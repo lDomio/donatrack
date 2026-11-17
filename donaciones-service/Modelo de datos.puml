@@ -1,0 +1,107 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity RankingDeDonantes{
+    id: int <<PK>>
+    fecha: DATETIME
+}
+entity DonanteEnRanking{
+    * donante: int <<PK, FK>>
+    * ranking: int <<PK, FK>>
+    * puesto: int
+}
+entity Donante{
+    * id: int <<PK>>
+    * categoria: int <<FK>>
+    * mision_actual: int <<FK>>
+}
+RankingDeDonantes ||--|{ DonanteEnRanking
+Donante ||--o{ DonanteEnRanking
+entity Donacion{
+    * id: int <<PK>>
+    * donante: int <<FK>>
+    * fecha: DATETIME
+    * cantidadDeBien: DOUBLE
+    * categoria_id: VARCHAR
+    * entidad_beneficiaria_id: VARCHAR
+    * fecha_recepcion: DATETIME
+}
+Donacion }o--|| Donante
+entity MisionCompletada{
+    * id: int <<PK>>
+    * donante: int <<FK>>
+    * insignia_otorgada: int <<FK>>
+    * fecha_complecion: DATETIME
+    * mision: int <<FK>>
+    * categoriaDonante: int <<FK>>
+}
+Donante ||--o{ MisionCompletada
+entity Insignia{
+    * id: int <<PK>>
+    * descripcion: VARCHAR
+}
+entity MedioDeContacto{
+    * id: int <<PK>>
+    * donante: int <<FK>>
+    * tipo_contacto: CHECK
+    * valor: VARCHAR
+}
+entity Mision{
+    * id: int <<PK>>
+    * insignia: int <<FK>>
+    * mision_anterior: int <<FK>>
+    * mision_siguiente: int <<FK>>
+    * categoria_donante: int <<FK>>
+    * estado_mision: int <<FK>>
+}
+
+entity CategoriaCompletada{
+    * id: int <<PK>>
+    * donante: int <<FK>>
+    * categoria: int <<FK>>
+    * fecha_complecion: DATETIME
+}
+entity EstadoMision{
+    id: int <<PK>>
+}
+entity MisionRacha{
+    id_estado: int <<PK, FK>>
+    meses_consecutivos: int
+}
+entity MisionCompletitud{
+    id_estado: int <<PK, FK>>
+    cantidad_categorias_distintas: int
+}
+entity MisionHabilDonador{
+    id_estado: int <<PK, FK>>
+    cantidad_bienes_en_donacion: int
+}
+entity MisionDonacionesExitosas{
+    id_estado: int <<PK, FK>>
+    donaciones_recibidas: int
+}
+entity CategoriaDonante{
+    * id: int <<PK>>
+    * nombre: VARCHAR
+    * cantidad_misiones: int
+    * primera_mision: int <<FK>>
+}
+CategoriaDonante ||--|| "Primera mision" Mision
+MisionDonacionesExitosas ||--|| EstadoMision
+MisionHabilDonador ||--|| EstadoMision
+MisionCompletitud ||--|| EstadoMision
+MisionRacha ||--|| EstadoMision
+Mision }|--|| EstadoMision
+CategoriaDonante ||--o{ "Categoria de mision" Mision
+Mision ||--o| "Mision Anterior" Mision
+Mision ||--o| "Mision Siguiente" Mision
+Mision }o--|| Insignia
+MedioDeContacto }o--|| Donante
+Donante ||--o{ CategoriaCompletada
+CategoriaCompletada }o--|| CategoriaDonante
+MisionCompletada }o--|| Mision
+Mision ||--o{ Donante
+MisionCompletada }o--|| Insignia
+CategoriaDonante ||--o{ Donante
+MisionCompletada }o--|| CategoriaDonante
+@enduml

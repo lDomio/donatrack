@@ -1,0 +1,156 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+    <main th:fragment="contenido" class="seccionPrincipal">
+        <div class="cuadriculaDiseño">
+
+            <!-- Lateral izquierdo: Últimas Noticias -->
+            <aside class="columnaNoticias" aria-labelledby="tituloSeccionNoticias">
+                <h2 class="tituloNoticias" id="tituloSeccionNoticias">
+                    <i class="far fa-newspaper"></i> Últimas noticias
+                </h2>
+
+                <div class="listaNoticias">
+                    <a href="#" class="tarjetaNoticia" aria-label="Leer más sobre Campaña Alimentos de Invierno">
+                        <div class="contenedorImagenNoticia">
+                            <div class="cajaImagenNoticiaCampaña">
+                                <i class="fas fa-bowl-rice"></i>
+                            </div>
+                        </div>
+                        <div class="contenidoNoticia">
+                            <span class="categoriaNoticia">Campañas</span>
+                            <h3 class="tituloItemNoticia">Campaña Alimentos de Invierno 2026</h3>
+                            <span class="fechaNoticia"><i class="far fa-calendar-alt"></i> Hace 2 horas</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="tarjetaNoticia" aria-label="Leer más sobre nuevos voluntarios incorporados">
+                        <div class="contenedorImagenNoticia">
+                            <div class="cajaImagenNoticiaComunidad">
+                                <i class="fas fa-people-group"></i>
+                            </div>
+                        </div>
+                        <div class="contenidoNoticia">
+                            <span class="categoriaNoticia">Comunidad</span>
+                            <h3 class="tituloItemNoticia">+150 voluntarios se sumaron esta semana</h3>
+                            <span class="fechaNoticia"><i class="far fa-calendar-alt"></i> Ayer</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="tarjetaNoticia" aria-label="Leer más sobre el reporte de impacto social">
+                        <div class="contenedorImagenNoticia">
+                            <div class="cajaImagenNoticiaTransparencia">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="contenidoNoticia">
+                            <span class="categoriaNoticia">Transparencia</span>
+                            <h3 class="tituloItemNoticia">Reporte de impacto semestral disponible</h3>
+                            <span class="fechaNoticia"><i class="far fa-calendar-alt"></i> 15 de Julio, 2026</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="tarjetaNoticia" aria-label="Leer más sobre la alianza con empresas">
+                        <div class="contenedorImagenNoticia">
+                            <div class="cajaImagenNoticiaAlianza">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                        </div>
+                        <div class="contenidoNoticia">
+                            <span class="categoriaNoticia">Alianzas</span>
+                            <h3 class="tituloItemNoticia">Nueva alianza con 12 PyMEs locales</h3>
+                            <span class="fechaNoticia"><i class="far fa-calendar-alt"></i> 10 de Julio, 2026</span>
+                        </div>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Columna derecha: Hero Slogan, Mapa y Estadísticas -->
+            <section class="seccionCentral" aria-label="Contenido central e interactivo">
+
+                <!-- Tarjeta Heroe: Slogan y Presentación -->
+                <article class="heroeSeccion">
+                    <div class="contenidoHeroe">
+                        <span class="etiquetaHeroe">Haciendo el bien visible</span>
+                        <h1 class="sloganHeroe">
+                            Donaciones <span>rastreables</span>, impacto real en cada comunidad.
+                        </h1>
+                        <p class="descripcionHeroe">
+                            En DonaTrack conectamos a personas solidarias con entidades benéficas de manera directa y transparente. Seguí el recorrido de tus donaciones en tiempo real y sé testigo del cambio que generás.
+                        </p>
+                        <div class="filaAccionesHeroe">
+                            <a th:href="@{/login}" class="botonPrimario" id="botonHeroeDonar" aria-label="Comenzar a donar">
+                                <i class="fas fa-heart"></i> Comenzar a donar
+                            </a>
+                            <a th:href="@{/proyectos}" class="botonSecundario">
+                                Ver proyectos <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Fila de Información: Mapa y En números -->
+                <div class="seccionInfo">
+
+                    <!-- Mapa interactivo -->
+                    <article class="tarjetaMapa">
+                        <h2 class="tituloMapa">
+                            <i class="fas fa-map-marked-alt"></i> Puntos de entrega
+                        </h2>
+                        <p class="descripcionMapa">Visualizá las heladeras sociales, comedores y centros de recepción activos en tu zona.</p>
+
+                        <div class="contenedorMapa">
+                            <div th:replace="~{fragments/mapaLeaflet :: mapaPublico(${casosExitoJson})}"></div>
+                        </div>
+                    </article>
+
+                    <!-- Estadísticas: En números -->
+                    <article class="tarjetaNumeros">
+                        <h2 class="tituloNumeros">
+                            <i class="fas fa-chart-simple"></i> Nuestro impacto en números
+                        </h2>
+
+                        <p th:if="${errorCarga}" style="color:#b00020;">
+                            No se pudo cargar la información actualizada. Intentá recargar la página en unos minutos.
+                        </p>
+
+                        <div class="contenedorEstadisticas">
+                            <div class="tarjetaEstadistica tarjetaEstadisticaUno" aria-label="2367 personas asistidas por mes">
+                                <div class="iconoEstadistica">
+                                    <i class="fas fa-hands-holding-child"></i>
+                                </div>
+                                <div class="datosEstadistica">
+                                    <span class="numeroEstadistica">2,367</span>
+                                    <span class="etiquetaEstadistica">Personas Asistidas / mes</span>
+                                </div>
+                            </div>
+
+                            <div class="tarjetaEstadistica tarjetaEstadisticaDos" aria-label="550 voluntarios activos">
+                                <div class="iconoEstadistica">
+                                    <i class="fas fa-handshake-angle"></i>
+                                </div>
+                                <div class="datosEstadistica">
+                                    <span class="numeroEstadistica" th:text="${cantidadDonantes != null ? cantidadDonantes : 550}">550</span>
+                                    <span class="etiquetaEstadistica">Voluntarios Activos</span>
+                                </div>
+                            </div>
+
+                            <div class="tarjetaEstadistica tarjetaEstadisticaTres" aria-label="70 programas de asistencia en acción">
+                                <div class="iconoEstadistica">
+                                    <i class="fas fa-circle-nodes"></i>
+                                </div>
+                                <div class="datosEstadistica">
+                                    <span class="numeroEstadistica">70</span>
+                                    <span class="etiquetaEstadistica">Programas en Acción</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+            </section>
+        </div>
+    </main>
+    <th:block th:fragment="estilosExtra">
+        <link rel="stylesheet" href="/css/acceso/main.css">
+    </th:block>
+</html>

@@ -1,0 +1,112 @@
+<html th:replace="~{layout/basePersonaDonante :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+    <div class="bloqueNavegacionSuperior">
+        <a class="botonVolverEntidades" th:href="@{/personaDonante/entidadesBeneficiarias}">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver a entidades
+        </a>
+    </div>
+
+    <p th:if="${errorCarga}" style="color:#b00020;">
+        No se pudieron cargar las necesidades de la entidad. Intentá recargar la página en unos minutos.
+    </p>
+
+    <div th:if="${noEncontrada}">
+        <p>La entidad que buscás no existe.</p>
+        <a class="botonVolverEntidades" th:href="@{/personaDonante/entidadesBeneficiarias}">
+            Volver a entidades
+        </a>
+    </div>
+
+    <section class="tarjetaEntidadDetalle" th:if="${entidad != null}">
+        <div class="contenedorImagenDetalle" th:if="${entidad.imagenUrl != null}">
+            <img class="imagenDetalle" th:src="${entidad.imagenUrl}" th:alt="${entidad.razonSocial}">
+        </div>
+
+        <span class="insigniaVerificado" th:if="${entidad.verificada}">
+            <i class="fas fa-circle-check" aria-hidden="true"></i> Verificada
+        </span>
+
+        <div class="infoEntidadDetalle">
+            <span class="tipoEntidadBadging" th:text="${entidad.tipo}">COMEDOR</span>
+            <h1 class="tituloEntidadDetalle" th:text="${entidad.razonSocial}">Comedor Los Bajitos</h1>
+            <p class="ubicacionEntidadDetalle" th:if="${entidad.ubicacion != null}">
+                <i class="fas fa-location-dot" aria-hidden="true"></i>
+                <span th:text="${entidad.ubicacion}">Av. Siempreviva 742</span>
+            </p>
+            <p class="descripcionEntidadDetalle" th:text="${entidad.descripcion}">Comedor de barrio.</p>
+        </div>
+    </section>
+
+    <section class="resumenImpactoEntidad" th:if="${entidad != null}">
+        <div class="itemResumen" th:each="cifra : ${entidad.impacto}">
+            <i class="fas" th:classappend="${cifra.icono}" aria-hidden="true"></i>
+            <div>
+                <span class="numeroImpacto" th:text="${cifra.valor}">120</span>
+                <span class="etiquetaImpacto" th:text="${cifra.unidad}">familias por semana</span>
+            </div>
+        </div>
+    </section>
+
+    <p class="avisoDonacionPresencial">
+        <i class="fas fa-circle-info" aria-hidden="true"></i>
+        <span>Las donaciones se registran presencialmente en el depósito. Acercate con los bienes y una persona administradora los carga a tu nombre.</span>
+    </p>
+
+    <div class="encabezadoPaginaNecesidades">
+        <h2 class="tituloPaginaNecesidades">Necesidades actuales</h2>
+        <p class="subtituloPaginaNecesidades">
+            Consultá qué falta en cada categoría.
+        </p>
+    </div>
+
+    <div class="cuadriculaNecesidadesDetalle">
+        <section class="tarjetaCategoriaNecesidad" th:each="categoria, iter : ${categorias}">
+
+            <div class="cabeceraCategoriaNecesidad">
+                <span class="iconoCategoria" th:classappend="${categoria.claseColorIcono}">
+                    <i class="fas" th:classappend="${categoria.icono}" aria-hidden="true"></i>
+                </span>
+                <div>
+                    <h3 class="tituloCategoriaNecesidad" th:text="${categoria.titulo}">Alimentos no perecederos</h3>
+                    <span class="frecuenciaEtiqueta" th:if="${categoria.frecuencia != null}"
+                          th:classappend="${categoria.frecuencia == 'Mensual' or categoria.frecuencia == 'Semanal'} ? '' : 'especial'"
+                          th:text="${categoria.frecuencia}">Mensual</span>
+                </div>
+            </div>
+
+            <p class="descripcionCategoria" th:text="${categoria.descripcion}">Productos de almacén.</p>
+
+            <div class="listaInsumos">
+                <th:block th:each="insumo : ${categoria.insumos}">
+                <div class="itemInsumo"
+                     th:with="claseItem=${insumo.completado ? 'completado' : (insumo.urgente ? 'urgente' : '')},
+                              claseTexto=${insumo.completado ? 'exito' : (insumo.urgente ? 'alerta' : '')}"
+                     th:classappend="${claseItem}">
+                    <div class="encabezadoInsumo">
+                        <span class="nombreInsumo" th:text="${insumo.nombre}">Arroz</span>
+                        <span class="progresoTexto" th:classappend="${claseTexto}"
+                              th:text="'(' + ${insumo.cantidadDonada} + '/' + ${insumo.cantidadRequerida} + ')'">(150/200)</span>
+                    </div>
+                    <div class="contenedorBarra">
+                        <div class="barraRelleno" th:classappend="${insumo.claseColorBarra}"
+                             th:style="'width:' + ${insumo.porcentaje} + '%'"></div>
+                    </div>
+                </div>
+                </th:block>
+            </div>
+
+        </section>
+    </div>
+
+    <div class="barraFlotanteMovil">
+        <a class="botonMovilFijo" th:href="@{/personaDonante/entidadesBeneficiarias}">
+            Ver otras entidades
+        </a>
+    </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaDonante/verNecesidadEntidad.css">
+</th:block>
+</html>

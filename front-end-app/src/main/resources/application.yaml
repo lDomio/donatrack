@@ -1,0 +1,51 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: front-end-app
+  jackson:
+    time-zone: America/Argentina/Buenos_Aires
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    servlet:
+      content-type: text/html;charset=UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-change-me}
+
+app:
+  #  donante-demo-id: ${DONANTE_DEMO_ID:}
+  donante-demo-id: ${DONANTE_DEMO_ID:1}
+  uploads:
+    dir: ${UPLOADS_DIR:uploads}
+
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://localhost:8084/api}
+
+donaciones:
+  service:
+    url: ${DONACIONES_SERVICE_URL:http://localhost:8080/donaciones-service}
+
+incentivos:
+  service:
+    url: ${INCENTIVOS_SERVICE_URL:http://localhost:8081}
+
+logistica:
+  service:
+    url: ${LOGISTICA_SERVICE_URL:http://localhost:8083/logistica-service}
+
+notificaciones:
+  service:
+    url: ${NOTIFICACIONES_SERVICE_URL:http://localhost:8082}

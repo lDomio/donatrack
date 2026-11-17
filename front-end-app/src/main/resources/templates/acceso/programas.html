@@ -1,0 +1,115 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+    <main th:fragment="contenido" class="seccionPrincipal">
+        <div class="contenedorProgramas">
+
+            <!-- Título de la Página -->
+            <h1 class="tituloSeccion">Programas</h1>
+            <h2 class="subtituloSeccion">Nuestras iniciativas de impacto</h2>
+
+            <!-- Lista de Acordeones Colapsables (CSS nativo details/summary) -->
+            <section class="contenedorAcordeon" aria-label="Acordeón de programas activos">
+
+                <!-- Programa 1 -->
+                <details class="itemAcordeon" open>
+                    <summary class="cabeceraAcordeon">
+                        <span class="tituloCabecera">
+                            <i class="fas fa-bowl-rice iconoPrograma"></i>
+                            <span>Programa de Rescate Alimentario</span>
+                        </span>
+                        <i class="fas fa-chevron-down iconoCaret"></i>
+                    </summary>
+                    <div class="cuerpoAcordeon">
+                        <p class="textoPrograma">
+                            Conectamos a comercios, verdulerías y distribuidores mayoristas con nuestra red de comedores asociados y heladeras sociales. Evitamos el desperdicio de comida rescatando excedentes frescos y secos aptos para consumo.
+                        </p>
+                        <ul class="listaDetallesPrograma">
+                            <li><i class="fas fa-check"></i> Distribución diaria a más de 20 comedores asociados.</li>
+                            <li><i class="fas fa-check"></i> Monitoreo de cadena de frío en heladeras sociales.</li>
+                            <li><i class="fas fa-check"></i> Trazabilidad completa desde el origen de la donación.</li>
+                        </ul>
+                        <div class="bloqueAccionPrograma">
+                            <a th:href="@{/login}" class="botonAccion">Sumarme a este programa</a>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Programa 2 -->
+                <details class="itemAcordeon">
+                    <summary class="cabeceraAcordeon">
+                        <span class="tituloCabecera">
+                            <i class="fas fa-shirt iconoPrograma"></i>
+                            <span>Programa de Abrigo Textil</span>
+                        </span>
+                        <i class="fas fa-chevron-down iconoCaret"></i>
+                    </summary>
+                    <div class="cuerpoAcordeon">
+                        <p class="textoPrograma">
+                            Organizamos campañas de recolección y clasificación de ropa de abrigo, calzado y frazadas. Clasificamos las prendas por talle y estado en nuestra sede central y coordinamos las entregas estacionales en barrios vulnerables durante el invierno.
+                        </p>
+                        <ul class="listaDetallesPrograma">
+                            <li><i class="fas fa-check"></i> Campañas anuales de abrigo invernal.</li>
+                            <li><i class="fas fa-check"></i> Puntos de entrega comunitarios directos y auditados.</li>
+                            <li><i class="fas fa-check"></i> Triage de ropa para asegurar prendas en excelente estado.</li>
+                        </ul>
+                        <div class="bloqueAccionPrograma">
+                            <a th:href="@{/login}" class="botonAccion">Donar indumentaria</a>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Programa 3 -->
+                <details class="itemAcordeon">
+                    <summary class="cabeceraAcordeon">
+                        <span class="tituloCabecera">
+                            <i class="fas fa-graduation-cap iconoPrograma"></i>
+                            <span>Programa de Apoyo Escolar</span>
+                        </span>
+                        <i class="fas fa-chevron-down iconoCaret"></i>
+                    </summary>
+                    <div class="cuerpoAcordeon">
+                        <p class="textoPrograma">
+                            Brindamos clases de apoyo a nivel primario y secundario, además de talleres recreativos y de oficios en las sedes de los comedores comunitarios. Los voluntarios acompañan a los niños en sus tareas para mitigar la deserción escolar.
+                        </p>
+                        <ul class="listaDetallesPrograma">
+                            <li><i class="fas fa-check"></i> Clases de matemática, lengua e inglés los fines de semana.</li>
+                            <li><i class="fas fa-check"></i> Talleres recreativos de arte, ajedrez y música.</li>
+                            <li><i class="fas fa-check"></i> Donación y equipamiento de bibliotecas comunitarias.</li>
+                        </ul>
+                        <div class="bloqueAccionPrograma">
+                            <a th:href="@{/login}" class="botonAccion">Unirme como voluntario docente</a>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Programa 4 -->
+                <details class="itemAcordeon">
+                    <summary class="cabeceraAcordeon">
+                        <span class="tituloCabecera">
+                            <i class="fas fa-handshake-simple iconoPrograma"></i>
+                            <span>Programa de Alianzas Corporativas</span>
+                        </span>
+                        <i class="fas fa-chevron-down iconoCaret"></i>
+                    </summary>
+                    <div class="cuerpoAcordeon">
+                        <p class="textoPrograma">
+                            Creamos puentes de colaboración con empresas locales, industrias y distribuidoras. Las empresas patrocinan logística, equipamiento o realizan donaciones corporativas mensuales estables, recibiendo certificados auditados.
+                        </p>
+                        <ul class="listaDetallesPrograma">
+                            <li><i class="fas fa-check"></i> Logística corporativa dedicada y auditable.</li>
+                            <li><i class="fas fa-check"></i> Deducción fiscal y responsabilidad social empresaria.</li>
+                            <li><i class="fas fa-check"></i> Reportes semestrales de impacto en métricas clave de la ONG.</li>
+                        </ul>
+                        <div class="bloqueAccionPrograma">
+                            <a th:href="@{/empresas}" class="botonAccion">Contactar como empresa</a>
+                        </div>
+                    </div>
+                </details>
+
+            </section>
+
+        </div>
+    </main>
+    <th:block th:fragment="estilosExtra">
+        <link rel="stylesheet" href="/css/acceso/programas.css">
+    </th:block>
+</html>

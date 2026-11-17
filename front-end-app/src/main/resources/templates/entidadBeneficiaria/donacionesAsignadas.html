@@ -1,0 +1,15 @@
+<html th:replace="~{layout/baseEntidadBeneficiaria :: html}" xmlns:th="http://www.thymeleaf.org">
+<main th:fragment="contenido">
+  <h1>Donaciones Asignadas</h1>
+  <div th:if="${mensajeExito}" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-weight:500;">
+    <i class="fas fa-check-circle"></i> <span th:text="${mensajeExito}"></span>
+  </div>
+  <div th:if="${mensajeError}" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-weight:500;">
+    <i class="fas fa-exclamation-circle"></i> <span th:text="${mensajeError}"></span>
+  </div>
+  <th:block th:replace="~{fragments/listaDonaciones :: listaDonaciones(${donaciones})}"></th:block>
+</main>
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/entidadBeneficiaria/donacionesYDetalle.css">
+</th:block>
+</html>

@@ -1,0 +1,209 @@
+/* ==========================================================================
+   ============ VISTA: GESTIÓN DE DONANTES (ADMIN) ==========================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 24px 48px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================= ENCABEZADO Y MIGAS DE PAN ================= */
+.encabezadoVista { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 8px; }
+.subtituloVista { font-size: 1rem; color: var(--colorTextoMedio); max-width: 600px; }
+
+.migasPan { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--colorTextoClaro); font-weight: 500; margin-top: 24px; }
+.migasPan a { color: var(--colorTextoMedio); text-decoration: none; transition: var(--transicionSuave); }
+.migasPan a:hover { color: var(--colorPrimario); }
+.migasPan .migaActual { color: var(--colorPrimario); font-weight: 600; }
+
+/* ================= BARRA DE HERRAMIENTAS ================= */
+.barraHerramientasDonantes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background-color: var(--colorFondo);
+    padding: 16px 0;
+}
+
+.filtrosDonantes {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.cajaBusquedaDonante { position: relative; display: flex; align-items: center; flex: 1; min-width: 260px; max-width: 400px; }
+.cajaBusquedaDonante .iconoBusqueda { position: absolute; left: 16px; color: var(--colorTextoClaro); font-size: 1rem; pointer-events: none; }
+.cajaBusquedaDonante .campoBusqueda {
+    width: 100%; padding: 10px 16px 10px 42px; font-family: inherit; font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1; border-radius: 8px; background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro); min-height: 44px; transition: var(--transicionSuave);
+}
+.campoBusqueda:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.cajaSelectorFiltro { position: relative; display: flex; align-items: center; min-width: 180px; }
+.cajaSelectorFiltro .iconoSelector { position: absolute; right: 16px; color: var(--colorTextoClaro); font-size: 0.8rem; pointer-events: none; }
+.selectorFiltro {
+    width: 100%; padding: 10px 36px 10px 16px; font-family: inherit; font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1; border-radius: 8px; background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro); min-height: 44px; transition: var(--transicionSuave); cursor: pointer; appearance: none;
+}
+.selectorFiltro:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+/* Toggle CSS puro */
+.controlInterruptor { display: flex; align-items: center; }
+.etiquetaInterruptor { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; color: var(--colorTextoMedio); font-weight: 500; }
+.checkboxOculto { position: absolute; opacity: 0; width: 0; height: 0; }
+.interruptorVisual {
+    position: relative; width: 44px; height: 24px; background-color: #cbd5e1; border-radius: 12px; transition: var(--transicionSuave); display: inline-block;
+}
+.interruptorVisual::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: white; border-radius: 50%; transition: var(--transicionSuave); box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.checkboxOculto:checked + .interruptorVisual { background-color: var(--colorPrimario); }
+.checkboxOculto:checked + .interruptorVisual::after { transform: translateX(20px); }
+.checkboxOculto:focus-visible + .interruptorVisual { box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.accionesPrincipales { flex-shrink: 0; }
+
+/* ================= TABLA DE DIRECTORIO ================= */
+.tarjetaTabla {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--sombraSuave);
+    overflow: hidden;
+}
+
+.contenedorTabla { width: 100%; overflow-x: auto; }
+.tablaDirectorio { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+
+.tablaDirectorio thead th {
+    text-align: left; padding: 16px 24px; background-color: var(--colorFondo);
+    color: var(--colorTextoMedio); font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+.columnaAcciones { text-align: right !important; }
+
+.tablaDirectorio tbody td { padding: 16px 24px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.tablaDirectorio tbody tr { transition: var(--transicionSuave); }
+.tablaDirectorio tbody tr:hover { background-color: var(--colorPrimarioClaro); }
+.tablaDirectorio tbody tr:last-child td { border-bottom: none; }
+
+/* Elementos de la tabla */
+.celdaDocumento { font-weight: 600; color: var(--colorTextoMedio); white-space: nowrap; font-size: 0.9rem; }
+.celdaNombre { display: flex; flex-direction: column; gap: 2px; }
+.textoPrincipal { font-weight: 700; color: var(--colorTextoOscuro); font-size: 1rem; }
+.textoSecundario { font-size: 0.8rem; color: var(--colorTextoClaro); }
+.celdaContacto { color: var(--colorTextoMedio); }
+
+.etiquetaTipo { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.03em; display: inline-block; background-color: #f1f5f9; color: var(--colorTextoMedio); border: 1px solid #e2e8f0; }
+.tipoJuridica { background-color: #f0fdfa; color: var(--colorPrimarioHover); border-color: #ccfbf1; }
+
+.etiquetaEstado { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; }
+.estadoActivo { background-color: #f0fdf4; color: var(--colorExito); border: 1px solid #bbf7d0; }
+.estadoInactivo { background-color: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+/* Filas inactivas (Baja Lógica) */
+.filaInactiva td { opacity: 0.6; background-color: #fafafa; }
+.filaInactiva:hover td { background-color: #f1f5f9; opacity: 0.8; }
+.filaInactiva .celdaAcciones { opacity: 1; }
+
+/* Acciones */
+.celdaAcciones { text-align: right; white-space: nowrap; }
+.grupoBotonesAccion { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+
+.botonAccionTabla {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e2e8f0;
+    background-color: var(--colorSuperficie); color: var(--colorTextoMedio);
+    display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
+    text-decoration: none; transition: var(--transicionSuave); cursor: pointer;
+}
+.botonAccionTabla:hover { background-color: var(--colorFondo); color: var(--colorPrimario); border-color: #cbd5e1; }
+
+.botonDestacado { color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); border-color: var(--colorPrimarioBorde); }
+.botonDestacado:hover { background-color: var(--colorPrimario); color: white; border-color: var(--colorPrimario); }
+
+.botonPeligro { color: var(--colorError); }
+.botonPeligro:hover { background-color: #fef2f2; color: var(--colorError); border-color: #fecaca; }
+
+.botonReactivar { width: auto; padding: 0 12px; gap: 8px; font-weight: 600; font-size: 0.85rem; color: var(--colorTextoOscuro); }
+.botonReactivar:hover { background-color: var(--colorTextoOscuro); color: white; border-color: var(--colorTextoOscuro); }
+
+/* ================= PAGINACIÓN ================= */
+.barraPaginacion { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-top: 1px solid #f1f5f9; background-color: var(--colorFondo); flex-wrap: wrap; }
+.textoPaginacion { font-size: 0.85rem; color: var(--colorTextoMedio); }
+.textoPaginacion strong { color: var(--colorTextoOscuro); }
+.listaPaginacion { list-style: none; display: flex; align-items: center; gap: 6px; }
+.enlacePagina { min-width: 40px; height: 40px; padding: 0 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; background-color: var(--colorSuperficie); color: var(--colorTextoMedio); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: var(--transicionSuave); }
+.enlacePagina:hover { border-color: var(--colorPrimario); color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); }
+.enlacePaginaActiva { background-color: var(--colorPrimario); border-color: var(--colorPrimario); color: white; }
+.enlacePaginaActiva:hover { background-color: var(--colorPrimarioHover); color: white; }
+.enlacePaginaDeshabilitada { opacity: 0.45; pointer-events: none; }
+
+/* ================= MODAL DE REPRESENTANTES ================= */
+.capaModal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: var(--transicionSuave); }
+.capaModal:target { opacity: 1; visibility: visible; }
+.fondoModal { position: absolute; inset: 0; background-color: rgba(15, 23, 42, 0.55); backdrop-filter: blur(2px); }
+
+.contenidoModal { position: relative; width: 100%; max-width: 540px; max-height: calc(100vh - 48px); background-color: var(--colorSuperficie); border-radius: var(--radioBorde); box-shadow: var(--sombraElevada); border: 1px solid rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; overflow: hidden; transform: translateY(16px) scale(0.98); transition: var(--transicionSuave); }
+.capaModal:target .contenidoModal { transform: translateY(0) scale(1); }
+
+.cabeceraModal { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
+.titulosModal { display: flex; flex-direction: column; gap: 4px; }
+.tituloModal { font-size: 1.4rem; font-weight: 800; color: var(--colorTextoOscuro); margin: 0; }
+.subtituloModalInfo { font-size: 0.9rem; color: var(--colorTextoMedio); }
+
+.botonCerrarModal { width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #e2e8f0; border-radius: 50%; background-color: var(--colorSuperficie); color: var(--colorTextoMedio); font-size: 1.1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: var(--transicionSuave); }
+.botonCerrarModal:hover { color: var(--colorError); border-color: #fecaca; background-color: #fef2f2; }
+
+.cuerpoModal { padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+.accionesModalSuperior { display: flex; justify-content: flex-end; }
+.accionesModalSuperior .botonOpcion { font-size: 0.9rem; min-height: 40px; padding: 6px 16px; border-radius: 8px; }
+
+.listaRepresentantes { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.itemRepresentante { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background-color: var(--colorFondo); border: 1px solid #e2e8f0; border-radius: 12px; }
+.avatarRepresentante { width: 36px; height: 36px; border-radius: 8px; background-color: var(--colorSuperficie); border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; color: var(--colorTextoMedio); flex-shrink: 0; }
+.datosRepresentante { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.nombreRepresentante { font-weight: 600; color: var(--colorTextoOscuro); font-size: 0.95rem; }
+.contactoRepresentante { font-size: 0.8rem; color: var(--colorTextoClaro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.accionesItemRepresentante { margin-left: auto; }
+.botonIconoSimple { background: none; border: none; cursor: pointer; color: var(--colorTextoClaro); font-size: 1rem; padding: 4px; transition: var(--transicionSuave); }
+.botonIconoSimple.botonPeligro:hover { color: var(--colorError); }
+
+.pieModal { display: flex; align-items: center; justify-content: flex-end; padding: 16px 24px; border-top: 1px solid #f1f5f9; background-color: var(--colorFondo); flex-shrink: 0; }
+.pieModal .botonPrimario { min-height: 40px; padding: 8px 24px; font-size: 0.95rem; border-radius: 8px; }
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .barraHerramientasDonantes { flex-direction: column; align-items: stretch; }
+    .filtrosDonantes { flex-direction: column; align-items: stretch; }
+    .cajaBusquedaDonante, .cajaSelectorFiltro { max-width: none; }
+    .accionesPrincipales .botonPrimario { width: 100%; }
+
+    .tablaDirectorio thead th { display: none; }
+    .tablaDirectorio tbody td { display: block; padding: 10px 16px; text-align: left; border-bottom: none; }
+    .tablaDirectorio tbody tr { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px solid #e2e8f0; position: relative; }
+    .tablaDirectorio tbody tr:last-child { border-bottom: none; }
+
+    .celdaNombre { margin-bottom: 8px; }
+    .celdaAcciones { position: absolute; top: 16px; right: 16px; padding: 0 !important; }
+    
+    .barraPaginacion { flex-direction: column; align-items: stretch; gap: 12px; }
+    .textoPaginacion { text-align: center; }
+    .listaPaginacion { justify-content: center; }
+    
+    .capaModal { padding: 12px; align-items: flex-end; }
+    .contenidoModal { max-height: calc(100vh - 24px); }
+    .pieModal .botonPrimario { width: 100%; }
+}

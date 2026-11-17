@@ -1,0 +1,197 @@
+@startuml
+
+class RankingDonantes {
+  List<Donante> ranking
+  LocalDate fechaRanking
+}
+
+class Donante {
+  DonanteEventoObserver observer
+  List<Donacion> donaciones
+  CategoriaDonante categoria
+  List<Insignia> insignias
+  List<MisionCompletada> misionesCompletadas
+  Mision misionActual
+  List<CategoriaCompletada> categoriasCompletadas
+  ProgresoMision progresoMisionActual
+  List<MedioDeContacto> medioContacto
+  + void registrarDonacion(Donacion)
+  + ProgresoMision getProgresoMisionActual()
+  + void completarMisionSiCompletada()
+  + void otorgarInsignia(Insignia)
+  + void AgregarMisionCompletada(Mision)
+  + LocalDate getFechaDeInicioMisionActual()
+  + void cambiarMisionActual(Mision)
+}
+class DonanteEventoObserver{
+    Donante donante
+    List<IPaquete> paquetes
+    List<IGeneradorPaqueteDonanteCategoriaCompletada> generadoresCategoriaCompletada
+    List<IGeneradorPaqueteDonanteMisionCompletada> generadoresMisionCompletada
+    notificarCategoriaCompletada(categoriaAnterior,categoriaNueva)
+    notificarMisionCompletada(misionAnterior, misionNueva)
+}
+interface IGeneradorPaqueteDonanteCategoriaCompletada{
+    Optional<IPaquete> generarPaqueteSiCorresponde(CategoriaCompletadaEvento)
+}
+class IGeneradorPaqueteDonanteCategoriaCompletadaBroker implements IGeneradorPaqueteDonanteCategoriaCompletada{
+    Optional<IPaquete> generarPaqueteSiCorresponde(CategoriaCompletadaEvento)
+}
+DonanteEventoObserver --> IGeneradorPaqueteDonanteCategoriaCompletada
+Donante --> DonanteEventoObserver
+interface IGeneradorPaqueteDonanteMisionCompletada{
+    Optional<IPaquete> generarPaqueteSiCorresponde(MisionCompletadaEvento)
+}
+DonanteEventoObserver --> IGeneradorPaqueteDonanteMisionCompletada
+class GeneradorPaqueteDonanteMisionCompletadaBroker implements IGeneradorPaqueteDonanteMisionCompletada{
+    Optional<IPaquete> generarPaqueteSiCorresponde(MisionCompletadaEvento)
+}
+class GeneradorPaqueteDonanteMisionCompletadaN8N implements IGeneradorPaqueteDonanteMisionCompletada{
+    Optional<IPaquete> generarPaqueteSiCorresponde(MisionCompletadaEvento)
+}
+interface IPaquete{
+    LocalDateTime obtenerFecha()
+}
+DonanteEventoObserver --> IPaquete
+class PaqueteBroker implements IPaquete{
+    LocalDateTime fechaDeCreacion
+    String routingKey
+    byte[] payload
+    Properties properties
+    Map<String, String> headers
+    LocalDateTime obtenerFecha()
+}
+
+class PaqueteN8N implements IPaquete{
+    Map<String, String> mensajeJson
+    LocalDateTime obtenerFecha()
+}
+interface IPaqueteBrokerAdapter{
+    enviar(PaqueteBroker)
+}
+class PaqueteBrokerAdapter implements IPaqueteBrokerAdapter{
+    enviar(PaqueteBroker)
+}
+interface IPaqueteN8NAdapter{
+    enviar(PaqueteN8N)
+}
+class PaqueteN8NAdapter implements IPaqueteN8NAdapter{
+    enviar(PaqueteBroker)
+}
+PaqueteN8N <-- IPaqueteN8NAdapter
+PaqueteBroker <-- IPaqueteBrokerAdapter
+class MisionCompletada {
+  Insignia insigniaOtorgada
+  LocalDate fechaDeComplecion
+  Mision mision
+  CategoriaDonante categoria
+}
+
+class ProgresoMision {
+  Double progreso
+  Double cantidadActual
+  Double cantidadObjetivo
+}
+
+class Donacion {
+  LocalDate fecha
+  Integer cantidadDeBien
+  String categoriaId
+  String entidadBeneficiariaId
+  LocalDate fechaDeRecepcion
+  + fueRecibida()
+}
+
+class Insignia {
+  String descripcion
+}
+
+class Mision {
+  -  String nombre
+  -  Insignia insignia
+  -  Mision misionAnterior
+  -  Mision misionSiguiente
+  -  CategoriaDonante categoria
+  -  EstadoMision mision
+
+
+
+  + ProgresoMision calcularProgreso(Donante)
+  + void completar(Donante)
+}
+
+interface EstadoMision{
+  + ProgresoMision calcularProgreso(Donante)
+
+}
+
+class MisionRacha {
+  Double mesesConsecutivos;
+  + ProgresoMision calcularProgreso(Donante)
+  - void otorgarRecompensa(Donante)
+}
+
+class MisionCompletitud {
+  Double cantidadCategoriasDistintas;
+  + ProgresoMision calcularProgreso(Donante)
+  - void otorgarRecompensa(Donante)
+}
+
+class MisionHabilDonador {
+  Double cantidadDeBienesEnDonacion;
+  + ProgresoMision calcularProgreso(Donante)
+  - void otorgarRecompensa(Donante)
+}
+
+class MisionDonacionesExitosas {
+  Double donacionesRecibidas;
+  + ProgresoMision calcularProgreso(Donante)
+  - void otorgarRecompensa(Donante)
+}
+
+class CategoriaDonante {
+  String nombre
+  Mision primeraMision
+  Integer cantidadDeMisionesACompletar
+}
+
+enum TipoDeContacto {
+  EMAIL
+  WHATSAPP
+  TELEFONO
+}
+
+class MedioDeContacto {
+  -TipoDeContacto tipo
+  -String valor
+
+  +esValido(): Boolean
+}
+class CategoriaCompletada{
+    -CategoriaDonante: categoria
+    -LocalDateTime: fechaDeComplecion
+}
+
+' Relaciones principales del Donante
+RankingDonantes --> Donante
+Donante --> Mision
+Donante --> MisionCompletada
+Donante --> ProgresoMision
+Donante --> Donacion
+Donante --> Insignia
+Donante --> "*"MedioDeContacto
+Donante --> "*" CategoriaCompletada
+MedioDeContacto-->TipoDeContacto
+
+Mision--> EstadoMision
+Mision ..>Insignia
+
+' Realizaciones de la interfaz Mision
+EstadoMision <|.. MisionRacha
+EstadoMision <|.. MisionCompletitud
+EstadoMision <|.. MisionHabilDonador
+EstadoMision <|.. MisionDonacionesExitosas
+
+Donante --> CategoriaDonante
+
+@enduml

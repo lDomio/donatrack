@@ -1,0 +1,343 @@
+@startuml
+
+enum TipoDeContacto {
+  EMAIL
+  WHATSAPP
+  TELEFONO
+}
+
+enum TipoPersona {
+  HUMANA
+  JURIDICA
+}
+
+class MedioDeContacto {
+  -TipoDeContacto tipo
+  -String valor
+
+  +esValido(): Boolean
+}
+
+class Pais {
+  -String nombre
+  -String codigoIso
+}
+
+class Provincia {
+  -String nombre
+  -Pais pais
+}
+
+class Ciudad {
+  -String nombre
+  -Provincia provincia
+}
+
+class Direccion {
+  -String calle
+  -Int altura
+  -Ciudad ciudad
+  -double latitud
+  -double longitud
+}
+
+class Humana {
+  -String nombre
+  -String apellido
+  -Date fechaDeNacimiento
+  -String genero
+  -Int numeroDocumento
+  -Direccion direccion
+
+  +getEdad()
+}
+
+class Donante {
+  -Long id
+  -TipoPersona tipoPersona
+  -Humana datosDePersona
+  -Juridica datosDeEntidadRepresentada
+  -List<FormularioDeDonacion> formulariosDeDonacion
+  -List<MedioDeContacto> contactos
+  -List<EstadoDeUnaDonacion> estadoDeDonaciones
+
+  +agregarContacto()
+  +definirContactoPredeterminado()
+
+}
+
+class FormularioDeDonacion {
+  -Date fechaDeCreacion
+  -String descripcionGeneral
+  -List<Bien> bienes
+}
+
+class ImportadorDonantesService {
+  -LectorDonantes lectorDonantes
+  +importar(file: MultipartFile) : List<Donante>
+  -mapearDonante(dto: RegistroDonanteDto) : Donante
+}
+
+interface LectorDonantes {
+  +leerDonantes(inputStream: InputStream) : List<RegistroDonanteDto>
+}
+
+class LectorDonantesOpenCsv implements LectorDonantes {
+  +leerDonantes(inputStream: InputStream) : List<RegistroDonanteDto>
+}
+
+class RegistroDonanteDto {
+  -String tipoPersona
+  -String tipoDoc
+  -String documento
+  -String nombreORazonSocial
+  -String email
+  -String telefono
+}
+
+
+class SegmentadorDeFormularioDonacion {
+  +segmentarFormularioEnDonaciones(bienes: List<Bien>) : List<Donacion>
+}
+
+class EstadoDeUnaDonacion {
+  -LocalDate fechaDeEstado
+  -String motivo
+  -TipoDeEstado tipoEstado
+}
+
+enum TipoDeEstado {
+  DEPOSITO
+  ASIGNACION_REALIZADA
+  LISTA_PARA_ENTREGAR
+  EN_TRASLADO
+  ENTREGADA
+  ENTREGA_FALLIDA
+  VENCIDO
+}
+
+class Donacion {
+  -Long id
+  -Long idDonante
+  -LocalDate fechaDeCreacion
+  -List<Bien> bienes
+  -String subcategoria
+  -String descripcion
+  -EstadoDeUnaDonacion estadoDeDonacion
+  -Necesidad necesidad
+  -Periodo periodo
+  +cambiarEstado(estado: EstadoDeUnaDonacion) : void
+  +noEstaVencida(): boolean
+  +desasignar()
+}
+
+class MatcheadorDonacion {
+  -List<AlgortimoDeSeleccion> algoritmosDeSeleccion
+
+  +MatcheoSugerido seleccionarNecesidad(donacion : Donacion , necesidades : List<Necesidad> ): MatcheoSugerido
+  -calcularInterseccion(resultadosSeleccion: List<List<EntidadBeneficiaria>>) : List<EntidadBeneficiaria>
+}
+
+class MatcheoSugerido{
+  -Long id
+  -Long idDonacion
+  -List<EntidadBeneficiaria> entidadesSugeridas
+  -Boolean yaFueSeleccionadoPorElAdministrador
+}
+
+interface AlgortimoDeSeleccion {
+  +aplicarCriterioDeSeleccion(donaciones: List<Donacion>, necesidades: List<Necesidad>): List<Necesidad>
+}
+
+class CompatibilidadSemantica implements AlgortimoDeSeleccion {
+  -calcularTipoNecesidad(necesidad : Necesidad) Double
+  -calcularCoberturaVolumen(necesidad : Necesidad) : Double
+  -calcularSimilitudTextual(necesidad : Necesidad , donacion: Donacion ) : Double
+  -calcularPuntaje(necesidad : Necesidad , donacion : Donacion )
+  +aplicarCriterioDeSeleccion(donaciones: List<Donacion>, necesidades: List<Necesidad>): List<Necesidad>
+
+}
+
+class PrioridadASubAtendidos implements AlgortimoDeSeleccion {
+  -calcularPuntaje(necesidad : Necesidad ) Double
+  +aplicarCriterioDeSeleccion(donaciones: List<Donacion>, necesidades: List<Necesidad>): List<EntidadBeneficiaria>
+}
+
+enum EstadoDeBienNoPerecedero {
+  NUEVO
+  USADO
+}
+
+class Bien {
+  -String nombre
+  -String descripcion
+  -Foto foto
+  -Double cantidad
+  -Subcategoria subcategoria
+  -String unidadDeMedida
+  -EstadoDeBienNoPerecedero estado
+  -Date fechaDeVencimiento
+
+  +agregarFoto()
+  +noEstaVencida()
+}
+
+class Foto {
+  -String urlFoto
+  -String descripcion
+}
+
+class TipoEntidadBeneficiaria {
+  -String nombre
+}
+
+class EntidadBeneficiaria {
+  -Long id
+  -String razonSocial
+  -Direccion direccion
+  -Int telefono
+  -TipoEntidadBeneficiaria tipo
+  -List<Representante> representantes
+  -List<Necesidad> necesidades
+  -List<Donacion> donacionesRecibidas
+
+  +registrarNecesidad(): void
+  +ultimasDonacionesDelTrimestre() : List<Donacion>
+}
+
+class Representante {
+  -String nombre
+  -List<MedioDeContacto> contactos
+}
+
+class Juridica {
+  -String razonSocial
+  -TipoJuridica tipo
+  -String rubro
+  -List<Representante> representantes
+}
+
+class TipoJuridica {
+  -String nombre
+}
+
+enum TipoNecesidadEnum {
+  RECURRENTE
+  EXTRAORDINARIA
+}
+class Necesidad{
+    -Long id
+    -Date fechaDeCreacion
+    -String descripcion
+    -Subcategoria subcategoria
+    -TipoNecesidad tipoNecesidad
+    -Double cantidadNecesitada
+    -EntidadBeneficiaria entidadBeneficiaria
+    -Double cantidadDonada
+    -LocalDate fechaInicioRecurrencia
+    -Period periodoCorrespondiente
+    -List<Periodo> historialPeriodos
+    -aumentarCantidad(Double)
+    +getCantidadDonada()
+    +getTipoNecesidad()
+    +agregarDonacion(Donacion)
+    +desasignar(Donacion)
+}
+class Periodo{
+    -Long id
+    -LocalDate fechaInicio
+    -LocalDate fechaFin
+    -Double cantidadDonada
+}
+Necesidad --> "*" Periodo
+Necesidad --> TipoNecesidad
+interface TipoNecesidad{
+    +aumentarCantidad(Necesidad, Double)
+    +getCantidadDonada(Necesidad): Double
+    +getTipoNecesidad(): TipoNecesidadEnum
+    +desasignar(Donacion)
+}
+TipoNecesidad --> TipoNecesidadEnum
+class TipoNecesidadRecurrente implements TipoNecesidad{
+    +aumentarCantidad(Necesidad, Double)
+    +getCantidadDonada(Necesidad): Double
+    +getTipoNecesidad(): TipoNecesidadEnum
+    +desasignar(Donacion)
+}
+class TipoNecesidadExtraordinaria implements TipoNecesidad{
+    +aumentarCantidad(Necesidad, Double)
+    +getCantidadDonada(Necesidad): Double
+    +getTipoNecesidad(): TipoNecesidadEnum
+    +desasignar(Donacion)
+}
+class Subcategoria {
+  -Long id
+  -String nombre
+  -Categoria categoria
+  -String unidad
+}
+
+class Categoria {
+  -Long id
+  -String nombre
+  -List<Subcategoria> subcategorias
+}
+
+' Relaciones
+MedioDeContacto --> TipoDeContacto
+
+Provincia --> Pais
+Ciudad --> Provincia
+Direccion --> Ciudad
+
+Humana --> Direccion
+
+Donante --> TipoPersona
+Donante --> Humana
+Donante --> Juridica
+Donante --> FormularioDeDonacion
+Donante --> MedioDeContacto
+Donacion --> Bien
+Donacion --> "*" EstadoDeUnaDonacion
+
+ImportadorDonantesService --> LectorDonantes : "usa"
+LectorDonantes ..> RegistroDonanteDto : "retorna"
+ImportadorDonantesService ..> RegistroDonanteDto : "mapea"
+ImportadorDonantesService ..> Donante : "crea/importa"
+
+FormularioDeDonacion --> Bien
+
+SegmentadorDeFormularioDonacion ..> Donacion : crea
+SegmentadorDeFormularioDonacion --> FormularioDeDonacion
+
+
+
+EstadoDeUnaDonacion --> TipoDeEstado
+
+Bien --> EstadoDeBienNoPerecedero
+Bien --> Foto
+Bien --> Subcategoria
+
+Subcategoria --> Categoria
+
+EntidadBeneficiaria --> TipoEntidadBeneficiaria
+EntidadBeneficiaria --> Representante
+EntidadBeneficiaria --> Direccion
+EntidadBeneficiaria --> "*" Necesidad
+EntidadBeneficiaria --> "*" Donacion
+
+Representante --> MedioDeContacto
+
+Juridica --> TipoJuridica
+Juridica --> Representante
+
+
+Necesidad --> Subcategoria
+Necesidad --> EntidadBeneficiaria
+
+MatcheadorDonacion --> "*" AlgortimoDeSeleccion
+MatcheadorDonacion ..> Donacion
+MatcheadorDonacion ..> EntidadBeneficiaria
+MatcheadorDonacion ..>"crea" MatcheoSugerido
+
+@enduml

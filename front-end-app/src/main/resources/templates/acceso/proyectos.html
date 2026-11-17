@@ -1,0 +1,412 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+<main th:fragment="contenido" class="seccionPrincipalProyectos">
+    <div class="contenedorColumnasProyectos">
+
+        <!-- Columna Lateral Izquierda (Listado de proyectos) -->
+        <aside class="barraLateralProyectos" aria-label="Listado de proyectos">
+            <div class="cabeceraBarraLateral">
+                <h2 class="tituloBarraLateral">Proyectos</h2>
+            </div>
+            <ul class="listaMenuProyectos" role="tablist">
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto botonMenuProyectoActivo" role="tab" aria-selected="true" aria-controls="panel-educacion" id="tab-educacion" data-target="educacion">
+                        <span>Educación</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-primera-infancia" id="tab-primera-infancia" data-target="primera-infancia">
+                        <span>Primera infancia</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-trabajo" id="tab-trabajo" data-target="trabajo">
+                        <span>Trabajo</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-seguridad-alimentaria" id="tab-seguridad-alimentaria" data-target="seguridad-alimentaria">
+                        <span>Seguridad alimentaria</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-adicciones" id="tab-adicciones" data-target="adicciones">
+                        <span>Adicciones</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-vivienda" id="tab-vivienda" data-target="vivienda">
+                        <span>Vivienda</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-emergencias" id="tab-emergencias" data-target="emergencias">
+                        <span>Emergencias</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+                <li class="itemMenuProyecto" role="presentation">
+                    <button type="button" class="botonMenuProyecto" role="tab" aria-selected="false" aria-controls="panel-integracion-barrios" id="tab-integracion-barrios" data-target="integracion-barrios">
+                        <span>Integración de Barrios Populares</span>
+                        <i class="fas fa-chevron-right iconoFlechaMenu"></i>
+                    </button>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Columna Derecha: Panel de Detalle del Proyecto -->
+        <section class="panelDetalleProyectos" aria-label="Detalle del proyecto">
+
+            <!-- ==================== 1. EDUCACIÓN ==================== -->
+            <article class="articuloProyecto articuloProyectoActivo" id="panel-educacion" role="tabpanel" aria-labelledby="tab-educacion" tabindex="0">
+                <h1 class="tituloProyecto">Educación</h1>
+                <p class="textoIntroduccion">
+                    Para abordar la problemática de la exclusión educativa, las dificultades para el acceso al sistema y el sostenimiento de las trayectorias de los niños y jóvenes, DonaTrack lleva adelante en todo el país proyectos de Inclusión Educativa.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Favorecer la inclusión educativa y el desarrollo integral de personas y comunidades vulnerables, como medio de transformación social.</li>
+                        <li class="itemPunto">Generar espacios educativos de referencia en los barrios, que sean también ámbitos de contención, desarrollo y promoción de las personas.</li>
+                        <li class="itemPunto">Potenciar el rol educador de las familias y de la red comunitaria que sostiene a los estudiantes en los distintos niveles del sistema.</li>
+                        <li class="itemPunto">Romper el círculo de la pobreza a través del acceso a la escuela y a niveles superiores de formación.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Es un plan nacional que atiende las necesidades específicas de cada comunidad, respetando sus diversidades culturales y sociales.</li>
+                        <li class="itemPunto">Trabaja con niños, niñas, adolescentes, jóvenes y adultos. Promueve el acceso a la educación, permanencia y egreso en los distintos niveles, impulsa el liderazgo juvenil y favorece la organización comunitaria.</li>
+                        <li class="itemPunto">Brindamos formación técnica a asistentes locales para acompañar los procesos comunitarios y asegurar la sustentabilidad de la propuesta.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Acondicionamos espacios barriales para el desarrollo de actividades educativas (ofreciendo internet, bibliotecas, espacios de estimulación, etc.).</li>
+                        <li class="itemPunto">Detectamos líderes comunitarios que puedan llevar adelante las actividades del plan y trabajamos con las familias a través de un programa de becas familiares.</li>
+                        <li class="itemPunto">Brindamos apoyo escolar y tutorías para el fortalecimiento educativo en todos los niveles.</li>
+                        <li class="itemPunto">Ofrecemos talleres y capacitaciones para el desarrollo de diversas capacidades (artísticas, deportivas, oficios, etc.).</li>
+                        <li class="itemPunto">Acompañamos a jóvenes terciarios y universitarios a través de becas, con asistencia económica y tutorías. Muchos de ellos son la primera generación en sus familias que acceden a estos niveles.</li>
+                        <li class="itemPunto">Formamos grupos de jóvenes de los barrios (llamados mochileros) que realizan tareas socioeducativas itinerantes con niños y adolescentes de zonas periféricas.</li>
+                        <li class="itemPunto">Tejemos redes con organizaciones y escuelas locales para un abordaje integral de las necesidades educativas.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 2. PRIMERA INFANCIA ==================== -->
+            <article class="articuloProyecto" id="panel-primera-infancia" role="tabpanel" aria-labelledby="tab-primera-infancia" tabindex="0">
+                <h1 class="tituloProyecto">Primera infancia</h1>
+                <p class="textoIntroduccion">
+                    Promovemos el desarrollo integral, el cuidado nutricional y la estimulación temprana de niños y niñas desde los 45 días hasta los 5 años, fortaleciendo a las familias y creando entornos protectores en cada comunidad.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Garantizar la seguridad alimentaria y el adecuado control nutricional en los primeros 1.000 días de vida.</li>
+                        <li class="itemPunto">Estimular el desarrollo psicomotriz, cognitivo y afectivo en espacios acondicionados para el juego.</li>
+                        <li class="itemPunto">Fortalecer a las familias en pautas de crianza positiva, higiene y prevención de la salud infantil.</li>
+                        <li class="itemPunto">Acompañar a mujeres embarazadas en controles de salud prenatal y preparación para el nacimiento.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Abordaje interdisciplinario con participación de nutricionistas, psicopedagogos y trabajadores comunitarios.</li>
+                        <li class="itemPunto">Centros de primera infancia barriales equipados con material didáctico seguro y espacios de estimulación.</li>
+                        <li class="itemPunto">Articulación permanente con centros de salud y hospitales locales para el seguimiento médico.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Entregamos módulos mensuales de leche maternizada, alimentos nutritivos y productos de higiene infantil.</li>
+                        <li class="itemPunto">Realizamos talleres semanales de estimulación temprana y juego compartido para madres, padres y bebés.</li>
+                        <li class="itemPunto">Monitoreamos periódicamente peso, talla y esquemas de vacunación en coordinación con agentes sanitarios.</li>
+                        <li class="itemPunto">Brindamos espacios de escucha y asesoramiento sobre lactancia materna y derechos de la niñez.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 3. TRABAJO ==================== -->
+            <article class="articuloProyecto" id="panel-trabajo" role="tabpanel" aria-labelledby="tab-trabajo" tabindex="0">
+                <h1 class="tituloProyecto">Trabajo</h1>
+                <p class="textoIntroduccion">
+                    Impulsamos la formación profesional, el aprendizaje de oficios y el desarrollo de emprendimientos productivos para generar oportunidades laborales genuinas y autonomía económica en sectores vulnerables.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Desarrollar capacidades técnicas y laborales en jóvenes y adultos para facilitar su inserción en el empleo formal.</li>
+                        <li class="itemPunto">Promover y consolidar emprendimientos productivos y unidades cooperativas comunitarias.</li>
+                        <li class="itemPunto">Vincular a los egresados de cursos con empresas, industrias y comercios que demanden mano de obra calificada.</li>
+                        <li class="itemPunto">Facilitar el acceso a herramientas de trabajo, insumos iniciales y microcréditos para la producción.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Cursos prácticos orientados a las demandas laborales reales de cada región y sector productivo.</li>
+                        <li class="itemPunto">Acompañamiento integral que incluye formulación de proyectos, comercialización y gestión de costos.</li>
+                        <li class="itemPunto">Alianzas con centros de formación profesional y cámaras empresarias para otorgar certificaciones.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Dictamos talleres de oficios: electricidad domiciliaria, gastronomía, carpintería, textil y nuevas tecnologías.</li>
+                        <li class="itemPunto">Entregamos kits de herramientas y maquinarias a egresados para la puesta en marcha de sus actividades.</li>
+                        <li class="itemPunto">Organizamos ferias barriales y rondas de negocios para la venta de productos de emprendedores locales.</li>
+                        <li class="itemPunto">Ofrecemos tutorías personalizadas para confección de CV, entrevistas laborales y formalización legal.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 4. SEGURIDAD ALIMENTARIA ==================== -->
+            <article class="articuloProyecto" id="panel-seguridad-alimentaria" role="tabpanel" aria-labelledby="tab-seguridad-alimentaria" tabindex="0">
+                <h1 class="tituloProyecto">Seguridad alimentaria</h1>
+                <p class="textoIntroduccion">
+                    Garantizamos la provisión de alimentos nutritivos y de calidad a comedores, merenderos y centros comunitarios, rescatando excedentes de comercialización para combatir el desperdicio y el hambre.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Asegurar el acceso a una alimentación balanceada y suficiente para personas y familias en situación de pobreza.</li>
+                        <li class="itemPunto">Rescatar excedentes de alimentos frescos y secos en buen estado de supermercados, industrias y productores.</li>
+                        <li class="itemPunto">Mejorar el equipamiento e infraestructura de comedores comunitarios y heladeras sociales.</li>
+                        <li class="itemPunto">Promover hábitos saludables y buenas prácticas en la manipulación y preparación de alimentos.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Logística diaria de retiro y distribución con transporte adecuado y control estricto de cadena de frío.</li>
+                        <li class="itemPunto">Supervisión por parte de nutricionistas para elevar el aporte proteico y vitamínico de las comidas.</li>
+                        <li class="itemPunto">Trazabilidad digital completa para asegurar la transparencia en la entrega de cada donación.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Coordinamos el rescate y acopio de frutas, verduras, carnes, lácteos y alimentos no perecederos.</li>
+                        <li class="itemPunto">Abastecemos de forma continua y planificada a más de 80 comedores y merenderos barriales.</li>
+                        <li class="itemPunto">Instalamos y mantenemos heladeras sociales en puntos estratégicos de alta concurrencia comunitaria.</li>
+                        <li class="itemPunto">Capacitamos a cocineras comunitarias en higiene bromatológica y aprovechamiento integral de ingredientes.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 5. ADICCIONES ==================== -->
+            <article class="articuloProyecto" id="panel-adicciones" role="tabpanel" aria-labelledby="tab-adicciones" tabindex="0">
+                <h1 class="tituloProyecto">Adicciones</h1>
+                <p class="textoIntroduccion">
+                    Acompañamos a personas en situación de consumo problemático y a sus grupos familiares a través de centros barriales de contención ("Casas Comunitarias"), escucha activa, prevención y reinserción social.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Brindar un espacio acogedor y libre de estigmas donde recibir a la persona tal como está.</li>
+                        <li class="itemPunto">Acompañar procesos de recuperación, resignificación del proyecto de vida y fortalecimiento de la autoestima.</li>
+                        <li class="itemPunto">Articular con el sistema de salud pública para tratamientos médicos, psicológicos y desintoxicación.</li>
+                        <li class="itemPunto">Fortalecer los lazos familiares y comunitarios como red indispensable de contención.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Dispositivos comunitarios de puertas abiertas y bajo umbral de exigencia para el ingreso.</li>
+                        <li class="itemPunto">Acompañamiento cuerpo a cuerpo por parte de operadores socio-terapéuticos y personas recuperadas.</li>
+                        <li class="itemPunto">Abordaje integral que combina salud mental, alimentación, descanso digno, arte y deporte.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Desarrollamos grupos de escucha, asambleas comunitarias y espacios de terapia individual y familiar.</li>
+                        <li class="itemPunto">Ofrecemos talleres de música, expresión corporal, deportes, huerta y oficios en las sedes barriales.</li>
+                        <li class="itemPunto">Brindamos asistencia inmediata de techo, ducha y comida caliente para personas en situación de calle.</li>
+                        <li class="itemPunto">Acompañamos en la gestión de DNI, turnos médicos y reinserción educativa o laboral.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 6. VIVIENDA ==================== -->
+            <article class="articuloProyecto" id="panel-vivienda" role="tabpanel" aria-labelledby="tab-vivienda" tabindex="0">
+                <h1 class="tituloProyecto">Vivienda</h1>
+                <p class="textoIntroduccion">
+                    Realizamos obras de mejoramiento habitacional, construcción de módulos sanitarios, impermeabilización de techos e instalaciones eléctricas seguras para erradicar condiciones de hacinamiento y riesgo sanitario.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Erradicar letrinas y asegurar módulos sanitarios dignos con agua caliente y saneamiento básico.</li>
+                        <li class="itemPunto">Mejorar techos, paredes y pisos para garantizar aislamiento térmico y protección ante lluvias.</li>
+                        <li class="itemPunto">Reemplazar instalaciones eléctricas precarias para prevenir incendios y accidentes domésticos.</li>
+                        <li class="itemPunto">Fomentar la autoconstrucción asistida y la participación comunitaria en el mejoramiento del hábitat.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Relevamiento técnico previo con arquitectos e ingenieros voluntarios junto a las familias.</li>
+                        <li class="itemPunto">Compra comunitaria de materiales de construcción a precios mayoristas directamente de fábrica.</li>
+                        <li class="itemPunto">Trabajo conjunto entre cuadrillas voluntarias y vecinos de los barrios beneficiarios.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Construimos módulos de baño completos con inodoro, ducha, lavamanos y biodigestores.</li>
+                        <li class="itemPunto">Reparamos y cambiamos cubiertas de techos con chapas, aislantes y tirantes resistentes.</li>
+                        <li class="itemPunto">Instalamos tableros eléctricos normalizados con disyuntores, llaves térmicas y puesta a tierra.</li>
+                        <li class="itemPunto">Hormigonamos pisos de cemento en reemplazo de pisos de tierra en dormitorios y cocinas.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 7. EMERGENCIAS ==================== -->
+            <article class="articuloProyecto" id="panel-emergencias" role="tabpanel" aria-labelledby="tab-emergencias" tabindex="0">
+                <h1 class="tituloProyecto">Emergencias</h1>
+                <p class="textoIntroduccion">
+                    Organizamos y desplegamos asistencia humanitaria inmediata ante catástrofes climáticas como inundaciones, temporales o incendios, acompañando a las familias damnificadas en la emergencia y en la vuelta a casa.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Brindar respuesta rápida y eficaz en las primeras 24 a 48 horas de ocurrida una catástrofe.</li>
+                        <li class="itemPunto">Distribuir agua potable, alimentos listos para consumo, ropa de abrigo y kits de higiene.</li>
+                        <li class="itemPunto">Acondicionar centros de evacuados temporales con condiciones seguras y sanitarias.</li>
+                        <li class="itemPunto">Acompañar en la etapa de retorno a los hogares con elementos de limpieza, desinfección y reconstrucción.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Reserva estratégica permanente de insumos críticos lista para ser despachada a cualquier punto del país.</li>
+                        <li class="itemPunto">Coordinación constante con Defensa Civil, Bomberos Voluntarios y comités de emergencia locales.</li>
+                        <li class="itemPunto">Voluntarios capacitados en logística de crisis, primeros auxilios y apoyo psicosocial.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Despachamos camiones con bidones de agua mineral, lavandina, botas de goma, frazadas y colchones.</li>
+                        <li class="itemPunto">Montamos cocinas de campaña para la elaboración de viandas calientes en centros de refugio.</li>
+                        <li class="itemPunto">Organizamos campañas solidarias transparentes canalizando las donaciones de empresas y particulares.</li>
+                        <li class="itemPunto">Enviamos cuadrillas para la limpieza, desinfección y recuperación de viviendas anegadas.</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 8. INTEGRACIÓN DE BARRIOS POPULARES ==================== -->
+            <article class="articuloProyecto" id="panel-integracion-barrios" role="tabpanel" aria-labelledby="tab-integracion-barrios" tabindex="0">
+                <h1 class="tituloProyecto">Integración de Barrios Populares</h1>
+                <p class="textoIntroduccion">
+                    Impulsamos proyectos de urbanismo social, construcción de veredas, recuperación de espacios públicos, instalación de luminarias y equipamiento comunitario para integrar plenamente los barrios a la ciudad.
+                </p>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Objetivos</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Integrar física, social y económicamente los asentamientos a la trama urbana consolidada.</li>
+                        <li class="itemPunto">Mejorar la transitabilidad y seguridad peatonal con veredas y rampas de accesibilidad universal.</li>
+                        <li class="itemPunto">Recuperar basurales y terrenos baldíos transformándolos en plazas, parques y canchas deportivas.</li>
+                        <li class="itemPunto">Fortalecer la organización comunitaria y los espacios de encuentro entre vecinos.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">Características</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Diagnóstico participativo donde los propios vecinos eligen las prioridades de obra de su barrio.</li>
+                        <li class="itemPunto">Soluciones sustentables como luminarias LED con paneles solares y arbolado urbano nativo.</li>
+                        <li class="itemPunto">Articulación con organizaciones sociales, centros vecinales y organismos públicos.</li>
+                    </ul>
+                </section>
+
+                <section class="seccionDetalle">
+                    <h2 class="subtituloSeccion">¿Qué hacemos?</h2>
+                    <ul class="listaPuntos">
+                        <li class="itemPunto">Construimos veredas de hormigón peinado y senderos peatonales seguros en pasillos y arterias principales.</li>
+                        <li class="itemPunto">Instalamos luminarias solares autónomas en zonas oscuras para mayor seguridad comunitaria.</li>
+                        <li class="itemPunto">Colocamos juegos infantiles, bancos comunitarios y arbolado en espacios públicos recuperados.</li>
+                        <li class="itemPunto">Organizamos jornadas culturales, festivales barriales y actividades deportivas para niños y jóvenes.</li>
+                    </ul>
+                </section>
+            </article>
+
+        </section>
+    </div>
+
+    <!-- Script interactivo para alternar proyectos en la barra lateral -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const botones = document.querySelectorAll('.botonMenuProyecto');
+            const paneles = document.querySelectorAll('.articuloProyecto');
+
+            function seleccionarProyecto(idTarget) {
+                if (!idTarget) return;
+
+                botones.forEach(function (btn) {
+                    btn.classList.remove('botonMenuProyectoActivo');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                paneles.forEach(function (panel) {
+                    panel.classList.remove('articuloProyectoActivo');
+                });
+
+                const boton = document.querySelector(`.botonMenuProyecto[data-target="${idTarget}"]`);
+                const panel = document.getElementById(`panel-${idTarget}`);
+
+                if (boton && panel) {
+                    boton.classList.add('botonMenuProyectoActivo');
+                    boton.setAttribute('aria-selected', 'true');
+                    panel.classList.add('articuloProyectoActivo');
+                }
+            }
+
+            botones.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const target = this.getAttribute('data-target');
+                    seleccionarProyecto(target);
+                });
+            });
+
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                seleccionarProyecto(hash);
+            }
+        });
+    </script>
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/acceso/proyectos.css">
+</th:block>
+</html>

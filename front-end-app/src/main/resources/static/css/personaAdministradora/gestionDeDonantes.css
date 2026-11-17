@@ -1,0 +1,274 @@
+/* ==========================================================================
+   ============ VISTA: GESTIÓN DE DONANTES (ADMIN) ==========================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 24px 48px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================= ENCABEZADO Y MIGAS DE PAN ================= */PP
+.encabezadoVista { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.subtituloVista { font-size: 1rem; color: var(--colorTextoMedio); max-width: 640px; }
+
+.migasPan { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--colorTextoClaro); font-weight: 500; margin-top: 24px; }
+.migasPan a { color: var(--colorTextoMedio); text-decoration: none; transition: var(--transicionSuave); }
+.migasPan a:hover { color: var(--colorPrimario); }
+.migasPan .migaActual { color: var(--colorPrimario); font-weight: 600; }
+
+/* ================= AVISO DE ALCANCE DE LA EDICIÓN ================= */
+.avisoAlcance {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background-color: var(--colorPrimarioClaro);
+    border: 1px solid var(--colorPrimarioBorde);
+    color: var(--colorPrimarioHover);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.avisoAlcance i { margin-top: 3px; flex-shrink: 0; }
+
+/* ================= BARRA DE HERRAMIENTAS ================= */
+.barraHerramientasDonantes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filtrosDonantes { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1; }
+
+.cajaBusquedaDonante { position: relative; display: flex; align-items: center; flex: 1; min-width: 260px; max-width: 400px; }
+.cajaBusquedaDonante .iconoBusqueda { position: absolute; left: 16px; color: var(--colorTextoClaro); font-size: 1rem; pointer-events: none; }
+.campoBusqueda {
+    width: 100%; padding: 10px 16px 10px 42px; font-family: inherit; font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1; border-radius: 8px; background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro); min-height: 44px; transition: var(--transicionSuave);
+}
+.campoBusqueda:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.cajaSelectorFiltro { position: relative; display: flex; align-items: center; min-width: 180px; }
+.cajaSelectorFiltro .iconoSelector { position: absolute; right: 16px; color: var(--colorTextoClaro); font-size: 0.8rem; pointer-events: none; }
+.selectorFiltro {
+    width: 100%; padding: 10px 36px 10px 16px; font-family: inherit; font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1; border-radius: 8px; background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro); min-height: 44px; transition: var(--transicionSuave); cursor: pointer; appearance: none;
+}
+.selectorFiltro:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+/* Interruptor (toggle) CSS puro */
+.controlInterruptor { display: flex; align-items: center; }
+.etiquetaInterruptor { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; color: var(--colorTextoMedio); font-weight: 500; }
+.checkboxOculto { position: absolute; opacity: 0; width: 0; height: 0; }
+.interruptorVisual { position: relative; width: 44px; height: 24px; flex-shrink: 0; background-color: #cbd5e1; border-radius: 12px; transition: var(--transicionSuave); display: inline-block; }
+.interruptorVisual::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: white; border-radius: 50%; transition: var(--transicionSuave); box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.checkboxOculto:checked + .interruptorVisual { background-color: var(--colorPrimario); }
+.checkboxOculto:checked + .interruptorVisual::after { transform: translateX(20px); }
+.checkboxOculto:focus-visible + .interruptorVisual { box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.accionesPrincipales { flex-shrink: 0; }
+
+/* ================= TABLA DE DIRECTORIO ================= */
+.tarjetaTabla {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--sombraSuave);
+    overflow: hidden;
+}
+
+.contenedorTabla { width: 100%; overflow-x: auto; }
+.tablaDirectorio { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+
+.tablaDirectorio thead th {
+    text-align: left; padding: 16px 24px; background-color: var(--colorFondo);
+    color: var(--colorTextoMedio); font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+.columnaAcciones { text-align: right; }
+
+.tablaDirectorio tbody td { padding: 16px 24px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.tablaDirectorio tbody tr { transition: var(--transicionSuave); }
+.tablaDirectorio tbody tr:hover { background-color: var(--colorPrimarioClaro); }
+.tablaDirectorio tbody tr:last-child td { border-bottom: none; }
+
+.celdaDocumento { font-weight: 600; color: var(--colorTextoMedio); white-space: nowrap; font-size: 0.9rem; }
+.contenidoCelda { display: flex; flex-direction: column; gap: 2px; }
+.textoPrincipal { font-weight: 700; color: var(--colorTextoOscuro); font-size: 1rem; }
+.textoSecundario { font-size: 0.8rem; color: var(--colorTextoClaro); }
+.celdaContacto { color: var(--colorTextoMedio); font-size: 0.9rem; }
+
+.etiquetaTipo { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.03em; display: inline-block; background-color: #f1f5f9; color: var(--colorTextoMedio); border: 1px solid #e2e8f0; white-space: nowrap; }
+.tipoJuridica { background-color: var(--colorPrimarioClaro); color: var(--colorPrimarioHover); border-color: var(--colorPrimarioBorde); }
+
+.etiquetaEstado { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; }
+.estadoActivo { background-color: #f0fdf4; color: var(--colorExito); border: 1px solid #bbf7d0; }
+.estadoInactivo { background-color: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+/* Filas dadas de baja (baja lógica) */
+.filaInactiva td { background-color: #fafafa; }
+.filaInactiva .textoPrincipal { color: var(--colorTextoMedio); }
+.filaInactiva .celdaDocumento { color: var(--colorTextoClaro); }
+.filaInactiva:hover td { background-color: #f1f5f9; }
+
+/* Acciones de fila */
+.celdaAcciones { text-align: right; white-space: nowrap; }
+.grupoBotonesAccion { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+
+.botonAccionTabla {
+    width: 38px; height: 38px; border-radius: 8px; border: 1px solid #e2e8f0;
+    background-color: var(--colorSuperficie); color: var(--colorTextoMedio);
+    display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
+    text-decoration: none; transition: var(--transicionSuave); cursor: pointer;
+}
+.botonAccionTabla:hover { background-color: var(--colorFondo); color: var(--colorPrimario); border-color: #cbd5e1; }
+
+.botonDestacado { color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); border-color: var(--colorPrimarioBorde); }
+.botonDestacado:hover { background-color: var(--colorPrimario); color: white; border-color: var(--colorPrimario); }
+
+.botonPeligro { color: var(--colorError); }
+.botonPeligro:hover { background-color: #fef2f2; color: var(--colorError); border-color: #fecaca; }
+
+.botonReactivar { width: auto; padding: 0 14px; gap: 8px; font: inherit; font-weight: 600; font-size: 0.85rem; color: var(--colorTextoOscuro); }
+.botonReactivar:hover { background-color: var(--colorTextoOscuro); color: white; border-color: var(--colorTextoOscuro); }
+
+/* ================= PAGINACIÓN ================= */
+.barraPaginacion { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-top: 1px solid #f1f5f9; background-color: var(--colorFondo); flex-wrap: wrap; }
+.textoPaginacion { font-size: 0.85rem; color: var(--colorTextoMedio); }
+.textoPaginacion strong { color: var(--colorTextoOscuro); }
+.listaPaginacion { list-style: none; display: flex; align-items: center; gap: 6px; }
+.enlacePagina { min-width: 40px; height: 40px; padding: 0 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; background-color: var(--colorSuperficie); color: var(--colorTextoMedio); font-weight: 600; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: var(--transicionSuave); }
+.enlacePagina:hover { border-color: var(--colorPrimario); color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); }
+.enlacePaginaActiva { background-color: var(--colorPrimario); border-color: var(--colorPrimario); color: white; }
+.enlacePaginaActiva:hover { background-color: var(--colorPrimarioHover); color: white; border-color: var(--colorPrimarioHover); }
+.enlacePaginaDeshabilitada { opacity: 0.45; pointer-events: none; }
+
+/* ==========================================================================
+   ================= MODALES (CSS puro con :target) =========================
+   ========================================================================== */
+.capaModal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: var(--transicionSuave); }
+.capaModal:target { opacity: 1; visibility: visible; }
+.fondoModal { position: absolute; inset: 0; background-color: rgba(15, 23, 42, 0.55); backdrop-filter: blur(2px); }
+
+.contenidoModal { position: relative; width: 100%; max-width: 560px; max-height: calc(100vh - 48px); background-color: var(--colorSuperficie); border-radius: var(--radioBorde); box-shadow: var(--sombraElevada); border: 1px solid rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; overflow: hidden; transform: translateY(16px) scale(0.98); transition: var(--transicionSuave); }
+.capaModal:target .contenidoModal { transform: translateY(0) scale(1); }
+.contenidoModalAngosto { max-width: 460px; }
+
+.cabeceraModal { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
+.titulosModal { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.tituloModal { font-size: 1.35rem; font-weight: 800; color: var(--colorTextoOscuro); margin: 0; }
+.subtituloModalInfo { font-size: 0.9rem; color: var(--colorTextoMedio); }
+
+.botonCerrarModal { width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #e2e8f0; border-radius: 50%; background-color: var(--colorSuperficie); color: var(--colorTextoMedio); font-size: 1.1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: var(--transicionSuave); }
+.botonCerrarModal:hover { color: var(--colorError); border-color: #fecaca; background-color: #fef2f2; }
+
+.cuerpoModal { padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+.formularioModal { display: flex; flex-direction: column; min-height: 0; }
+
+.pieModal { display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid #f1f5f9; background-color: var(--colorFondo); flex-shrink: 0; }
+.pieModal .botonPrimario, .pieModal .botonOpcion, .pieModal .botonOpcionCancelar { min-height: 44px; padding: 8px 22px; font-size: 0.95rem; border-radius: 10px; }
+
+/* ================= CAMPOS DE LOS MODALES ================= */
+.grupoCampo { display: flex; flex-direction: column; gap: 8px; }
+.etiquetaCampo { font-size: 0.9rem; font-weight: 600; color: var(--colorTextoMedio); }
+.textoAyuda { font-size: 0.85rem; color: var(--colorTextoClaro); font-weight: 500; }
+
+.campoTexto {
+    width: 100%; padding: 12px 16px; font-family: inherit; font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1; border-radius: 12px; background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro); min-height: 48px; transition: var(--transicionSuave);
+}
+.campoTexto:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.cajaCampoIcono { position: relative; display: flex; align-items: center; }
+.cajaCampoIcono .iconoCampo { position: absolute; left: 16px; color: var(--colorTextoClaro); font-size: 0.95rem; pointer-events: none; }
+.campoConIcono { padding-left: 44px; }
+
+.gridDosColumnas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Datos que la administración NO puede modificar */
+.bloqueSoloLectura {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px;
+    padding: 16px; border-radius: 12px;
+    background-color: var(--colorFondo); border: 1px solid #e2e8f0;
+}
+.datoSoloLectura { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.etiquetaSoloLectura { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--colorTextoClaro); display: flex; align-items: center; gap: 6px; }
+.valorSoloLectura { font-size: 0.95rem; font-weight: 600; color: var(--colorTextoMedio); }
+
+/* Aviso dentro del modal */
+.notaModal { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--colorTextoMedio); line-height: 1.5; }
+.notaModal i { margin-top: 3px; color: var(--colorPrimario); flex-shrink: 0; }
+
+/* ================= MODAL DE REPRESENTANTES ================= */
+.accionesModalSuperior { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.contadorRepresentantes { font-size: 0.85rem; font-weight: 600; color: var(--colorTextoMedio); }
+.accionesModalSuperior .botonOpcion { font-size: 0.9rem; min-height: 44px; padding: 8px 16px; border-radius: 10px; }
+
+.listaRepresentantes { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.itemRepresentante { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background-color: var(--colorFondo); border: 1px solid #e2e8f0; border-radius: 12px; transition: var(--transicionSuave); }
+.itemRepresentante:hover { border-color: var(--colorPrimarioBorde); background-color: var(--colorPrimarioClaro); }
+.avatarRepresentante { width: 38px; height: 38px; border-radius: 10px; background-color: var(--colorSuperficie); border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: var(--colorTextoMedio); flex-shrink: 0; }
+.datosRepresentante { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.nombreRepresentante { font-weight: 700; color: var(--colorTextoOscuro); font-size: 0.95rem; }
+.contactoRepresentante { font-size: 0.8rem; color: var(--colorTextoClaro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.accionesItemRepresentante { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* Estado vacío dentro del modal */
+.sinRepresentantes { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 16px; text-align: center; color: var(--colorTextoMedio); border: 1px dashed #cbd5e1; border-radius: 12px; }
+.sinRepresentantes i { font-size: 2rem; color: var(--colorTextoClaro); }
+
+/* ================= MODALES DE CONFIRMACIÓN ================= */
+.cuerpoConfirmacion { align-items: center; text-align: center; gap: 12px; }
+.iconoConfirmacion { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; background-color: #fef2f2; color: var(--colorError); border: 1px solid #fecaca; }
+.textoConfirmacion { font-size: 1rem; color: var(--colorTextoOscuro); line-height: 1.5; }
+.detalleConfirmacion { font-size: 0.9rem; color: var(--colorTextoMedio); line-height: 1.5; }
+.cuerpoConfirmacion .grupoCampo { width: 100%; text-align: left; }
+
+/* ================= ESTADO VACÍO DE LA TABLA ================= */
+.estadoVacio { display: none; flex-direction: column; align-items: center; gap: 8px; padding: 48px 24px; text-align: center; color: var(--colorTextoMedio); }
+.estadoVacio i { font-size: 2.5rem; color: var(--colorTextoClaro); }
+
+/* ==========================================================================
+   ========================= RESPONSIVE =====================================
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .celdaContacto, .columnaContacto { display: none; }
+}
+
+@media (max-width: 768px) {
+    .barraHerramientasDonantes { flex-direction: column; align-items: stretch; }
+    .filtrosDonantes { flex-direction: column; align-items: stretch; }
+    .cajaBusquedaDonante, .cajaSelectorFiltro { max-width: none; }
+    .accionesPrincipales .botonPrimario { width: 100%; }
+
+    /* La tabla pasa a tarjetas apiladas */
+    .tablaDirectorio thead { display: none; }
+    .tablaDirectorio tbody td { display: block; padding: 4px 16px; border-bottom: none; }
+    .tablaDirectorio tbody tr { display: block; padding: 16px 0; border-bottom: 1px solid #e2e8f0; }
+    .tablaDirectorio tbody tr:last-child { border-bottom: none; }
+    .celdaAcciones { text-align: left; padding-top: 12px; }
+    .grupoBotonesAccion { justify-content: flex-start; }
+
+    .barraPaginacion { flex-direction: column; align-items: stretch; gap: 12px; }
+    .textoPaginacion { text-align: center; }
+    .listaPaginacion { justify-content: center; flex-wrap: wrap; }
+
+    .capaModal { padding: 12px; align-items: flex-end; }
+    .contenidoModal { max-height: calc(100vh - 24px); }
+    .cabeceraModal, .cuerpoModal, .pieModal { padding: 16px; }
+    .gridDosColumnas, .bloqueSoloLectura { grid-template-columns: 1fr; }
+    .pieModal { flex-direction: column-reverse; align-items: stretch; }
+    .pieModal .botonPrimario, .pieModal .botonOpcion, .pieModal .botonOpcionCancelar { width: 100%; }
+}

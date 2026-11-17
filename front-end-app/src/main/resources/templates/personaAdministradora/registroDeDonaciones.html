@@ -1,0 +1,369 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+  <!-- Migas de pan: máximo 3 niveles de profundidad -->
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a href="/acceso/main">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <a href="/personaAdministradora/asignacionDeDonaciones">Donaciones</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Registro de donaciones</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Registrar donación</h1>
+    <p class="subtituloVista">Cargá una donación recibida asociándola a un donante y detallando los ítems entregados.</p>
+  </div>
+
+  <div th:if="${exito}" class="alertaFormulario alertaExito" role="status">
+    <i class="fas fa-circle-check" aria-hidden="true"></i>
+    <span th:text="${exito}">Donación registrada correctamente.</span>
+  </div>
+  <div th:if="${error}" class="alertaFormulario alertaError" role="alert">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span th:utext="${error}">No se pudo registrar la donación.</span>
+  </div>
+
+  <form class="formularioRegistroDonacion" th:action="@{/personaAdministradora/registroDeDonaciones}" method="POST" id="formularioRegistrarDonacion">
+    <input type="hidden" name="idDonante" id="idDonanteSeleccionado" required>
+    <input type="hidden" name="bienesJson" id="bienesJson">
+
+    <!-- ============ PASO 1: DONANTE ============ -->
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">1</span>
+        Donante
+      </legend>
+
+      <!-- Tarjeta del donante seleccionado (inicialmente oculta hasta elegir uno) -->
+      <div class="tarjetaDonanteSeleccionado" id="tarjetaDonanteSeleccionado" style="display: none;">
+        <span class="avatarDonante" id="avatarDonante" aria-hidden="true">JD</span>
+        <div class="datosDonante">
+          <span class="etiquetaDonante">DONANTE SELECCIONADO</span>
+          <span class="nombreDonante" id="nombreDonanteSeleccionado">John Doe</span>
+          <span class="detalleDonante" id="detalleDonanteSeleccionado">DNI · contacto</span>
+        </div>
+        <button type="button" class="botonOpcion" id="btnCambiarDonante">
+          <i class="fas fa-arrows-rotate" aria-hidden="true"></i> Cambiar donante
+        </button>
+      </div>
+
+      <!-- Buscador de donante con sugerencias instantáneas -->
+      <div class="grupoCampo buscadorDonante" id="contenedorBuscadorDonante">
+        <label class="etiquetaCampo" for="campoBuscarDonante">Buscar otro donante</label>
+        <div class="cajaBusquedaDonante">
+          <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+          <input type="search" id="campoBuscarDonante" class="campoTexto campoBusquedaDonante"
+                 placeholder="Buscar donante por nombre, DNI o correo..."
+                 autocomplete="off">
+
+          <div class="listaResultadosDonante" id="listaResultadosDonante" style="display: none;">
+            <p class="tituloResultados">Donantes encontrados</p>
+            <ul class="grupoResultados" id="ulResultadosDonantes">
+            </ul>
+          </div>
+        </div>
+        <span class="textoAyuda">Escribí al menos 1 caracter para ver coincidencias. Si el donante no existe, registralo desde <a href="/personaAdministradora/registrarDonante" style="color: var(--colorPrimario); font-weight: 600;">Registrar donante</a>.</span>
+      </div>
+    </fieldset>
+
+    <!-- ============ PASO 2: DATOS DE LA DONACIÓN ============ -->
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">2</span>
+        Datos de la donación
+      </legend>
+
+      <div class="gridDatosDonacion">
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="campoFechaDonacion">Fecha de recepción *</label>
+          <input type="date" id="campoFechaDonacion" name="fechaDonacion" class="campoFecha" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="campoDescripcionDonacion">Descripción</label>
+          <textarea id="campoDescripcionDonacion" name="descripcionDonacion" class="campoDescripcion" rows="3"
+                    placeholder="Ej: Ropa de abrigo en buen estado, entregada en la sede central."
+                    aria-describedby="ayudaDescripcion"></textarea>
+          <span class="textoAyuda" id="ayudaDescripcion">Opcional. Sumá detalles del estado de los bienes o del punto de entrega.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ============ PASO 3: ÍTEMS DONADOS ============ -->
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque tituloBloqueItems">
+        <span class="numeroPaso" aria-hidden="true">3</span>
+        Ítems donados
+        <span class="contadorItems" id="contadorItems">0 ítems cargados</span>
+      </legend>
+
+      <!-- Lista dinámica de ítems/bienes -->
+      <ul class="listaItems" id="listaItems">
+      </ul>
+
+      <p id="mensajeSinItems" class="textoAyuda" style="text-align: center; padding: 20px; border: 1.5px dashed #cbd5e1; border-radius: 14px; background: var(--colorSuperficie); display: none;">
+        No hay ítems cargados todavía en esta donación. Usá el botón de abajo para agregar los bienes recibidos.
+      </p>
+
+      <!-- Abre el modal para agregar ítem -->
+      <a href="#modalAgregarItem" class="botonAgregarItem" id="btnAbrirModalAgregar">
+        <i class="fas fa-circle-plus" aria-hidden="true"></i> Agregar otro ítem
+      </a>
+
+      <p class="avisoInformativo">
+        <i class="fas fa-circle-info" aria-hidden="true"></i>
+        <span>La donación quedará en estado <strong>En depósito</strong> hasta vincularla con una entidad beneficiaria.</span>
+      </p>
+    </fieldset>
+
+    <!-- ============ ACCIONES ============ -->
+    <div class="pieFormulario">
+      <span class="textoObligatorio">Los campos marcados con * son obligatorios.</span>
+      <div class="accionesFormulario">
+        <a href="/personaAdministradora/asignacionDeDonaciones" class="botonOpcion">Cancelar</a>
+        <button type="submit" class="botonPrimario" id="btnSubmitDonacion">
+          <i class="fas fa-circle-check" aria-hidden="true"></i> Registrar donación
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- ====================== MODAL: AGREGAR OTRO ÍTEM ====================== -->
+  <div class="capaModal" id="modalAgregarItem" role="dialog" aria-modal="true" aria-labelledby="tituloModalAgregarItem">
+    <a href="#" class="fondoModal" aria-label="Cerrar el modal de agregar ítem" tabindex="-1"></a>
+
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <h2 class="tituloModal" id="tituloModalAgregarItem">Agregar ítem a la donación</h2>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar el modal de agregar ítem">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+
+      <form class="formularioAgregarItem" id="formularioModalItem" onsubmit="return false;">
+        <div class="cuerpoModal">
+
+          <!-- Nombre del ítem -->
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="modalNombreItem">Nombre del ítem *</label>
+            <input type="text" id="modalNombreItem" class="campoTexto"
+                   placeholder="Ej: Campera de abrigo, Arroz largo fino 1kg" required>
+            <span class="textoAyuda">Nombre descriptivo con el que se identifica el bien.</span>
+          </div>
+
+          <!-- Categoría / Tipo -->
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="modalCategoriaItem">Subcategoría del bien *</label>
+            <div class="cajaSelector">
+              <select id="modalCategoriaItem" class="selectorCampo" required>
+                <option value="" disabled selected>Seleccioná una subcategoría...</option>
+                <th:block th:if="${subcategorias != null and !subcategorias.isEmpty()}">
+                  <option th:each="sub : ${subcategorias}"
+                          th:value="${sub.id}"
+                          th:data-categoria="${sub.categoriaNombre != null ? sub.categoriaNombre : 'General'}"
+                          th:data-nombre="${sub.nombre}"
+                          th:data-unidad="${sub.unidadDeMedida != null ? sub.unidadDeMedida : 'UNIDADES'}"
+                          th:text="${(sub.categoriaNombre != null ? sub.categoriaNombre + ' - ' : '') + sub.nombre + (sub.unidadDeMedida != null ? ' (' + sub.unidadDeMedida + ')' : '')}">
+                    Alimentos - Arroz (KG)
+                  </option>
+                </th:block>
+                <th:block th:if="${subcategorias == null or subcategorias.isEmpty()}">
+                  <option value="1" data-categoria="Alimentos" data-nombre="ARROZ" data-unidad="KG">Alimentos - ARROZ (KG)</option>
+                  <option value="2" data-categoria="Alimentos" data-nombre="ARROZ BLANCO" data-unidad="KG">Alimentos - ARROZ BLANCO (KG)</option>
+                  <option value="3" data-categoria="Alimentos" data-nombre="LECHE LARGA VIDA" data-unidad="L">Alimentos - LECHE LARGA VIDA (L)</option>
+                  <option value="7" data-categoria="Alimentos" data-nombre="FIDEOS SECOS" data-unidad="PAQUETES">Alimentos - FIDEOS SECOS (PAQUETES)</option>
+                  <option value="8" data-categoria="Alimentos" data-nombre="LATAS DE CONSERVA" data-unidad="UNIDADES">Alimentos - LATAS DE CONSERVA (UNIDADES)</option>
+                  <option value="4" data-categoria="Vestimenta" data-nombre="CAMPERAS" data-unidad="UNIDADES">Vestimenta - CAMPERAS (UNIDADES)</option>
+                  <option value="5" data-categoria="Vestimenta" data-nombre="ROPA" data-unidad="UNIDADES">Vestimenta - ROPA (UNIDADES)</option>
+                  <option value="6" data-categoria="Mobiliario" data-nombre="SILLAS" data-unidad="UNIDADES">Mobiliario - SILLAS (UNIDADES)</option>
+                  <option value="9" data-categoria="Mobiliario" data-nombre="MESAS" data-unidad="UNIDADES">Mobiliario - MESAS (UNIDADES)</option>
+                </th:block>
+                <option value="__CREAR_NUEVA__" style="color: var(--colorPrimario); font-weight: 700;">➕ Crear nueva subcategoría...</option>
+              </select>
+              <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+            </div>
+            <span class="textoAyuda">La subcategoría clasifica el bien y define la unidad canónica para el matcheo.</span>
+          </div>
+
+          <!-- Panel para crear nueva subcategoría inline si no existe -->
+          <div id="panelCrearSubcategoria" style="display: none; background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 12px; padding: 14px 16px; margin-top: 4px; margin-bottom: 12px;">
+            <p style="font-weight: 700; font-size: 0.92rem; margin-bottom: 8px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-folder-plus" style="color: var(--colorPrimario);" aria-hidden="true"></i> Alta de nueva subcategoría
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+              <div class="grupoCampo">
+                <label class="etiquetaCampo" for="nuevaSubcatNombre" style="font-size: 0.82rem;">Nombre *</label>
+                <input type="text" id="nuevaSubcatNombre" class="campoTexto" placeholder="Ej: Harina 000, Aceite, Fideos" style="min-height: 40px; padding: 8px 12px; font-size: 0.9rem;">
+              </div>
+              <div class="grupoCampo">
+                <label class="etiquetaCampo" for="nuevaSubcatCategoria" style="font-size: 0.82rem;">Categoría padre *</label>
+                <div class="cajaSelector">
+                  <select id="nuevaSubcatCategoria" class="selectorCampo" style="min-height: 40px; padding: 8px 12px; font-size: 0.9rem;">
+                    <th:block th:if="${categorias != null and !categorias.isEmpty()}">
+                      <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}">Alimentos</option>
+                    </th:block>
+                    <th:block th:if="${categorias == null or categorias.isEmpty()}">
+                      <option value="1">Alimentos</option>
+                      <option value="2">Vestimenta</option>
+                      <option value="3">Mobiliario</option>
+                    </th:block>
+                  </select>
+                  <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+            <div class="grupoCampo" style="margin-bottom: 12px;">
+              <label class="etiquetaCampo" for="nuevaSubcatUnidad" style="font-size: 0.82rem;">Unidad canónica del sistema *</label>
+              <div class="cajaSelector">
+                <select id="nuevaSubcatUnidad" class="selectorCampo" style="min-height: 40px; padding: 8px 12px; font-size: 0.9rem;">
+                  <option value="KG">KG (Kilogramos - Peso)</option>
+                  <option value="L">L (Litros - Líquidos)</option>
+                  <option value="M">M (Metros - Longitud)</option>
+                  <option value="UNIDADES" selected>UNIDADES (Conteo / Bienes)</option>
+                  <option value="PAQUETES">PAQUETES (Paquetes cerrados)</option>
+                </select>
+                <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button type="button" class="botonOpcion" id="btnCancelarNuevaSubcat" style="min-height: 36px; padding: 6px 14px; font-size: 0.85rem;">Cancelar</button>
+              <button type="button" class="botonPrimario" id="btnGuardarNuevaSubcat" style="min-height: 36px; padding: 6px 16px; font-size: 0.85rem;">
+                <i class="fas fa-check" aria-hidden="true"></i> Guardar y seleccionar
+              </button>
+            </div>
+          </div>
+
+          <!-- Cantidad y Unidad con Conversión Automática -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="modalCantidadItem">Cantidad ingresada *</label>
+              <input type="number" id="modalCantidadItem" class="campoTexto" value="1" min="0.001" step="any" required>
+            </div>
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="modalUnidadItem">Unidad de medida *</label>
+              <div class="cajaSelector">
+                <select id="modalUnidadItem" class="selectorCampo" required>
+                  <option value="UNIDADES" data-factor="1">Unidades</option>
+                </select>
+                <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner de conversión automática (Opción A) -->
+          <div id="bannerConversionUnidad" class="bannerConversion" style="display: none; margin-bottom: 16px;">
+            <i class="fas fa-calculator" aria-hidden="true"></i>
+            <span id="textoConversionCalculada">Conversión: 500 GR = 0.5 KG</span>
+          </div>
+
+          <!-- Estado del bien -->
+          <fieldset class="grupoOpciones">
+            <legend class="etiquetaCampo">Estado del bien *</legend>
+            <div class="filaOpciones">
+              <label class="opcionRadio">
+                <input type="radio" name="modalEstadoItem" value="USADO" checked>
+                <span>Usado</span>
+              </label>
+              <label class="opcionRadio">
+                <input type="radio" name="modalEstadoItem" value="NUEVO">
+                <span>Nuevo</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Fecha de vencimiento (opcional para alimentos/perecederos) -->
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="modalVencimientoItem">Fecha de vencimiento (opcional)</label>
+            <input type="date" id="modalVencimientoItem" class="campoFecha" aria-describedby="errorVencimientoItem">
+            <span class="textoAyuda">Completar si aplica a alimentos perecederos o medicamentos. No puede ser anterior a hoy.</span>
+            <span class="textoError" id="errorVencimientoItem" role="alert" hidden></span>
+          </div>
+
+          <!-- Descripción -->
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="modalDescripcionItem">Descripción / Detalles adicionales</label>
+            <input type="text" id="modalDescripcionItem" class="campoTexto"
+                   placeholder="Ej: Talles 8 a 12, en buen estado, color azul.">
+            <span class="textoAyuda">Opcional. Ayuda a identificar el bien al momento de la asignación.</span>
+          </div>
+
+          <!-- Foto del bien -->
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="modalFotoItem">Foto del bien</label>
+            <input type="file" id="modalFotoItem" class="campoTexto"
+                   accept="image/jpeg,image/png,image/webp" aria-describedby="errorFotoItem">
+            <img id="previewFotoItem" class="previewFotoItem" alt="Vista previa de la foto del bien" hidden>
+            <span class="textoAyuda">Opcional. JPG, PNG o WEBP de hasta 5 MB.</span>
+            <span class="textoError" id="errorFotoItem" role="alert" hidden></span>
+          </div>
+
+        </div>
+
+        <div class="pieModal">
+          <a href="#" class="botonOpcion">Cancelar</a>
+          <button type="button" class="botonPrimario" id="btnConfirmarAgregarItem">
+            <i class="fas fa-plus" aria-hidden="true"></i> Agregar ítem
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================== MODAL: DETALLE DEL ÍTEM ====================== -->
+  <div class="capaModal" id="modalDetalleGenerico" role="dialog" aria-modal="true" aria-labelledby="tituloDetalleGenerico">
+    <a href="#" class="fondoModal" aria-label="Cerrar el detalle del ítem" tabindex="-1"></a>
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <div class="titulosModal">
+          <h2 class="tituloModal" id="detalleTitulo">Detalle del ítem</h2>
+          <p class="subtituloModalInfo" id="detalleSubtitulo">Información del bien donado</p>
+        </div>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar el detalle">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+      <div class="cuerpoModal">
+        <dl class="listaDatosDetalle">
+          <div class="datoDetalle">
+            <dt>Categoría</dt>
+            <dd id="detalleCategoria">-</dd>
+          </div>
+          <div class="datoDetalle">
+            <dt>Estado</dt>
+            <dd id="detalleEstado">-</dd>
+          </div>
+          <div class="datoDetalle">
+            <dt>Cantidad</dt>
+            <dd id="detalleCantidad">-</dd>
+          </div>
+          <div class="datoDetalle" id="filaDetalleVencimiento" style="display: none;">
+            <dt>Vencimiento</dt>
+            <dd id="detalleVencimiento">-</dd>
+          </div>
+        </dl>
+        <div class="grupoCampo">
+          <span class="etiquetaCampo">Descripción</span>
+          <p class="descripcionDetalle" id="detalleDescripcion">-</p>
+        </div>
+        <img id="detalleFoto" class="previewFotoItem" alt="Foto del bien donado" hidden>
+      </div>
+      <div class="pieModal">
+        <a href="#" class="botonPrimario">Cerrar</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+  <link rel="stylesheet" href="/css/personaAdministradora/registroDeDonaciones.css">
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    window.listaDonantesGlobal = /*[[${donantes}]]*/ [];
+    /*]]>*/
+  </script>
+  <script src="/js/personaAdministradora/registroDeDonaciones.js" defer></script>
+</th:block>
+</html>

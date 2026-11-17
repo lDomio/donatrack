@@ -1,0 +1,594 @@
+/* ==========================================================================
+   ========================= CONTENIDO DE LA VISTA ==========================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 64px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* NAVEGACIÓN SUPERIOR / BREADCRUMB */
+.bloqueNavegacionSuperior {
+    display: flex;
+    align-items: center;
+}
+
+.botonVolverEntidades {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--colorPrimario);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: var(--colorPrimarioClaro);
+    transition: var(--transicionSuave);
+}
+
+.botonVolverEntidades:hover {
+    background-color: var(--colorPrimarioBorde);
+    color: var(--colorPrimarioHover);
+    transform: translateX(-2px);
+}
+
+/* TARJETA DETALLE DE LA ENTIDAD */
+.tarjetaEntidadDetalle {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    overflow: hidden;
+}
+
+.contenedorImagenDetalle {
+    position: relative;
+    height: 100%;
+    min-height: 220px;
+    background-color: #e2e8f0;
+}
+
+.imagenDetalle {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.insigniaVerificado {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(13, 148, 136, 0.95);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--sombraSuave);
+}
+
+.infoEntidadDetalle {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+}
+
+.tipoEntidadBadging {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colorPrimario);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tituloEntidadDetalle {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    line-height: 1.2;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    letter-spacing: 0 !important;
+}
+
+.ubicacionEntidadDetalle {
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.descripcionEntidadDetalle {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.6;
+}
+
+.resumenImpactoEntidad {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.itemResumen {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--colorTextoOscuro);
+    background-color: var(--colorFondo);
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.itemResumen i {
+    color: var(--colorPrimario);
+    margin-right: 4px;
+}
+
+/* ENCABEZADO DE NECESIDADES */
+.encabezadoPaginaNecesidades {
+    margin-top: 8px;
+}
+
+.tituloPaginaNecesidades {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.subtituloPaginaNecesidades {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+}
+
+/* CUADRÍCULA DE CATEGORÍAS (RECURRENTES VS EXTRAORDINARIAS) */
+.cuadriculaNecesidadesDetalle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+.tarjetaCategoriaNecesidad {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 28px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: var(--transicionSuave);
+}
+
+.tarjetaCategoriaNecesidad:hover {
+    box-shadow: var(--sombraMedia);
+}
+
+.cabeceraCategoriaNecesidad {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.iconoCategoria {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.iconoCategoria.teal {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+}
+
+.iconoCategoria.orange {
+    background-color: #fff7ed;
+    color: var(--colorSecundario);
+}
+
+.tituloCategoriaNecesidad {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.frecuenciaEtiqueta {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--colorPrimarioHover);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+}
+
+.frecuenciaEtiqueta.especial {
+    color: var(--colorSecundario);
+}
+
+.descripcionCategoria {
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.5;
+}
+
+/* LISTA DE INSUMOS Y BARRAS DE PROGRESO */
+.listaInsumos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.itemInsumo {
+    background-color: var(--colorFondo);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.itemInsumo.urgente {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.itemInsumo.completado {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.encabezadoInsumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.nombreInsumo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progresoTexto {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+}
+
+.progresoTexto.alerta {
+    color: var(--colorError);
+    font-weight: 700;
+}
+
+.progresoTexto.exito {
+    color: var(--colorExito);
+    font-weight: 700;
+}
+
+.contenedorBarra {
+    width: 100%;
+    height: 8px;
+    background-color: #cbd5e1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barraRelleno {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.barraRelleno.teal {
+    background-color: var(--colorPrimario);
+}
+
+.barraRelleno.orange {
+    background-color: var(--colorSecundario);
+}
+
+.barraRelleno.red {
+    background-color: var(--colorError);
+}
+
+.barraRelleno.green {
+    background-color: var(--colorExito);
+}
+
+/* BARRA FLOTANTE MÓVIL */
+.barraFlotanteMovil {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--colorSuperficie);
+    padding: 12px 16px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e2e8f0;
+    z-index: 200;
+}
+
+.botonMovilFijo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+    border-radius: var(--radioBorde);
+    background-color: var(--colorPrimario);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.botonMovilFijo:hover {
+    background-color: var(--colorPrimarioHover);
+    transform: translateY(-2px);
+    box-shadow: var(--sombraMedia);
+}
+
+/* MODAL (:target) */
+.modalContenedor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+}
+
+.modalContenedor:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modalContenido {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    max-width: 520px;
+    width: 100%;
+    box-shadow: var(--sombraElevada);
+    overflow: hidden;
+}
+
+.modalCabecera {
+    padding: 20px 24px;
+    background-color: var(--colorPrimarioClaro);
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modalSubtitulo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colorPrimarioHover);
+}
+
+.modalTitulo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.botonCerrarModal {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: var(--colorTextoMedio);
+    text-decoration: none;
+    padding: 4px;
+}
+
+.modalCuerpo {
+    padding: 24px;
+}
+
+.formularioDonacion {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grupoCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.etiquetaCampo {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--colorTextoOscuro);
+}
+
+.campoEntrada {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background-color: var(--colorFondo);
+    min-height: 48px;
+}
+
+.botonConfirmarModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+    border-radius: var(--radioBorde);
+    background-color: var(--colorPrimario);
+    color: white;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.botonConfirmarModal:hover {
+    background-color: var(--colorPrimarioHover);
+    transform: translateY(-2px);
+    box-shadow: var(--sombraMedia);
+}
+
+/* FOOTER */
+.piePaginaPrincipal {
+    background-color: var(--colorTextoOscuro);
+    color: #94a3b8;
+    padding: 48px 24px 24px 24px;
+    margin-top: auto;
+}
+
+.contenedorPiePagina {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.logotipoPie {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+.descripcionPie {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 360px;
+}
+
+.tituloColumnaPie {
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.listaPie {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.enlacePie {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transicionSuave);
+}
+
+.enlacePie:hover {
+    color: white;
+}
+
+.subPiePagina {
+    max-width: 1280px;
+    margin: 24px auto 0 auto;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+/* MEDIA QUERIES PARA ADAPTABILIDAD */
+@media (max-width: 768px) {
+    .menuDesplegableNotificaciones {
+        position: fixed;
+        top: 76px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: calc(100vw - 32px);
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .menuDesplegable {
+        position: fixed;
+        top: 76px;
+        right: 16px;
+        left: auto;
+    }
+
+    .tarjetaEntidadDetalle {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedorImagenDetalle {
+        height: 180px;
+    }
+
+    .cuadriculaNecesidadesDetalle {
+        grid-template-columns: 1fr;
+    }
+
+    .barraFlotanteMovil {
+        display: flex;
+    }
+
+    .contenedorPiePagina {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}

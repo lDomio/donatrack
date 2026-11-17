@@ -1,0 +1,563 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a href="/acceso/main">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Gestión de donantes</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Gestión de donantes</h1>
+    <p class="subtituloVista">Directorio centralizado para dar de alta, editar y dar de baja donantes, y administrar los representantes de las personas jurídicas.</p>
+  </div>
+
+  <!-- Alcance de lo que la administración puede modificar -->
+  <p class="avisoAlcance">
+    <i class="fas fa-circle-info" aria-hidden="true"></i>
+    <span>Desde acá solo se editan los <strong>datos públicos de contacto</strong> que muestra la plataforma. Las credenciales, los datos personales y las preferencias de cada cuenta las gestiona la propia persona usuaria desde su perfil.</span>
+  </p>
+
+  <!-- ============ FILTROS Y ALTA ============ -->
+  <div class="barraHerramientasDonantes">
+        <form class="filtrosDonantes" aria-label="Filtros de donantes"
+      th:action="@{/personaAdministradora/gestionDeDonantes}"
+      method="get"
+      hx-get="/personaAdministradora/gestionDeDonantes" 
+      hx-trigger="submit, input delay:250ms from:#campoBuscarDonante, change from:#filtroTipo, change from:#filtroEstado"
+      hx-target="#seccionDirectorioDonantes"
+      hx-select="#seccionDirectorioDonantes"
+      hx-swap="outerHTML"
+      hx-push-url="true">
+      <input type="hidden" name="pagina" value="1">
+      <div class="cajaBusquedaDonante">
+        <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+        <label class="visualmenteOculto" for="campoBuscarDonante">Buscar donante</label>
+        <input type="search" id="campoBuscarDonante" name="buscar" class="campoBusqueda" placeholder="Buscar por nombre..." autocomplete="off" th:value="${paramBuscar}">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--colorTextoClaro); text-transform: uppercase; letter-spacing: 0.05em;">Filtros</span>
+        <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="filtroTipo" style="font-size: 0.85rem; font-weight: 600; color: var(--colorTextoMedio);">Tipo de donante</label>
+            <div class="cajaSelectorFiltro">
+              <select id="filtroTipo" name="tipo" class="selectorFiltro">
+                <option value="todos" th:selected="${paramTipo == null or paramTipo == 'todos'}">Todos los tipos</option>
+                <option value="humana" th:selected="${paramTipo == 'humana'}">Persona humana</option>
+                <option value="juridica" th:selected="${paramTipo == 'juridica'}">Persona jurídica</option>
+              </select>
+              <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="filtroEstado" style="font-size: 0.85rem; font-weight: 600; color: var(--colorTextoMedio);">Estado del donante</label>
+            <div class="cajaSelectorFiltro">
+              <select id="filtroEstado" name="estado" class="selectorFiltro">
+                <option value="todos" th:selected="${paramEstado == null or paramEstado == 'todos'}">Todos los estados</option>
+                <option value="alta" th:selected="${paramEstado == 'alta'}">Activo</option>
+                <option value="baja" th:selected="${paramEstado == 'baja'}">Dado de baja</option>
+              </select>
+              <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+            </div>
+          </div>
+          
+          <button type="submit" class="botonOpcion" style="height: 48px; border-radius: 12px; padding: 0 20px; border: 1.5px solid #cbd5e1; background-color: var(--colorSuperficie); color: var(--colorTextoOscuro); font-weight: 600; cursor: pointer; transition: var(--transicionSuave);">
+            Aplicar
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- El alta redirige a la vista dedicada -->
+    <div class="accionesPrincipales">
+      <a th:href="@{/personaAdministradora/registrarDonante}" class="botonPrimario">
+        <i class="fas fa-plus" aria-hidden="true"></i> Nuevo donante
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ DIRECTORIO ============ -->
+  <section class="tarjetaTabla" id="seccionDirectorioDonantes" aria-label="Directorio de donantes registrados">
+    <div class="contenedorTabla" th:style="${totalDonantes == 0} ? 'display: none;' : ''">
+      <table class="tablaDirectorio">
+        <caption class="visualmenteOculto">Listado de donantes con su documento, tipo, contacto público, estado y acciones de gestión.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Documento</th>
+            <th scope="col">Nombre / Razón social</th>
+            <th scope="col">Tipo</th>
+            <th scope="col" class="columnaContacto">Contacto público</th>
+            <th scope="col">Estado</th>
+            <th scope="col" class="columnaAcciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaDonantes">
+          <tr th:each="donante : ${donantes}">
+            <!-- Como el DTO no trae documento aún, mostramos el ID temporalmente -->
+            <td class="celdaDocumento" th:text="'ID ' + ${donante.id}">ID</td>
+            
+            <td class="celdaNombre">
+              <div class="contenidoCelda">
+                <span class="textoPrincipal" th:text="${donante.nombre}">Nombre / Razón Social</span>
+                <span class="textoSecundario">-- donaciones registradas</span>
+              </div>
+
+</td>
+            
+            <td>
+              <span class="etiquetaTipo" 
+                    th:classappend="${donante.tipo != null and #strings.containsIgnoreCase(donante.tipo, 'jur')} ? 'tipoJuridica' : ''"
+                    th:text="${donante.tipo}">Tipo</span>
+            </td>
+            
+            <td class="celdaContacto" th:text="${donante.contactos != null and !donante.contactos.isEmpty()} ? ${donante.contactos[0].valorDelContacto} : 'Sin contacto'">contacto</td>
+            
+            <!-- Estado: como pediste, no lo implementamos aún -->
+            <td><span class="etiquetaEstado" th:text="${donante.estaActivo != null and donante.estaActivo} ? 'Activo' : 'Dado de baja'" th:style="${donante.estaActivo != null and donante.estaActivo} ? 'color: #28a745; background-color: #e8f5e9;' : 'color: #dc3545; background-color: #f8d7da;'"></span></td>
+            
+            <td class="celdaAcciones">
+              <div class="grupoBotonesAccion">
+                <a href="#modalEditarDonante" class="botonAccionTabla" title="Editar datos públicos">
+                  <i class="fas fa-pen" aria-hidden="true"></i>
+                </a>
+                <!-- El botón de gestionar representantes se muestra solo para personas jurídicas -->
+                <a th:href="'#modalRepresentantes-' + ${donante.id}" class="botonAccionTabla botonDestacado" title="Gestionar representantes" 
+                   th:if="${donante.tipo != null and #strings.containsIgnoreCase(donante.tipo, 'jur')}">
+                  <i class="fas fa-users" aria-hidden="true"></i>
+                </a>
+                <a th:href="'#modalBajaDonante-' + ${donante.id}" class="botonAccionTabla botonPeligro" title="Dar de baja" th:if="${donante.estaActivo == null or donante.estaActivo}">
+                  <i class="fas fa-user-slash" aria-hidden="true"></i>
+                </a>
+                <a th:href="'#modalAltaDonante-' + ${donante.id}" class="botonAccionTabla" style="color: #28a745; border-color: #28a745;" title="Dar de alta" th:unless="${donante.estaActivo == null or donante.estaActivo}">
+                  <i class="fas fa-user-check" aria-hidden="true"></i>
+                </a>
+              </div>
+
+<!-- Modales de Baja y Alta (Generados por fila) -->
+<div class="capaModal" th:id="'modalBajaDonante-' + ${donante.id}" role="dialog" aria-modal="true" style="text-align: left; white-space: normal;">
+  <a href="#" class="fondoModal" aria-label="Cancelar la baja del donante" tabindex="-1"></a>
+  <div class="contenidoModal contenidoModalAngosto">
+    <header class="cabeceraModal">
+      <div class="titulosModal">
+        <h2 class="tituloModal">Dar de baja</h2>
+        <p class="subtituloModalInfo" th:text="${donante.nombre}"></p>
+      </div>
+      <a href="#" class="botonCerrarModal" aria-label="Cancelar la baja del donante">
+        <i class="fas fa-xmark" aria-hidden="true"></i>
+      </a>
+    </header>
+    <form class="formularioModal" th:action="@{/personaAdministradora/donantes/{id}/baja(id=${donante.id})}" method="post">
+      <input type="hidden" name="_method" value="patch"/>
+      <div class="cuerpoModal cuerpoConfirmacion">
+        <span class="iconoConfirmacion" aria-hidden="true"><i class="fas fa-user-slash"></i></span>
+        <p class="textoConfirmacion">¿Confirmás la baja de <strong th:text="${donante.nombre}"></strong>?</p>
+        <p class="detalleConfirmacion">
+          Es una <strong>baja lógica</strong>: el donante deja de aparecer en los listados y no podrá recibir nuevas donaciones,
+          pero su historial y sus donaciones ya registradas se conservan. Podés reactivarlo cuando quieras.
+        </p>
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="motivoBaja">Motivo de la baja</label>
+          <div class="cajaSelectorFiltro">
+            <select id="motivoBaja" name="motivoBaja" class="selectorFiltro">
+              <option value="solicitud" selected>A pedido del donante</option>
+              <option value="inactividad">Inactividad prolongada</option>
+              <option value="datosInvalidos">Datos de contacto inválidos</option>
+              <option value="duplicado">Registro duplicado</option>
+              <option value="otro">Otro</option>
+            </select>
+            <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+          </div>
+          <span class="textoAyuda">Queda registrado en el historial administrativo.</span>
+        </div>
+      </div>
+      <div class="pieModal">
+        <a href="#" class="botonOpcion">Cancelar</a>
+        <button type="submit" class="botonOpcionCancelar">
+          <i class="fas fa-user-slash" aria-hidden="true"></i> Dar de baja
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="capaModal" th:id="'modalAltaDonante-' + ${donante.id}" role="dialog" aria-modal="true" style="text-align: left; white-space: normal;">
+  <a href="#" class="fondoModal" aria-label="Cancelar el alta del donante" tabindex="-1"></a>
+  <div class="contenidoModal contenidoModalAngosto">
+    <header class="cabeceraModal">
+      <div class="titulosModal">
+        <h2 class="tituloModal">Dar de alta</h2>
+        <p class="subtituloModalInfo" th:text="${donante.nombre}"></p>
+      </div>
+      <a href="#" class="botonCerrarModal" aria-label="Cancelar el alta del donante">
+        <i class="fas fa-xmark" aria-hidden="true"></i>
+      </a>
+    </header>
+    <form class="formularioModal" th:action="@{/personaAdministradora/donantes/{id}/alta(id=${donante.id})}" method="post">
+      <input type="hidden" name="_method" value="patch"/>
+      <div class="cuerpoModal cuerpoConfirmacion">
+        <span class="iconoConfirmacion" aria-hidden="true"><i class="fas fa-user-check"></i></span>
+        <p class="textoConfirmacion">¿Confirmás el alta de <strong th:text="${donante.nombre}"></strong>?</p>
+        <p class="detalleConfirmacion">
+          El donante volverá a estar activo en el sistema, aparecerá en los listados y podrá volver a realizar donaciones y aparecer en el ranking público.
+        </p>
+      </div>
+      <div class="pieModal">
+        <a href="#" class="botonOpcion">Cancelar</a>
+        <button type="submit" class="botonOpcionCancelar" style="background-color: #28a745; color: white;">
+          <i class="fas fa-user-check" aria-hidden="true"></i> Dar de alta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ======================================================================
+     MODALES DE REPRESENTANTES (Por cada Persona Jurídica)
+     ====================================================================== -->
+<th:block th:if="${donante.tipo != null and #strings.containsIgnoreCase(donante.tipo, 'jur')}">
+  <!-- MODAL 3: LISTADO DE REPRESENTANTES -->
+  <div class="capaModal" th:id="'modalRepresentantes-' + ${donante.id}" role="dialog" aria-modal="true" style="text-align: left; white-space: normal;">
+    <a href="#" class="fondoModal" aria-label="Cerrar panel de representantes" tabindex="-1"></a>
+
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <div class="titulosModal">
+          <h2 class="tituloModal">Representantes</h2>
+          <p class="subtituloModalInfo" th:text="${donante.nombre} + ' (ID ' + ${donante.id} + ')'">Persona Jurídica</p>
+        </div>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar panel de representantes">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+
+      <div class="cuerpoModal">
+        <div class="accionesModalSuperior">
+          <span class="contadorRepresentantes"
+                th:text="${donante.representantes != null ? donante.representantes.size() : 0} + (${donante.representantes != null and donante.representantes.size() == 1} ? ' representante vinculado' : ' representantes vinculados')">0 representantes vinculados</span>
+          <a th:href="@{/personaAdministradora/registrarRepresentante(idDonante=${donante.id})}" class="botonOpcion">
+            <i class="fas fa-user-plus" aria-hidden="true"></i> Añadir representante
+          </a>
+        </div>
+
+        <div class="sinRepresentantes" th:if="${donante.representantes == null or donante.representantes.isEmpty()}">
+          <i class="fas fa-users-slash" aria-hidden="true"></i>
+          <p>Esta persona jurídica aún no tiene representantes registrados.</p>
+        </div>
+
+        <ul class="listaRepresentantes" th:if="${donante.representantes != null and !donante.representantes.isEmpty()}">
+          <li class="itemRepresentante" th:each="rep : ${donante.representantes}">
+            <span class="avatarRepresentante" aria-hidden="true" th:text="${rep.iniciales}">RP</span>
+            <div class="datosRepresentante">
+              <span class="nombreRepresentante" th:text="${rep.nombre}">Nombre Representante</span>
+              <span class="contactoRepresentante" th:text="${rep.resumenContactos}">correo · teléfono</span>
+            </div>
+            <div class="accionesItemRepresentante">
+              <a th:href="'#modalEditarRepresentante-' + ${donante.id} + '-' + ${rep.id}" class="botonAccionTabla" th:aria-label="'Editar datos de ' + ${rep.nombre}" title="Editar">
+                <i class="fas fa-pen" aria-hidden="true"></i>
+              </a>
+              <a th:href="'#modalQuitarRepresentante-' + ${donante.id} + '-' + ${rep.id}" class="botonAccionTabla botonPeligro" th:aria-label="'Quitar a ' + ${rep.nombre} + ' como representante'" title="Quitar">
+                <i class="fas fa-user-minus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </li>
+        </ul>
+
+        <p class="notaModal">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <span>Los representantes son el contacto operativo de la entidad. Quitar uno realiza la baja física del representante en esta persona jurídica.</span>
+        </p>
+      </div>
+
+      <div class="pieModal">
+        <a href="#" class="botonPrimario">Hecho</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALES 4 y 5: EDITAR Y QUITAR CADA REPRESENTANTE -->
+  <th:block th:if="${donante.representantes != null}" th:each="rep : ${donante.representantes}">
+    <!-- MODAL 4: EDITAR REPRESENTANTE -->
+    <div class="capaModal" th:id="'modalEditarRepresentante-' + ${donante.id} + '-' + ${rep.id}" role="dialog" aria-modal="true" style="text-align: left; white-space: normal;">
+      <a th:href="'#modalRepresentantes-' + ${donante.id}" class="fondoModal" aria-label="Volver al panel de representantes" tabindex="-1"></a>
+
+      <div class="contenidoModal">
+        <header class="cabeceraModal">
+          <div class="titulosModal">
+            <h2 class="tituloModal">Editar representante</h2>
+            <p class="subtituloModalInfo" th:text="${rep.nombre} + ' · ' + ${donante.nombre}">Representante · Entidad</p>
+          </div>
+          <a th:href="'#modalRepresentantes-' + ${donante.id}" class="botonCerrarModal" aria-label="Volver al panel de representantes">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+          </a>
+        </header>
+
+        <form class="formularioModal" th:action="@{/personaAdministradora/donantes/{idDonante}/representantes/{idRep}/editar(idDonante=${donante.id}, idRep=${rep.id})}" method="post">
+          <div class="cuerpoModal">
+            <div class="gridDosColumnas">
+              <div class="grupoCampo">
+                <label class="etiquetaCampo" th:for="'nombreRepEditar-' + ${rep.id}">Nombre *</label>
+                <input type="text" th:id="'nombreRepEditar-' + ${rep.id}" name="nombreRepresentante" class="campoTexto" th:value="${rep.nombrePila}" required>
+              </div>
+
+              <div class="grupoCampo">
+                <label class="etiquetaCampo" th:for="'apellidoRepEditar-' + ${rep.id}">Apellido *</label>
+                <input type="text" th:id="'apellidoRepEditar-' + ${rep.id}" name="apellidoRepresentante" class="campoTexto" th:value="${rep.apellido}">
+              </div>
+            </div>
+
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" th:for="'correoRepEditar-' + ${rep.id}">Correo de contacto *</label>
+              <div class="cajaCampoIcono">
+                <i class="fas fa-envelope iconoCampo" aria-hidden="true"></i>
+                <input type="email" th:id="'correoRepEditar-' + ${rep.id}" name="correoRepresentante" class="campoTexto campoConIcono" th:value="${rep.email}" placeholder="correo@empresa.com" required>
+              </div>
+            </div>
+
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" th:for="'telefonoRepEditar-' + ${rep.id}">Teléfono de contacto *</label>
+              <div class="cajaCampoIcono">
+                <i class="fas fa-phone iconoCampo" aria-hidden="true"></i>
+                <input type="tel" th:id="'telefonoRepEditar-' + ${rep.id}" name="telefonoRepresentante" class="campoTexto campoConIcono" th:value="${rep.telefono}" placeholder="Ej: 11 4567-8901" required>
+              </div>
+            </div>
+
+            <p class="notaModal">
+              <i class="fas fa-shield-halved" aria-hidden="true"></i>
+              <span>Son los datos de contacto que la entidad publica para coordinar retiros. No modifican la cuenta personal del representante.</span>
+            </p>
+          </div>
+
+          <div class="pieModal">
+            <a th:href="'#modalRepresentantes-' + ${donante.id}" class="botonOpcion">Cancelar</a>
+            <button type="submit" class="botonPrimario">
+              <i class="fas fa-floppy-disk" aria-hidden="true"></i> Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 5: QUITAR REPRESENTANTE -->
+    <div class="capaModal" th:id="'modalQuitarRepresentante-' + ${donante.id} + '-' + ${rep.id}" role="dialog" aria-modal="true" style="text-align: left; white-space: normal;">
+      <a th:href="'#modalRepresentantes-' + ${donante.id}" class="fondoModal" aria-label="Volver al panel de representantes" tabindex="-1"></a>
+
+      <div class="contenidoModal contenidoModalAngosto">
+        <header class="cabeceraModal">
+          <div class="titulosModal">
+            <h2 class="tituloModal">Quitar representante</h2>
+            <p class="subtituloModalInfo" th:text="${donante.nombre}">Persona Jurídica</p>
+          </div>
+          <a th:href="'#modalRepresentantes-' + ${donante.id}" class="botonCerrarModal" aria-label="Volver al panel de representantes">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+          </a>
+        </header>
+
+        <form class="formularioModal" th:action="@{/personaAdministradora/donantes/{idDonante}/representantes/{idRep}/eliminar(idDonante=${donante.id}, idRep=${rep.id})}" method="post">
+          <div class="cuerpoModal cuerpoConfirmacion">
+            <span class="iconoConfirmacion" aria-hidden="true"><i class="fas fa-user-minus"></i></span>
+            <p class="textoConfirmacion">¿Quitás a <strong th:text="${rep.nombre}">Representante</strong> como representante?</p>
+            <p class="detalleConfirmacion">
+              Se eliminará de forma permanente como representante de esta persona jurídica junto con sus medios de contacto asociados.
+            </p>
+          </div>
+
+          <div class="pieModal">
+            <a th:href="'#modalRepresentantes-' + ${donante.id}" class="botonOpcion">Cancelar</a>
+            <button type="submit" class="botonOpcionCancelar">
+              <i class="fas fa-user-minus" aria-hidden="true"></i> Quitar representante
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </th:block>
+</th:block>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vacío: se muestra cuando los filtros no arrojan resultados -->
+    <div class="estadoVacio" th:style="${totalDonantes == 0} ? 'display: flex;' : 'display: none;'">
+      <i class="fas fa-user-slash" aria-hidden="true"></i>
+      <p>No encontramos donantes que coincidan con los filtros aplicados.</p>
+    </div>
+
+    <!-- Paginación (20 donantes por página) -->
+    <div class="barraPaginacion">
+      <p class="textoPaginacion" th:if="${totalDonantes == 0}">
+        No se encontraron donantes
+      </p>
+      <p class="textoPaginacion" th:unless="${totalDonantes == 0}">
+        Mostrando <strong th:text="${registroDesde}">1</strong>-<strong th:text="${registroHasta}">20</strong> de <strong th:text="${totalDonantes}">60</strong> donantes
+      </p>
+      <nav aria-label="Paginación del directorio de donantes" th:if="${totalDonantes > 0}">
+        <ul class="listaPaginacion">
+          <!-- Botón Página Anterior -->
+          <li>
+            <a th:if="${paginaActual > 1}"
+               th:href="@{/personaAdministradora/gestionDeDonantes(pagina=${paginaActual - 1}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               th:hx-get="@{/personaAdministradora/gestionDeDonantes(pagina=${paginaActual - 1}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               hx-target="#seccionDirectorioDonantes"
+               hx-select="#seccionDirectorioDonantes"
+               hx-swap="outerHTML"
+               hx-push-url="true"
+               class="enlacePagina"
+               aria-label="Página anterior">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </a>
+            <span th:unless="${paginaActual > 1}"
+                  class="enlacePagina enlacePaginaDeshabilitada"
+                  aria-disabled="true"
+                  aria-label="Página anterior deshabilitada">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </span>
+          </li>
+
+          <!-- Páginas numeradas -->
+          <li th:each="p : ${#numbers.sequence(1, totalPaginas)}">
+            <a th:href="@{/personaAdministradora/gestionDeDonantes(pagina=${p}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               th:hx-get="@{/personaAdministradora/gestionDeDonantes(pagina=${p}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               hx-target="#seccionDirectorioDonantes"
+               hx-select="#seccionDirectorioDonantes"
+               hx-swap="outerHTML"
+               hx-push-url="true"
+               class="enlacePagina"
+               th:classappend="${p == paginaActual} ? 'enlacePaginaActiva' : ''"
+               th:attr="aria-current=${p == paginaActual} ? 'page' : null"
+               th:text="${p}">1</a>
+          </li>
+
+          <!-- Botón Página Siguiente -->
+          <li>
+            <a th:if="${paginaActual < totalPaginas}"
+               th:href="@{/personaAdministradora/gestionDeDonantes(pagina=${paginaActual + 1}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               th:hx-get="@{/personaAdministradora/gestionDeDonantes(pagina=${paginaActual + 1}, buscar=${paramBuscar}, tipo=${paramTipo}, estado=${paramEstado})}"
+               hx-target="#seccionDirectorioDonantes"
+               hx-select="#seccionDirectorioDonantes"
+               hx-swap="outerHTML"
+               hx-push-url="true"
+               class="enlacePagina"
+               aria-label="Página siguiente">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </a>
+            <span th:unless="${paginaActual < totalPaginas}"
+                  class="enlacePagina enlacePaginaDeshabilitada"
+                  aria-disabled="true"
+                  aria-label="Página siguiente deshabilitada">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       MODAL 1: EDITAR DATOS PÚBLICOS DEL DONANTE
+       ====================================================================== -->
+  <div class="capaModal" id="modalEditarDonante" role="dialog" aria-modal="true" aria-labelledby="tituloModalEditarDonante">
+    <a href="#" class="fondoModal" aria-label="Cerrar edición de donante" tabindex="-1"></a>
+
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <div class="titulosModal">
+          <h2 class="tituloModal" id="tituloModalEditarDonante">Editar datos públicos</h2>
+          <p class="subtituloModalInfo">Supermercado La Familia (CUIT 30-71054321-9)</p>
+        </div>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar edición de donante">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+
+      <form class="formularioModal" id="formularioEditarDonante">
+        <div class="cuerpoModal">
+
+          <!-- Datos que la administración no puede tocar -->
+          <div class="bloqueSoloLectura">
+            <div class="datoSoloLectura">
+              <span class="etiquetaSoloLectura"><i class="fas fa-lock" aria-hidden="true"></i> Documento</span>
+              <span class="valorSoloLectura">CUIT 30-71054321-9</span>
+            </div>
+            <div class="datoSoloLectura">
+              <span class="etiquetaSoloLectura"><i class="fas fa-lock" aria-hidden="true"></i> Tipo de donante</span>
+              <span class="valorSoloLectura">Persona jurídica</span>
+            </div>
+            <div class="datoSoloLectura">
+              <span class="etiquetaSoloLectura"><i class="fas fa-lock" aria-hidden="true"></i> Alta en el sistema</span>
+              <span class="valorSoloLectura">14/09/2025</span>
+            </div>
+            <div class="datoSoloLectura">
+              <span class="etiquetaSoloLectura"><i class="fas fa-lock" aria-hidden="true"></i> Usuario de acceso</span>
+              <span class="valorSoloLectura">lafamilia_admin</span>
+            </div>
+          </div>
+
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="nombrePublicoDonante">Nombre / Razón social *</label>
+            <input type="text" id="nombrePublicoDonante" name="nombrePublicoDonante" class="campoTexto" value="Supermercado La Familia" required>
+            <span class="textoAyuda">Es el nombre que ven las entidades beneficiarias y el que aparece en el ranking.</span>
+          </div>
+
+          <div class="gridDosColumnas">
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="correoPublicoDonante">Correo de contacto *</label>
+              <div class="cajaCampoIcono">
+                <i class="fas fa-envelope iconoCampo" aria-hidden="true"></i>
+                <input type="email" id="correoPublicoDonante" name="correoPublicoDonante" class="campoTexto campoConIcono" value="contacto@lafamilia.com" required>
+              </div>
+            </div>
+
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="telefonoPublicoDonante">Teléfono de contacto</label>
+              <div class="cajaCampoIcono">
+                <i class="fas fa-phone iconoCampo" aria-hidden="true"></i>
+                <input type="tel" id="telefonoPublicoDonante" name="telefonoPublicoDonante" class="campoTexto campoConIcono" value="11 4567-8901">
+              </div>
+            </div>
+          </div>
+
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="zonaPublicaDonante">Localidad / zona de retiro</label>
+            <div class="cajaCampoIcono">
+              <i class="fas fa-location-dot iconoCampo" aria-hidden="true"></i>
+              <input type="text" id="zonaPublicaDonante" name="zonaPublicaDonante" class="campoTexto campoConIcono" value="Rosario, Santa Fe">
+            </div>
+          </div>
+
+          <div class="controlInterruptor">
+            <label class="etiquetaInterruptor" for="visibleRanking">
+              <input type="checkbox" id="visibleRanking" name="visibleRanking" class="checkboxOculto" checked>
+              <span class="interruptorVisual" aria-hidden="true"></span>
+              <span>Mostrar en el ranking público de donantes</span>
+            </label>
+          </div>
+
+          <p class="notaModal">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            <span>Los cambios afectan solo a la información pública del perfil. La persona usuaria conserva el acceso a su cuenta y puede volver a editar estos datos.</span>
+          </p>
+
+        </div>
+
+        <div class="pieModal">
+          <a href="#" class="botonOpcion">Cancelar</a>
+          <button type="submit" class="botonPrimario">
+            <i class="fas fa-floppy-disk" aria-hidden="true"></i> Guardar cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+    <link rel="stylesheet" href="/css/personaAdministradora/gestionDeDonantes.css">
+</th:block>
+</html>

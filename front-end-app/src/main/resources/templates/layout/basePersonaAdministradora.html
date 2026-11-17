@@ -1,0 +1,64 @@
+<html th:replace="~{layout/base :: html}">
+<nav th:fragment="listaNavegacion" class="navegacionPrincipal" aria-label="Menú principal de administración">
+  <ul class="listaNavegacion">
+    <li><a th:href="@{/personaAdministradora/gestionDeDonantes}" class="enlaceNavegacion" th:classappend="${vistaActual == 'gestionDeDonantes'} ? 'enlaceNavegacionActivo'">Gestión de donantes</a></li>
+    <li><a th:href="@{/personaAdministradora/registroDeDonaciones}" class="enlaceNavegacion" th:classappend="${vistaActual == 'registroDeDonaciones'} ? 'enlaceNavegacionActivo'">Registro de donaciones</a></li>
+    <li><a th:href="@{/personaAdministradora/asignacionDeDonaciones}" class="enlaceNavegacion" th:classappend="${vistaActual == 'asignacionDeDonaciones'} ? 'enlaceNavegacionActivo'">Asignación de donaciones</a></li>
+    <li><a th:href="@{/personaAdministradora/registrarEntidadBeneficiaria}" class="enlaceNavegacion" th:classappend="${vistaActual == 'registrarEntidadBeneficiaria'} ? 'enlaceNavegacionActivo'">Registrar entidad</a></li>
+    <li><a th:href="@{/personaAdministradora/camiones}" class="enlaceNavegacion" th:classappend="${vistaActual == 'camiones'} ? 'enlaceNavegacionActivo'">Camiones</a></li>
+    <li><a th:href="@{/personaAdministradora/ranking}" class="enlaceNavegacion" th:classappend="${vistaActual == 'ranking'} ? 'enlaceNavegacionActivo'">Ranking</a></li>
+  </ul>
+</nav>
+
+<a th:fragment="botonUnirse">
+</a>
+
+<a th:fragment="botonUnirseMovil">
+</a>
+
+<div th:fragment="perfilOpciones">
+  <div class="menuDesplegableCabecera">
+    <p class="nombreUsuario">Agustín Salas</p>
+    <p class="correoUsuario">asalas@donatrack.com</p>
+    <span class="etiquetaRol">Administración</span>
+  </div>
+  <a th:href="@{/personaAdministradora/gestionDeDonantes}" class="enlaceDesplegable">
+    <i class="fas fa-users"></i> Gestión de donantes
+  </a>
+  <a th:href="@{/personaAdministradora/asignacionDeDonaciones}" class="enlaceDesplegable">
+    <i class="fas fa-pen-to-square"></i> Asignación de donaciones
+  </a>
+  <a th:href="@{/personaAdministradora/registroDeDonaciones}" class="enlaceDesplegable">
+    <i class="fas fa-box-open"></i> Registro de donaciones
+  </a>
+  <a th:href="@{/personaAdministradora/registrarEntidadBeneficiaria}" class="enlaceDesplegable">
+    <i class="fas fa-building-circle-check"></i> Registrar entidad
+  </a>
+  <a th:href="@{/personaAdministradora/ranking}" class="enlaceDesplegable">
+    <i class="fas fa-ranking-star"></i> Ranking
+  </a>
+  <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 6px 0;">
+  <form th:action="@{/logout}" method="post" style="margin: 0;">
+    <button type="submit" class="enlaceDesplegable">
+      <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+    </button>
+  </form>
+</div>
+
+<ul th:fragment="listaMovil" class="listaMovil">
+  <li><a th:href="@{/personaAdministradora/gestionDeDonantes}" class="enlaceMovil" th:classappend="${vistaActual == 'gestionDeDonantes'} ? 'enlaceMovilActivo'"><i class="fas fa-users"></i> Gestión de donantes</a></li>
+  <li><a th:href="@{/personaAdministradora/asignacionDeDonaciones}" class="enlaceMovil" th:classappend="${vistaActual == 'asignacionDeDonaciones'} ? 'enlaceMovilActivo'"><i class="fas fa-pen-to-square"></i> Asignación de donaciones</a></li>
+  <li><a th:href="@{/personaAdministradora/registroDeDonaciones}" class="enlaceMovil" th:classappend="${vistaActual == 'registroDeDonaciones'} ? 'enlaceMovilActivo'"><i class="fas fa-box-open"></i> Registro de donaciones</a></li>
+  <li><a th:href="@{/personaAdministradora/registrarEntidadBeneficiaria}" class="enlaceMovil" th:classappend="${vistaActual == 'registrarEntidadBeneficiaria'} ? 'enlaceMovilActivo'"><i class="fas fa-building-circle-check"></i> Registrar entidad</a></li>
+  <li><a th:href="@{/personaAdministradora/camiones}" class="enlaceMovil" th:classappend="${vistaActual == 'camiones'} ? 'enlaceMovilActivo'"><i class="fas fa-truck"></i> Camiones</a></li>
+  <li><a th:href="@{/personaAdministradora/ranking}" class="enlaceMovil" th:classappend="${vistaActual == 'ranking'} ? 'enlaceMovilActivo'"><i class="fas fa-ranking-star"></i> Ranking</a></li>
+  <li><hr class="divisorMenuMovil"></li>
+  <li>
+    <form th:action="@{/logout}" method="post" style="margin: 0;">
+      <button type="submit" class="enlaceMovil" style="border: none; background: none; width: 100%; text-align: left; font-family: inherit; font-size: inherit; cursor: pointer; color: #dc2626;">
+        <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+      </button>
+    </form>
+  </li>
+</ul>
+</html>

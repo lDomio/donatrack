@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: incentivos-service
+
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+
+  # Base de Datos MySQL y JPA
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/incentivos_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8081
+
+service:
+  role: ROLE_INCENTIVOS_SERVICE
+  username: Incentivos service
+
+
+n8n:
+  webhook:
+    url: ${N8N_WEBHOOK_URL:http://localhost:9999/dummy-endpoint}
+
+donatrack:
+  events:
+    exchange: eventos
+    routing-keys:
+      notificacion:
+        critica: notificacion.critica
+        general: notificacion.general
+        bulk: notificacion.bulk
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-change-me}

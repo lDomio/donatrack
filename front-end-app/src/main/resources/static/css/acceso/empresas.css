@@ -1,0 +1,154 @@
+/* ==========================================================================
+   ========================= EMPRESAS =======================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.contenedorEmpresas {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.tituloSeccion {
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -1px;
+}
+
+.subtituloSeccion {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--colorTextoMedio);
+    margin-top: -16px;
+    margin-bottom: 24px;
+}
+
+/* Cuadrícula de Empresas (5 columnas en desktop) */
+.cuadriculaEmpresas {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px;
+}
+
+/* Tarjeta Individual */
+.tarjetaEmpresa {
+    background-color: var(--colorSuperficie);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radioBorde);
+    padding: 32px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.tarjetaEmpresa:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombraMedia);
+    border-color: var(--colorPrimarioBorde);
+}
+
+.contenedorLogo {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicionSuave);
+}
+
+.tarjetaEmpresa:hover .contenedorLogo {
+    transform: scale(1.06);
+}
+
+/* Iconos y vectores de marcas */
+.logoSvg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.iconoApple {
+    font-size: 3.25rem;
+    color: #555555;
+}
+
+.nombreEmpresa {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+}
+
+/* Insignias de Alianza */
+.tipoAlianza {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.alianzaOro {
+    background-color: #fef3c7; /* Oro */
+    color: #d97706;
+}
+
+.alianzaPlata {
+    background-color: #f1f5f9; /* Plata */
+    color: #475569;
+}
+
+.alianzaBronce {
+    background-color: #ffedd5; /* Cobre/Naranja */
+    color: #c2410c;
+}
+
+/* ---------- MEDIA QUERIES EMPRESAS ---------- */
+@media (max-width: 1024px) {
+    .cuadriculaEmpresas {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 680px) {
+    .seccionPrincipal {
+        padding: 24px 16px;
+    }
+
+    .tituloSeccion {
+        font-size: 2.25rem;
+    }
+
+    .cuadriculaEmpresas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .tarjetaEmpresa {
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .cuadriculaEmpresas {
+        grid-template-columns: 1fr;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+}
+
+

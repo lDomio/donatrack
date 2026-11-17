@@ -1,0 +1,87 @@
+<html th:replace="~{layout/base :: html}">
+    <nav th:fragment="listaNavegacion" class="navegacionPrincipal" aria-label="Menú principal">
+        <ul class="listaNavegacion" aria-label="Menú principal">
+            <li><a th:href="@{/}" class="enlaceNavegacion" th:classappend="${vistaActual == 'inicio'} ? 'enlaceNavegacionActivo'">Inicio</a></li>
+            <li><a th:href="@{/quienesSomos}" class="enlaceNavegacion" th:classappend="${vistaActual == 'quienesSomos'} ? 'enlaceNavegacionActivo'">Quiénes Somos</a></li>
+            <li><a th:href="@{/programas}" class="enlaceNavegacion" th:classappend="${vistaActual == 'programas'} ? 'enlaceNavegacionActivo'">Programas</a></li>
+            <li><a th:href="@{/proyectos}" class="enlaceNavegacion" th:classappend="${vistaActual == 'proyectos'} ? 'enlaceNavegacionActivo'">Proyectos</a></li>
+            <li><a th:href="@{/empresas}" class="enlaceNavegacion" th:classappend="${vistaActual == 'empresas'} ? 'enlaceNavegacionActivo'">Empresas</a></li>
+        </ul>
+    </nav>
+
+    <a th:fragment="botonUnirse" sec:authorize="isAnonymous()" th:href="@{/login}" class="botonPrimario" id="botonUnirseCabecera" aria-label="Iniciar sesión">
+        <i class="fas fa-right-to-bracket"></i>
+        <span>Ingresar</span>
+    </a>
+    <a th:fragment="botonUnirseMovil" sec:authorize="isAnonymous()" th:href="@{/login}" class="botonPrimario botonMenuMovilAlineado">
+        <i class="fas fa-right-to-bracket"></i>
+        <span>Ingresar</span>
+    </a>
+
+    <div th:fragment="perfilOpciones">
+        <!-- Opciones para invitados no logueados -->
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="enlaceDesplegable">
+                <i class="fas fa-right-to-bracket"></i> Iniciar sesión
+            </a>
+        </div>
+
+        <!-- Opciones para usuarios autenticados -->
+        <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="hasRole('DONANTE')">
+                <a th:href="@{/personaDonante/misDonaciones}" class="enlaceDesplegable">
+                    <i class="fas fa-receipt"></i> Mis donaciones
+                </a>
+                <a th:href="@{/personaDonante/entidadesBeneficiarias}" class="enlaceDesplegable">
+                    <i class="fas fa-building-ngo"></i> Entidades
+                </a>
+                <a th:href="@{/personaDonante/incentivos}" class="enlaceDesplegable">
+                    <i class="fas fa-gift"></i> Incentivos
+                </a>
+                <a th:href="@{/personaDonante/mapaDonaciones}" class="enlaceDesplegable">
+                    <i class="fas fa-map-location-dot"></i> Mapa de donaciones
+                </a>
+            </div>
+
+            <div sec:authorize="hasRole('ADMINISTRADOR')">
+                <a th:href="@{/personaAdministradora/registrarDonante}" class="enlaceDesplegable">
+                    <i class="fas fa-user-shield"></i> Panel Administrador
+                </a>
+                <a th:href="@{/personaAdministradora/camiones}" class="enlaceDesplegable">
+                    <i class="fas fa-truck"></i> Camiones
+                </a>
+                <a th:href="@{/personaAdministradora/ranking}" class="enlaceDesplegable">
+                    <i class="fas fa-trophy"></i> Ranking
+                </a>
+            </div>
+
+            <div sec:authorize="hasRole('ENTIDAD_BENEFICIARIA')">
+                <a th:href="@{/entidadBeneficiaria/misNecesidades}" class="enlaceDesplegable">
+                    <i class="fas fa-hand-holding-heart"></i> Mis necesidades
+                </a>
+            </div>
+
+            <div sec:authorize="hasRole('CAMIONERO')">
+                <a th:href="@{/personaChofer/miRuta}" class="enlaceDesplegable">
+                    <i class="fas fa-truck-fast"></i> Mi Ruta
+                </a>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 6px 0;">
+
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" class="enlaceDesplegable">
+                    <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <ul th:fragment="listaMovil" class="listaMovil">
+        <li><a th:href="@{/}" class="enlaceMovil">Inicio</a></li>
+        <li><a th:href="@{/quienesSomos}" class="enlaceMovil">Quiénes Somos</a></li>
+        <li><a th:href="@{/programas}" class="enlaceMovil">Programas</a></li>
+        <li><a th:href="@{/proyectos}" class="enlaceMovil">Proyectos</a></li>
+        <li><a th:href="@{/empresas}" class="enlaceMovil">Empresas</a></li>
+    </ul>
+</html>

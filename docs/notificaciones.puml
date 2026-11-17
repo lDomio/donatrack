@@ -1,0 +1,157 @@
+@startuml
+class GestorNotificaciones{
+    -notificadores:<List>Notificador
+
+    +despachadorDeNotificaciones(notificacion:Notificacion, mensaje:String):void
+}
+
+
+GestorNotificaciones..>Notificacion
+GestorNotificaciones..>Notificador
+
+
+interface Notificador {
+    +soporta(tipoContacto:TipoDeContacto)
+    + enviar(notificacion: Notificacion, contacto:String): boolean
+}
+
+class EmailCanal {
+    +soporta(tipoContacto:TipoDeContacto)
+     +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+interface AdapterEmailCanal{
+    +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+class JavaMailSenderAdapter implements AdapterEmailCanal{
+     +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+class WhatsappCanal {
+    +soporta(tipoContacto:TipoDeContacto)
+    +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+interface AdapterWhatsAppCanal{
+    +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+class WhatsAppSenderAdapter implements AdapterWhatsAppCanal{
+     +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+class MensajeCanal {
+
+    +soporta(tipoContacto:TipoDeContacto)
+    + enviar(notificacion: Notificacion, contacto:String): boolean
+}
+
+interface AdapterMensajeCanal{
+    +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+class MensajeSenderAdapter implements AdapterMensajeCanal{
+     +enviar(notificacion:Notificacion, contacto : String) boolean
+}
+
+
+
+EmailCanal --> AdapterEmailCanal
+WhatsappCanal --> AdapterWhatsAppCanal
+MensajeCanal --> AdapterMensajeCanal
+
+Notificador <|.. EmailCanal
+Notificador <|.. WhatsappCanal
+Notificador <|.. MensajeCanal
+
+
+class Notificacion {
+    - destinatario: Destinatario
+    - mensaje: String
+    - plantillaCanal : PlantillaCanal
+    - estados: List<EstadoNotificacion>
+
+    + registrarEvento(tipo: TipoEstado, canal: TipoDeContacto): void
+    + obtenerUltimoEstado(): EstadoNotificacion
+}
+/'
+
+'/
+class PlantillaCanal {
+        ' Contenido
+    - asunto : String /' Iria con los emails '/
+    - cuerpo : String /' Iria con los emails, whatsapp y mensaje'/
+        ' Identidad
+    - remitente : String /' Iria con los emails, whatsapp y mensaje'/
+        ' Multimedia
+    - imagenUrl : String /' Iria con los emails y whatsapp '/
+    - videoUrl : String /' Iria con los emails y whatsapp'/
+    - audioUrl : String /' Iria con los emails y whatsapp'/
+        ' Archivos
+    - archivosAdjuntos : List<ArchivoAdjunto> /' Iria con los emails y whatsapp'/
+        ' Auditoría
+    - fechaEnvio : LocalDateTime
+        ' Canal
+    - canal : TipoDeContacto
+    - variableMensaje : Map <String, String>
+
+}
+
+class ArchivoAdjunto{
+    -nombreArchivo:String
+    -tipoArchivo:String
+    -tamanioArchivo:Double
+}
+
+
+class Destinatario {
+    - nombreCompleto: String
+    - contactos: List<MedioDeContacto>
+
+    + obtenerContactosPreferidos(): List<MedioDeContacto>
+}
+
+class MedioDeContacto {
+    - valor: String
+    - tipo: TipoDeContacto
+    - esPreferido: Boolean
+}
+
+class EstadoNotificacion {
+    - fechaHora: LocalDateTime
+    - tipo: TipoEstado
+
+}
+
+enum TipoEstado {
+    CREADA
+    ENVIADA
+    RECIBIDA
+    LEIDA
+    ERROR
+}
+
+enum TipoDeContacto {
+    EMAIL
+    WHATSAPP
+    SMS
+}
+
+Notificacion --> Destinatario
+Notificacion "1" --> "*" EstadoNotificacion
+Notificacion --> PlantillaCanal
+
+PlantillaCanal--> ArchivoAdjunto
+PlantillaCanal-->TipoDeContacto
+
+Destinatario --> MedioDeContacto
+
+EstadoNotificacion --> TipoEstado
+
+
+MedioDeContacto-->TipoDeContacto
+
+Notificador ..> Notificacion
+
+@enduml

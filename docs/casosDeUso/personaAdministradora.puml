@@ -1,0 +1,56 @@
+@startuml casosUsoPersonaAdministradora
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam actorStyle awesome
+
+actor "Persona administradora" as administradora
+
+rectangle "DonaTrack" {
+  usecase "Iniciar sesión" as UC_Login
+  usecase "Registrar persona donante\n(persona humana o jurídica)" as UC_AltaDonante
+  usecase "Registrar donación\n(asociada a la persona\ndonante)" as UC_RegistrarDonacion
+  usecase "Actualizar estado de\ndonaciones (vencidas)" as UC_Vencer
+  usecase "Ejecutar algoritmos de\nasignación (matchmaking)" as UC_Matcheo
+  usecase "Seleccionar entidad\nbeneficiaria final\n(a partir del ranking)" as UC_Seleccion
+  usecase "Obtener ranking mensual\nde donantes (e historial)" as UC_Ranking
+  usecase "Administrar camiones" as UC_Camiones
+  usecase "Importar personas donantes\ndesde CSV (más de\n10.000 filas)" as UC_Importar
+  usecase "Monitorear camiones\n(dashboard en tiempo real)" as UC_Dashboard
+}
+
+administradora --> UC_Login
+administradora --> UC_AltaDonante
+administradora --> UC_RegistrarDonacion
+administradora --> UC_Vencer
+administradora --> UC_Matcheo
+administradora --> UC_Seleccion
+administradora --> UC_Ranking
+administradora --> UC_Camiones
+administradora --> UC_Importar
+administradora --> UC_Dashboard
+
+UC_RegistrarDonacion .> UC_AltaDonante : <<include>>
+
+note right of UC_Matcheo
+  Se ejecuta automáticamente en
+  horarios de baja carga y a
+  demanda por la administradora.
+end note
+
+note right of UC_Seleccion
+  Usa el ranking que genera la
+  ejecución de los algoritmos
+  de matchmaking.
+end note
+
+note right of UC_Ranking
+  Se calcula automáticamente al
+  cierre de cada mes; el caso de
+  uso cubre la consulta.
+end note
+
+@enduml

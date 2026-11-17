@@ -1,0 +1,49 @@
+<html th:replace="~{layout/baseEntidadBeneficiaria :: html}" xmlns:th="http://www.thymeleaf.org">
+<main th:fragment="contenido">
+    <h1>Detalle Necesidad</h1>
+    <dl class="info-necesidad centrado" style="max-width: 400px; margin: auto;">
+        <dt class="info-necesidad-termino">Subcategoría: </dt>
+        <dd class="info-necesidad-dato" th:text="${necesidad.subcategoria.nombre}">Fideos</dd>
+
+        <dt class="info-necesidad-termino">Tipo: </dt>
+        <dd class="info-necesidad-dato" th:text="${necesidad.tipoNecesidad}">Recurrente</dd>
+
+        <dt class="info-necesidad-termino">Estado: </dt>
+        <dd class="info-necesidad-dato">
+            <span th:if="${necesidad.cantidadDonada != null and necesidad.cantidad != null and necesidad.cantidadDonada >= necesidad.cantidad}" style="color: #15803d; font-weight: 700;">
+                <i class="fas fa-check-circle"></i> Satisfecha
+            </span>
+            <span th:if="${necesidad.cantidadDonada != null and necesidad.cantidad != null and necesidad.cantidadDonada > 0 and necesidad.cantidadDonada < necesidad.cantidad}" style="color: #854d0e; font-weight: 700;">
+                <i class="fas fa-spinner"></i> En progreso (Restante: [[${necesidad.cantidad - necesidad.cantidadDonada}]])
+            </span>
+            <span th:if="${necesidad.cantidadDonada == null or necesidad.cantidadDonada == 0}" style="color: #64748b; font-weight: 700;">
+                <i class="fas fa-box-open"></i> Abierta
+            </span>
+        </dd>
+
+        <dt class="info-necesidad-termino">Cantidad necesitada: </dt>
+        <dd class="info-necesidad-dato" th:text="|${necesidad.cantidad} ${necesidad.subcategoria.unidadDeMedida}|">400Kg</dd>
+        <th:block th:if="${necesidad.tipoNecesidad == 'Recurrente'}">
+            <dt class="info-necesidad-termino">Periodo recurrencia: </dt>
+            <dd class="info-necesidad-dato" th:text="${periodo}">7 días</dd>
+
+            <dt class="info-necesidad-termino">Próximo reinicio: </dt>
+            <dd class="info-necesidad-dato" th:text="${necesidad.proximoReinicio}">17/08/2026</dd>
+        </th:block>
+    </dl>
+    <section>
+        <h2>Donaciones Contribuyentes</h2>
+        <th:block th:each="periodo : ${necesidad.historialDePeriodos}" th:if="${necesidad.tipoNecesidad == 'Recurrente'}">
+            <h3 class="centrado"><time th:datetime="${#temporals.format(periodo.fechaInicio, 'yyyy-MM-dd')}" th:text="${periodo.fechaInicio}">10/08/2026</time> - <time  th:datetime="${#temporals.format(periodo.fechaFin, 'yyyy-MM-dd')}" th:text="${periodo.fechaFin}">17/08/2026</time></h3>
+            <p class="centrado" th:text="|${periodo.cantidadDonada}/${necesidad.cantidad}${necesidad.subcategoria.unidadDeMedida}|">29/400Kg</p>
+            <th:block th:replace="~{fragments/listaDonaciones :: listaDonaciones(${donaciones.?[PeriodoAsignadoId == __${periodo.id}__]})}"></th:block>
+        </th:block>
+        <div th:if="${necesidad.tipoNecesidad == 'Extraordinaria'}">
+            <th:block th:replace="~{fragments/listaDonaciones :: listaDonaciones(${donaciones})}"></th:block>
+        </div>
+    </section>
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/entidadBeneficiaria/donacionesYDetalle.css">
+</th:block>
+</html>

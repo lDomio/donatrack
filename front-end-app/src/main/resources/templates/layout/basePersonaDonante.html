@@ -1,0 +1,49 @@
+<html th:replace="~{layout/base :: html}">
+<nav th:fragment="listaNavegacion" class="navegacionPrincipal" aria-label="Menú principal">
+    <ul class="listaNavegacion">
+        <li><a th:href="@{/personaDonante/misDonaciones}" class="enlaceNavegacion" th:classappend="${vistaActual == 'misDonaciones'} ? 'enlaceNavegacionActivo'">Mis donaciones</a></li>
+        <li><a th:href="@{/personaDonante/entidadesBeneficiarias}" class="enlaceNavegacion" th:classappend="${vistaActual == 'entidadesBeneficiarias'} ? 'enlaceNavegacionActivo'">Entidades beneficiarias</a></li>
+        <li><a th:href="@{/personaDonante/incentivos}" class="enlaceNavegacion" th:classappend="${vistaActual == 'incentivos'} ? 'enlaceNavegacionActivo'">Incentivos</a></li>
+        <li><a th:href="@{/personaDonante/mapaDonaciones}" class="enlaceNavegacion" th:classappend="${vistaActual == 'mapaDonaciones'} ? 'enlaceNavegacionActivo'">Mapa de donaciones</a></li>
+    </ul>
+</nav>
+
+<a th:fragment="botonUnirse"></a>
+<a th:fragment="botonUnirseMovil"></a>
+
+<div th:fragment="perfilOpciones">
+    <a th:href="@{/personaDonante/misDonaciones}" class="enlaceDesplegable">
+        <i class="fas fa-receipt"></i> Mis donaciones
+    </a>
+    <a th:href="@{/personaDonante/entidadesBeneficiarias}" class="enlaceDesplegable">
+        <i class="fas fa-building-ngo"></i> Entidades
+    </a>
+    <a th:href="@{/personaDonante/incentivos}" class="enlaceDesplegable">
+        <i class="fas fa-gift"></i> Incentivos
+    </a>
+    <a th:href="@{/personaDonante/mapaDonaciones}" class="enlaceDesplegable">
+        <i class="fas fa-map-location-dot"></i> Mapa de donaciones
+    </a>
+    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 6px 0;">
+    <form th:action="@{/logout}" method="post" style="margin: 0;">
+        <button type="submit" class="enlaceDesplegable">
+            <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+        </button>
+    </form>
+</div>
+
+<ul th:fragment="listaMovil" class="listaMovil">
+    <li><a th:href="@{/personaDonante/misDonaciones}" class="enlaceMovil"><i class="fas fa-receipt"></i> Mis donaciones</a></li>
+    <li><a th:href="@{/personaDonante/entidadesBeneficiarias}" class="enlaceMovil"><i class="fas fa-building-ngo"></i> Entidades</a></li>
+    <li><a th:href="@{/personaDonante/incentivos}" class="enlaceMovil"><i class="fas fa-gift"></i> Incentivos</a></li>
+    <li><a th:href="@{/personaDonante/mapaDonaciones}" class="enlaceMovil"><i class="fas fa-map-location-dot"></i> Mapa de donaciones</a></li>
+    <li><hr class="divisorMenuMovil"></li>
+    <li>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="enlaceMovil" style="border: none; background: none; width: 100%; text-align: left; font-family: inherit; font-size: inherit; cursor: pointer; color: #dc2626;">
+                <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+            </button>
+        </form>
+    </li>
+</ul>
+</html>

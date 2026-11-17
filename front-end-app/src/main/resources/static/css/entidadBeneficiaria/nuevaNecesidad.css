@@ -1,0 +1,73 @@
+#formulario-nueva-necesidad {
+    max-width: 600px; margin: 20px auto 60px auto; background-color: var(--colorSuperficie);
+    padding: 32px; border-radius: var(--radioBorde); box-shadow: var(--sombraSuave); border: 1px solid rgba(0,0,0,0.05);
+    display: flex; flex-direction: column; gap: 20px;
+}
+fieldset { height: fit-content; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; background-color: var(--colorFondo); transition: var(--transicionSuave); }
+fieldset:focus-within { border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); background-color: var(--colorSuperficie); }
+legend { font-weight: 700; color: var(--colorTextoOscuro); padding: 0 12px; font-size: 1.1rem; }
+
+label {
+    font-size: 0.95rem; font-weight: 500; color: var(--colorTextoMedio); margin-right: 8px; cursor: pointer;
+}
+
+input[type="radio"] {
+    margin-right: 16px;
+    accent-color: var(--colorPrimario);
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+input[type="text"], input[type="number"], input[type="date"], select {
+    padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; margin-top: 8px; width: 100%; font-family: inherit; font-size: 0.95rem; background-color: var(--colorSuperficie); color: var(--colorTextoOscuro); transition: var(--transicionSuave);
+}
+input[type="text"]{
+    margin-top: 0;
+}
+/* El select es un botón interactivo, así que le ponemos el cursor de manito */
+select {
+    cursor: pointer;
+}
+
+input[type="text"]:focus,input[type="number"]:focus, input[type="date"]:focus, select:focus {
+    outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+#formulario-nueva-necesidad .botonPrimario {
+    margin-top: 12px;
+    font-size: 1.05rem;
+}
+.contenedor-cantidad {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 16px;
+}
+.campo-cantidad{
+    grid-row:2;
+}
+.label-cantidad{
+    grid-row:1;
+}
+.text-danger{
+    color: var(--colorError);
+}
+.spinner-carga {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Color del fondo del anillo */
+    border-left-color: #007bff; /* Color de la parte que gira (cámbialo a tu color primario) */
+    border-radius: 50%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 40px;
+    animation: girar 1s linear infinite; /* Llama a la animación */
+}
+
+/* La animación que lo hace girar 360 grados */
+@keyframes girar {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

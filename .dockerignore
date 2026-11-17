@@ -1,0 +1,32 @@
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+
+# Maven target (se regenera en build)
+*/target/
+target/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs y tests no necesarios para producción
+docs/
+postman/
+test/
+
+# Backups y variables locales
+.env.twilio.local
+*.local
+
+# Directorios legacy borrados o no usados
+donacionesService/
+incentivosService/
+logisticaService/
+notificacionService/
+autenticacionService/

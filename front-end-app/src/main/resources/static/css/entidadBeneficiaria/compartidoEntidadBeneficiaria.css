@@ -1,0 +1,32 @@
+.botonOpcion, .botonOpcionCancelar {
+    border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 8px 16px; box-shadow: var(--sombraSuave); font: inherit; font-weight: 600; color: var(--colorPrimario); text-decoration: none; cursor: pointer; transition: var(--transicionSuave); display: inline-flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2;
+}
+.botonOpcion{
+    background-color: var(--colorPrimarioClaro);
+}
+.botonOpcionCancelar{
+    background-color: var(--colorError);
+}
+.botonOpcion:hover {
+    background-color: var(--colorPrimarioBorde); color: var(--colorPrimarioHover); transform: translateY(-2px); box-shadow: var(--sombraMedia);
+}
+.botonOpcionCancelar:hover {
+    background-color: #b91c1c; color: var(--colorPrimarioHover); transform: translateY(-2px); box-shadow: var(--sombraMedia);
+}
+h1 { font-size: 2.25rem; font-weight: 800; color: var(--colorTextoOscuro); text-align: center; margin: 32px 24px 16px 24px; letter-spacing: -0.02em; }
+h2 { font-size: 1.6rem; font-weight: 800; color: var(--colorTextoOscuro); margin-bottom: 16px; }
+
+.centrado { margin: auto; text-align: center; }
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

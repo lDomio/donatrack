@@ -1,0 +1,449 @@
+/* ==========================================================================
+   ====== VISTA: DONACIONES EN DEPÓSITO Y ASIGNACIÓN (ADMINISTRACIÓN) =======
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 24px 48px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================= ENCABEZADO Y MIGAS DE PAN ================= */
+.migasPan { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--colorTextoClaro); font-weight: 500; margin-top: 24px; }
+.migasPan a { color: var(--colorTextoMedio); text-decoration: none; transition: var(--transicionSuave); }
+.migasPan a:hover { color: var(--colorPrimario); }
+.migasPan .migaActual { color: var(--colorPrimario); font-weight: 600; }
+
+.encabezadoVista { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 8px; }
+.subtituloVista { font-size: 1rem; color: var(--colorTextoMedio); max-width: 600px; }
+
+.alertaFormulario {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.alertaExito {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.alertaError {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+/* ================= BARRA DE FILTROS ================= */
+.contenedorBarraSuperiorDonaciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.barraFiltrosDonaciones {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    background-color: var(--colorFondo);
+    padding: 16px 0;
+}
+
+.botonEjecutarMatchmaking {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    transition: var(--transicionSuave);
+    white-space: nowrap;
+}
+
+.botonEjecutarMatchmaking:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+.filaTituloBeneficiario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.etiquetaAlgoritmo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+}
+
+.badgeSemantica {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.badgePrioridad {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.badgeConsenso {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+    border: 1px solid #d8b4fe;
+}
+
+.comparativaAlgoritmos {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.chipRanking {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chipSemantica {
+    background-color: #eff6ff;
+    color: #1e3a8a;
+    border: 1px solid #bfdbfe;
+}
+
+.chipPrioridad {
+    background-color: #f0fdf4;
+    color: #14532d;
+    border: 1px solid #bbf7d0;
+}
+
+.grupoFiltro { min-width: 160px; }
+
+.cajaSelector { position: relative; display: flex; align-items: center; }
+.cajaSelector .iconoSelector { position: absolute; right: 16px; color: var(--colorTextoClaro); font-size: 0.8rem; pointer-events: none; }
+
+.selectorFiltro, .campoBusqueda {
+    width: 100%;
+    padding: 12px 36px 12px 16px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    min-height: 44px;
+    transition: var(--transicionSuave);
+}
+.selectorFiltro { cursor: pointer; appearance: none; }
+.selectorFiltro:focus, .campoBusqueda:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.cajaBusquedaDonacion { position: relative; display: flex; align-items: center; flex: 1; min-width: 240px; }
+.cajaBusquedaDonacion .iconoBusqueda { position: absolute; left: 16px; color: var(--colorTextoClaro); font-size: 1rem; pointer-events: none; }
+.cajaBusquedaDonacion .campoBusqueda { padding-left: 44px; padding-right: 16px; }
+
+/* ================= LISTADO DE DONACIONES (TARJETAS) ================= */
+.contenedorListaDonaciones { display: flex; flex-direction: column; gap: 32px; }
+.listaDonaciones { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+
+.tarjetaDonacion {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+.tarjetaDonacion:hover { box-shadow: var(--sombraMedia); transform: translateY(-2px); }
+
+.contenedorImagenDonacion {
+    width: 90px; height: 90px;
+    background-color: #f1f5f9;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--colorTextoClaro);
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+.contenedorImagenDonacion img { width: 100%; height: 100%; object-fit: cover; }
+
+.cuerpoTarjeta { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+.encabezadoTarjeta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tituloDonacion { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--colorTextoOscuro); }
+
+.estadoDonacion {
+    font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;
+    text-transform: uppercase; letter-spacing: 0.05em; display: inline-block;
+}
+.estadoVencido { background-color: #fef2f2; color: var(--colorError); border: 1px solid #fecaca; }
+.estadoPendiente { background-color: #fffbeb; color: var(--colorAdvertencia); border: 1px solid #fde68a; }
+.estadoEntregada { background-color: #f0fdf4; color: var(--colorExito); border: 1px solid #bbf7d0; }
+
+.datosDonanteTarjeta { font-size: 0.95rem; color: var(--colorTextoOscuro); font-weight: 500; display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+.datosDonanteTarjeta i { color: var(--colorTextoClaro); }
+
+.detalleItemTarjeta { font-size: 0.85rem; color: var(--colorTextoMedio); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.separadorDetalle { color: #cbd5e1; }
+
+.accionesTarjeta { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-wrap: wrap; }
+
+.botonSecundarioAccion {
+    background-color: var(--colorTextoOscuro); color: white; border: none;
+    font-family: inherit; font-weight: 600; padding: 10px 20px; border-radius: 12px;
+    cursor: pointer; transition: var(--transicionSuave);
+}
+.botonSecundarioAccion:hover { background-color: #1e293b; }
+
+.botonPeligroAccion {
+    background-color: transparent; color: var(--colorError); border: 1px solid var(--colorError);
+    font-family: inherit; font-weight: 600; padding: 10px 20px; border-radius: 12px;
+    cursor: pointer; transition: var(--transicionSuave);
+}
+.botonPeligroAccion:hover { background-color: #fef2f2; }
+
+/* ================= PAGINACIÓN ================= */
+.barraPaginacion { display: flex; justify-content: center; margin-top: 16px; }
+.listaPaginacion { list-style: none; display: flex; align-items: center; gap: 12px; }
+.enlacePagina {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border: 1.5px solid #cbd5e1; border-radius: 8px;
+    background-color: var(--colorSuperficie); color: var(--colorTextoOscuro);
+    font-weight: 600; text-decoration: none; font-size: 0.95rem;
+    transition: var(--transicionSuave);
+}
+.enlacePagina:hover { border-color: var(--colorPrimario); color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); }
+
+/* ==========================================================================
+   ================ MODAL ASIGNAR DONACIÓN (CSS PURO :TARGET) ===============
+   ========================================================================== */
+.capaModal {
+    position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center;
+    padding: 24px; opacity: 0; visibility: hidden; transition: var(--transicionSuave);
+}
+.capaModal:target { opacity: 1; visibility: visible; }
+.fondoModal { position: absolute; inset: 0; background-color: rgba(15, 23, 42, 0.55); backdrop-filter: blur(2px); }
+
+.contenidoModal {
+    position: relative; width: 100%; max-width: 640px; max-height: calc(100vh - 48px);
+    background-color: var(--colorSuperficie); border-radius: var(--radioBorde); box-shadow: var(--sombraElevada);
+    border: 1px solid rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; overflow: hidden;
+    transform: translateY(16px) scale(0.98); transition: var(--transicionSuave);
+}
+.capaModal:target .contenidoModal { transform: translateY(0) scale(1); }
+
+.cabeceraModal { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
+.tituloModal { font-size: 1.4rem; font-weight: 800; color: var(--colorTextoOscuro); margin: 0; }
+
+.botonCerrarModal {
+    width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #e2e8f0; border-radius: 50%;
+    background-color: var(--colorSuperficie); color: var(--colorTextoMedio); font-size: 1.1rem;
+    text-decoration: none; display: flex; align-items: center; justify-content: center; transition: var(--transicionSuave);
+}
+.botonCerrarModal:hover { color: var(--colorError); border-color: #fecaca; background-color: #fef2f2; }
+
+.formularioAsignacion { display: flex; flex-direction: column; min-height: 0; }
+.cuerpoModal { padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+
+/* Resumen de donación superior en modal */
+.resumenDonacionModal { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.filaResumen { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; }
+.etiquetaResumen { color: var(--colorTextoMedio); }
+.valorResumen { font-weight: 700; color: var(--colorTextoOscuro); }
+.separadorResumen { color: #cbd5e1; margin: 0 4px; }
+
+.subtituloModal { font-size: 1rem; font-weight: 600; color: var(--colorTextoMedio); margin-top: 12px; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+
+/* Lista de entidades (Radio buttons) */
+.grupoOpcionesBeneficiario { border: none; display: flex; flex-direction: column; margin: 0; padding: 0; }
+
+.opcionBeneficiario {
+    display: flex; align-items: center; gap: 16px; padding: 16px 8px;
+    border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: var(--transicionSuave);
+}
+.opcionBeneficiario:last-child { border-bottom: none; }
+.opcionBeneficiario:hover { background-color: var(--colorFondo); border-radius: 8px; padding-left: 12px; padding-right: 12px; }
+.opcionBeneficiario:has(input:checked) { background-color: var(--colorPrimarioClaro); border-radius: 8px; padding-left: 12px; padding-right: 12px; border-bottom-color: transparent; }
+
+.contenedorRadio { display: flex; align-items: center; justify-content: center; min-width: 32px; }
+.radioBeneficiario { width: 20px; height: 20px; accent-color: var(--colorPrimario); cursor: pointer; transform: scale(1.1); }
+
+.infoPrincipalBeneficiario { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.nombreBeneficiario { font-weight: 700; font-size: 1.1rem; color: var(--colorTextoOscuro); }
+.descripcionBeneficiario { font-size: 0.85rem; color: var(--colorTextoMedio); }
+
+.infoUbicacionBeneficiario { text-align: right; display: flex; flex-direction: column; gap: 4px; }
+.distanciaBeneficiario { font-weight: 600; font-size: 0.95rem; color: var(--colorTextoOscuro); }
+.localidadBeneficiario { font-size: 0.85rem; color: var(--colorTextoMedio); }
+
+/* Pie del modal */
+.pieModal { display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 20px 24px; border-top: 1px solid #f1f5f9; background-color: var(--colorFondo); flex-shrink: 0; }
+.pieModal .botonOpcion { background-color: var(--colorSuperficie); }
+.botonPrimarioNegro {
+    background-color: #0f172a; color: white; border: none; font-family: inherit; font-weight: 600;
+    padding: 12px 24px; border-radius: var(--radioBorde); cursor: pointer; transition: var(--transicionSuave); min-height: 48px;
+}
+.botonPrimarioNegro:hover { background-color: #1e293b; box-shadow: var(--sombraMedia); transform: translateY(-2px); }
+
+/* ==========================================================================
+   ========================= RESPONSIVE =====================================
+   ========================================================================== */
+@media (max-width: 768px) {
+    .barraFiltrosDonaciones { flex-direction: column; align-items: stretch; }
+    .grupoFiltro { min-width: 0; }
+    .cajaBusquedaDonacion { min-width: 0; }
+
+    .tarjetaDonacion { flex-direction: column; align-items: stretch; text-align: left; padding: 16px; }
+    .contenedorImagenDonacion { width: 100%; height: 140px; }
+    .accionesTarjeta { margin-left: 0; margin-top: 12px; display: grid; grid-template-columns: 1fr; width: 100%; }
+    .accionesTarjeta .botonSecundarioAccion, .accionesTarjeta .botonPeligroAccion, .accionesTarjeta .botonPrimario { width: 100%; text-align: center; }
+
+    .capaModal { padding: 12px; align-items: flex-end; }
+    .contenidoModal { max-height: calc(100vh - 24px); }
+    .pieModal { flex-direction: column-reverse; align-items: stretch; }
+    .pieModal .botonOpcion, .pieModal .botonPrimarioNegro { width: 100%; }
+    
+    .filaResumen { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .separadorResumen { display: none; }
+    .opcionBeneficiario { flex-direction: column; align-items: flex-start; gap: 12px; position: relative; padding-left: 48px; }
+    .contenedorRadio { position: absolute; left: 12px; top: 16px; }
+    .infoUbicacionBeneficiario { text-align: left; flex-direction: row; gap: 8px; align-items: center; }
+    .infoUbicacionBeneficiario::before { content: '•'; color: var(--colorTextoClaro); }
+}
+
+/* ==========================================================================
+   ================ ESTILOS MODAL Y BOTÓN DE PESAJE ========================
+   ========================================================================== */
+.botonPesajeAccion {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1.5px solid #86efac;
+    font-family: inherit;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transicionSuave);
+}
+.botonPesajeAccion:hover {
+    background-color: #dcfce7;
+    border-color: #22c55e;
+    color: #14532d;
+    transform: translateY(-1px);
+}
+
+.modalPesajeContenido {
+    max-width: 480px;
+}
+
+.descripcionModalPesaje {
+    font-size: 0.92rem;
+    color: var(--colorTextoMedio);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.formularioPesaje {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grupoCampoPesaje {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.etiquetaCampoPesaje {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.etiquetaCampoPesaje i {
+    color: var(--colorPrimario);
+}
+
+.inputPesaje {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: var(--colorTextoOscuro);
+    box-sizing: border-box;
+    transition: var(--transicionSuave);
+}
+
+.inputPesaje:focus {
+    outline: none;
+    border-color: var(--colorPrimario);
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.badgeRequiereAsignacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f8fafc;
+    color: #64748b;
+    border: 1px dashed #cbd5e1;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 8px;
+    cursor: not-allowed;
+    user-select: none;
+}
+
+

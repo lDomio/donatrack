@@ -1,0 +1,113 @@
+/* Información de Necesidad Detalle */
+.info-necesidad {
+    display: grid; grid-template-columns: max-content 1fr;align-items: baseline; margin: 24px auto; max-width: 500px; background-color: var(--colorSuperficie);
+    padding: 32px; border-radius: var(--radioBorde); box-shadow: var(--sombraSuave); border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.info-necesidad-termino {
+    display: block; font-weight: 700; font-size: 0.9rem; color: var(--colorTextoClaro); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;
+}
+.info-necesidad-dato {
+    display: block;  font-size: 1.25rem; font-weight: 600; color: var(--colorTextoOscuro); margin: 0; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9; place-self: end;
+}
+.info-necesidad-dato:last-child {
+    border-bottom: none; margin-bottom: 0; padding-bottom: 0;
+}
+
+section h2 { text-align: center; margin: 40px 24px 24px 24px; font-size: 1.8rem; }
+
+/* Estilos de Lista y DonacionItem Fusionados */
+.lista-donaciones { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; padding: 20px 24px 60px 24px; max-width: 1280px; margin: 0 auto; row-gap: 50px}
+
+.donacion-de-lista {
+    position: relative; padding: 24px 20px 48px 20px; width: 250px; min-height: 230px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    background-color: var(--colorSuperficie); border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave); border: 1px solid rgba(0, 0, 0, 0.05); transition: var(--transicionSuave);
+}
+.donacion-de-lista:hover {
+    transform: translateY(-4px); box-shadow: var(--sombraMedia);
+}
+
+.donacion-de-lista span:first-child {
+    font-size: 1.35rem; font-weight: 800; color: var(--colorTextoOscuro); text-align: center;
+}
+
+.donacion-estado {
+    text-align: center; margin-top: 8px; font-size: 0.85rem; font-weight: 600; color: var(--colorTextoMedio); background-color: var(--colorFondo); padding: 4px 12px; border-radius: 12px; border: 1px solid #e2e8f0;
+}
+
+.desplazadoAbajo { position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); z-index: 10; width: 80%; cursor: pointer; }
+
+.pin-circular {
+    display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px;
+    border-radius: 50%; background-color: #fee2e2; color: var(--colorError); font-size: 18px;
+    position: absolute; top: -12px; right: -12px; box-shadow: var(--sombraSuave); transition: var(--transicionSuave); border: 2px solid white; text-decoration: none;
+}
+.pin-circular:hover { transform: scale(1.1); background-color: var(--colorError); color: white; }
+
+.botonOpcion.desplazadoAbajo, .botonOpcionCancelar.desplazadoAbajo {
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+}
+.botonOpcion.desplazadoAbajo {
+    background-color: var(--colorPrimario);
+}
+.botonOpcionCancelar.desplazadoAbajo{
+    background-color: var(--colorError);
+    width: fit-content;
+}
+.botonOpcion.desplazadoAbajo:hover,.botonOpcionCancelar.desplazadoAbajo:hover {
+    box-shadow: 0 6px 14px rgba(13, 148, 136, 0.4);
+    transform: translate(-50%, 50%) scale(1.05);
+}
+.botonOpcion.desplazadoAbajo:hover{
+    background-color: var(--colorPrimarioHover);
+}
+
+.form-confirmar-recepcion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+    padding-bottom: 18px;
+}
+
+.campo-foto-entrega {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 10px;
+    background-color: var(--colorFondo, #f8fafc);
+    color: var(--colorTextoMedio, #475569);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    text-align: center;
+}
+
+.campo-foto-entrega:hover {
+    border-color: var(--colorPrimario, #0d9488);
+    color: var(--colorPrimario, #0d9488);
+    background-color: var(--colorPrimarioClaro, #f0fdfa);
+}
+
+.texto-foto-entrega {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.input-foto-entrega {
+    display: none;
+}

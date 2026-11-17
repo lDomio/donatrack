@@ -1,0 +1,28 @@
+@startuml ranking-programado
+!theme plain
+
+actor "Reloj del sistema\n(03:00 día 1 ART)" as CLOCK
+participant "GenerarRankingSchedule" as SCH
+participant "RankingService" as RS
+participant "RankingDonantes" as RD
+database "MySQL\nranking_de_donantes" as DB
+
+CLOCK -> SCH : dispara job mensual
+SCH -> RS : generarRanking(mesAnterior)
+RS -> DB : buscar ranking del período
+alt ya existe
+  RS -> DB : eliminar ranking anterior
+end
+RS -> RD : construir ranking\n(periodo = primer día del mes)
+RD -> RD : ordenar por misiones del período\nluego donaciones, luego nombre
+RD --> RS : ranking ordenado
+RS -> DB : guardar ranking del período
+RS --> SCH : ranking persistido
+
+note right of SCH
+  @Scheduled(cron = "0 0 3 1 * ?",
+             zone = "America/Argentina/Buenos_Aires")
+  período = YearMonth.now(zone).minusMonths(1)
+end note
+
+@enduml

@@ -1,0 +1,196 @@
+@startuml
+class Camion{
+-Long id
+-String patente
+-Double capacidadEnKg
+-Double volumen
+-Double altura
+-Boolen estaEnDeposito
+-List<Ruta> ruta
+-String nombreChofer
+
+}
+
+class Ruta{
+-Long id
+-Double DistanciaARecorrer
+-LocalDateTime fechaDeComienzoDeViaje
+-LocalDateTime fechaFinDeViaje
+-List<Parada> parada
+-List<EstadoDeLaRuta> estadosDeLaRuta
+}
+
+class EstadoDeLaRuta{
+-LocalDate fecha
+-TipoDeEstadoRuta tipoDeEstadoRuta
+}
+
+enum TipoDeEstadoRuta{
+RUTA_ASIGANADA,
+VIAJE_COMENZADO,
+VIAJE_FINALIZADO
+}
+
+class Parada{
+-Long id
+-Integer numeroDeParada
+-LocalDateTime fechaEntrega
+-EntregaODelivery entregas
+}
+
+class EntregaODelivery{
+-Long id
+-String direccionEntidad
+-Double latitud
+-Double longitud
+-Boolen fueRecibidoPorLaEntidad
+-List<Donacion> donacionesAEntregar
+-List<EstadoEntrega> estadosEntrega
+}
+
+class EstadoEntrega{
+-String observaciones
+-LocalDate fecha
+-TipoDeEstadoEntrega tipoDeEstadoEntrega
+}
+
+enum TipoDeEstadoEntrega{
+EN_CAMINO,
+EXITOSA,
+NO_RECIBIDA,
+PENDIENTE,
+EN_DEPOSITO
+}
+
+
+
+
+class Donacion {
+  -Long id
+  -Long donanteId
+  -String subcategoria
+  -LocalDate fechaVencimiento
+  -Double pesoKg
+  -Double volumen
+  -TipoDeEstadoDonacion estado
+  +puedeCambiarDeEstado(TipoDeEstadoDonacion nuevoEstado): Boolean
+  +cambiarEstado(TipoDeEstadoDonacion nuevoEstado): boolean
+  +estaListaParaPlanificar(): boolean
+  +requierePesaje(): boolean
+  +registrarPesaje(Double pesoKg, Double volumen): void
+}
+
+enum TipoDeEstadoDonacion {
+  PENDIENTE_DE_PESAJE
+  LISTA_PARA_PLANIFICAR
+  EN_PLANIFICACION
+  ASIGNADA_A_RUTA
+  ENTREGADA
+}
+
+class PlanificadorDeRutasDeEntrega {
+  -OptimizadorRutasAdapter optimizadorRutasAdapter
+  -int maximoPorLote
+  +generarLotes(List<Camion>, List<EntidadBeneficiaria>): List<PlanificadorRutaRequest>
+  +solicitarPlanificacion()
+  +consultarEstado(String)
+  +crearRuta(RoutePlan, List<Parada>): Ruta
+  +crearParada(StopPlan, Entrega): Parada
+  +crearEntrega(Delivery, List<Donacion>): Entrega
+}
+
+interface OptimizadorRutasAdapter {
+  +solicitarPlanificacion(RequestApiRutas request): void
+  +consultarEstado(String requestId): PollingRoutingResult
+}
+
+class OptimizadorRutasRestAdapter implements OptimizadorRutasAdapter{
+      +solicitarPlanificacion(RequestApiRutas request): void
+      +consultarEstado(String requestId): PollingRoutingResult
+}
+
+class Donante{
+  -Long id
+  -List<MedioDeContacto> contactos
+}
+
+
+
+
+class Pais {
+  -String nombre
+  -String codigoIso
+}
+
+class Provincia {
+  -String nombre
+  -Pais pais
+}
+
+class Ciudad {
+  -String nombre
+  -Provincia provincia
+}
+
+class Direccion {
+  -String calle
+  -Int altura
+  -Ciudad ciudad
+  -double latitud
+  -double longitud
+}
+
+class EntidadBeneficiaria {
+  -String razonSocial
+  -Direccion direccion
+  -List<MedioDeContacto> contactos
+  -List<Donacion> donacionesAsignadas
+
+}
+
+class MedioDeContacto {
+    - valor: String
+    - tipo: TipoDeContacto
+}
+
+enum TipoDeContacto {
+    EMAIL
+    WHATSAPP
+    SMS
+}
+
+
+
+
+Camion-->"*"Ruta
+
+Ruta-->"*"Parada
+Ruta-->"*"EstadoDeLaRuta
+EstadoDeLaRuta-->TipoDeEstadoRuta
+
+Parada-->"*"EntregaODelivery
+
+
+EntregaODelivery-->"*"Donacion
+EntregaODelivery-->"*"EstadoEntrega
+
+EstadoEntrega-->TipoDeEstadoEntrega
+
+Donacion-->TipoDeEstadoDonacion
+
+PlanificadorDeRutasDeEntrega-->OptimizadorRutasAdapter
+
+EntidadBeneficiaria-->Direccion
+EntidadBeneficiaria-->"*"Donacion
+EntidadBeneficiaria-->"*"MedioDeContacto
+
+MedioDeContacto-->TipoDeContacto
+
+Donante-->"*"MedioDeContacto
+
+
+Direccion-->Ciudad
+Ciudad-->Provincia
+Provincia-->Pais
+
+@enduml

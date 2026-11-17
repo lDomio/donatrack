@@ -1,0 +1,143 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+
+  <!-- Migas de pan: máximo 3 niveles de profundidad -->
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a href="/acceso/main">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Ranking</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Ranking mensual de donantes</h1>
+    <p class="subtituloVista">Posiciones según las misiones cumplidas en el período seleccionado.</p>
+  </div>
+
+  <div th:if="${exito}" class="alertaFormulario alertaExito" role="status">
+    <i class="fas fa-circle-check" aria-hidden="true"></i>
+    <span th:text="${exito}">Ranking generado correctamente.</span>
+  </div>
+  <div th:if="${error}" class="alertaFormulario alertaError" role="alert">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span th:text="${error}">No se pudo generar el ranking.</span>
+  </div>
+
+  <!-- ============ FILTROS ============ -->
+  <form class="barraFiltros" id="formularioFiltrosRanking" method="get" th:action="@{/personaAdministradora/ranking}" aria-label="Filtros del ranking">
+    <div class="grupoFiltro">
+      <label class="etiquetaFiltro" for="filtroPeriodo">
+        <i class="fas fa-calendar-days" aria-hidden="true"></i> Mes y año
+      </label>
+      <div class="cajaSelector">
+        <select id="filtroPeriodo" name="periodo" class="selectorFiltro">
+          <option th:each="opcion : ${opcionesPeriodo}"
+                  th:value="${opcion.valor}"
+                  th:text="${opcion.etiqueta}"
+                  th:selected="${opcion.valor == periodoSeleccionado}">
+            Abril 2026
+          </option>
+        </select>
+        <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <div class="accionesFiltro">
+      <button type="submit" class="botonOpcion">
+        <i class="fas fa-filter" aria-hidden="true"></i> Aplicar filtro
+      </button>
+    </div>
+  </form>
+
+  <form class="formularioGenerarRanking" method="post" th:action="@{/personaAdministradora/ranking/generar}" aria-label="Generar ranking del período seleccionado">
+    <input type="hidden" name="periodo" id="periodoGenerar" th:value="${periodoSeleccionado}">
+    <button type="submit" class="botonOpcion">
+      <i class="fas fa-rotate" aria-hidden="true"></i> Generar ranking
+    </button>
+  </form>
+
+  <p class="resumenFiltro">
+    <span class="etiquetaPeriodo"><i class="fas fa-calendar-check" aria-hidden="true"></i> <span th:text="${periodoTexto}">Abril 2026</span></span>
+    <span th:if="${ranking != null and !ranking.isEmpty()}"><strong th:text="${totalDonantes}">0</strong> donante(s) con misiones en este período.</span>
+    <span th:if="${ranking == null or ranking.isEmpty()}">Sin ranking generado para este período.</span>
+  </p>
+
+  <!-- ============ TABLA DEL RANKING ============ -->
+  <section class="tarjetaRanking" aria-label="Tabla de posiciones de donantes">
+
+    <div class="contenedorTabla" th:if="${ranking != null and !ranking.isEmpty()}">
+      <table class="tablaRanking">
+        <caption th:text="'Ranking de donantes de ' + ${periodoTexto} + ', ordenado por misiones cumplidas en el período.'">Ranking de donantes de abril 2026, ordenado por misiones cumplidas en el período.</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="columnaPosicion">Posición</th>
+            <th scope="col">Donante</th>
+            <th scope="col" class="columnaMisiones">Misiones</th>
+            <th scope="col" class="columnaDonaciones">Donaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="donante : ${ranking}">
+            <td>
+              <span class="medallaPosicion"
+                    th:classappend="${donante.claseMedalla}"
+                    th:text="${donante.puesto}">1</span>
+            </td>
+            <td>
+              <div class="celdaDonante">
+                <span class="avatarDonante" aria-hidden="true" th:text="${donante.iniciales}">JP</span>
+                <span class="datosDonante">
+                  <span class="nombreDonante" th:text="${donante.nombreVisual}">Juan Pérez</span>
+                  <span class="metaDonante" th:text="${donante.metaInfo}">ID Donante #1</span>
+                </span>
+              </div>
+            </td>
+            <td class="celdaMisiones">
+              <span class="cantidadMisiones">
+                <i class="fas fa-medal" aria-hidden="true"></i>
+                <span th:text="${donante.misionesCompletadas}">0</span>
+              </span>
+            </td>
+            <td class="celdaDonaciones">
+              <span class="cantidadDonaciones">
+                <i class="fas fa-box-open" aria-hidden="true"></i>
+                <span th:text="${donante.cantidadDonaciones}">0</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vacío: se muestra cuando el mes elegido no tiene ranking -->
+    <div class="estadoVacio" th:if="${ranking == null or ranking.isEmpty()}">
+      <i class="fas fa-inbox" aria-hidden="true"></i>
+      <p>No hay ranking generado para este período. Usá el botón "Generar ranking" para calcularlo.</p>
+    </div>
+
+    <!-- ============ PAGINACIÓN (10 donantes por página o total) ============ -->
+    <div class="barraPaginacion" th:if="${ranking != null and !ranking.isEmpty()}">
+      <p class="textoPaginacion">Mostrando <strong th:text="'1-' + ${totalDonantes}">1-10</strong> de <strong th:text="${totalDonantes}">24</strong> donantes</p>
+    </div>
+
+  </section>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+    <link rel="stylesheet" href="/css/personaAdministradora/ranking.css">
+</th:block>
+<th:block th:fragment="scriptsExtra">
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const selectorPeriodo = document.getElementById('filtroPeriodo');
+      const periodoGenerar = document.getElementById('periodoGenerar');
+      if (selectorPeriodo && periodoGenerar) {
+        selectorPeriodo.addEventListener('change', function () {
+          periodoGenerar.value = selectorPeriodo.value;
+        });
+      }
+    });
+  </script>
+</th:block>
+</html>

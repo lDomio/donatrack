@@ -1,0 +1,193 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+    <main th:fragment="contenido" class="seccionPrincipal">
+        <div class="contenedorNosotros">
+
+            <!-- Título de la Página -->
+            <h1 class="tituloSeccion">Nosotros</h1>
+
+            <!-- Sección de Historia -->
+            <section class="seccionHistoria" aria-labelledby="subtituloHistoria">
+                <h2 class="subtituloSeccion" id="subtituloHistoria">Nuestra historia</h2>
+
+                <div class="cuadriculaHistoria">
+                    <div class="columnaHistoria">
+                        <p class="textoHistoria">
+                            DonaTrack nació como respuesta a un desafío crítico: la falta de visibilidad y confianza en el trayecto de las donaciones solidarias. Observamos que muchas personas querían colaborar, pero se detenían al no saber con certeza si su ayuda llegaba efectivamente a destino. Así diseñamos una plataforma transparente que conecta donantes con entidades de manera directa.
+                        </p>
+                    </div>
+                    <div class="columnaHistoria">
+                        <p class="textoHistoria">
+                            Hoy conectamos a una red en crecimiento de comedores, merenderos y centros de asistencia con personas y empresas dispuestas a tender una mano. A través del registro detallado y la trazabilidad de la mercadería, cada actor de la cadena puede constatar el impacto real de su aporte en tiempo real, garantizando transparencia absoluta.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Línea de Tiempo Interactiva (Puro CSS con Radio Buttons) -->
+            <section class="seccionPasos" aria-labelledby="subtituloPasos">
+                <h2 class="subtituloSeccion" id="subtituloPasos">Nuestros pasos</h2>
+
+                <div class="lineaTiempo">
+
+                    <!-- Controles de Radio Button ocultos para manejar la interactividad de años -->
+                    <input type="radio" name="lineaTiempo" id="anio1992" class="controlLineaTiempo" checked>
+                    <input type="radio" name="lineaTiempo" id="anio1994" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2001" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2003" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2004" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2005" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2006" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2008" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2010" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2014" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2016" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2021" class="controlLineaTiempo">
+                    <input type="radio" name="lineaTiempo" id="anio2024" class="controlLineaTiempo">
+
+                    <!-- Barra de Años (Contenedor de Labels) -->
+                    <div class="barraAnios">
+                        <label for="anio1992" class="etiquetaAnio" id="lbl1992">1992</label>
+                        <label for="anio1994" class="etiquetaAnio" id="lbl1994">1994</label>
+                        <label for="anio2001" class="etiquetaAnio" id="lbl2001">2001</label>
+                        <label for="anio2003" class="etiquetaAnio" id="lbl2003">2003</label>
+                        <label for="anio2004" class="etiquetaAnio" id="lbl2004">2004</label>
+                        <label for="anio2005" class="etiquetaAnio" id="lbl2005">2005</label>
+                        <label for="anio2006" class="etiquetaAnio" id="lbl2006">2006</label>
+                        <label for="anio2008" class="etiquetaAnio" id="lbl2008">2008</label>
+                        <label for="anio2010" class="etiquetaAnio" id="lbl2010">2010</label>
+                        <label for="anio2014" class="etiquetaAnio" id="lbl2014">2014</label>
+                        <label for="anio2016" class="etiquetaAnio" id="lbl2016">2016</label>
+                        <label for="anio2021" class="etiquetaAnio" id="lbl2021">2021</label>
+                        <label for="anio2024" class="etiquetaAnio" id="lbl2024">2024</label>
+                    </div>
+
+                    <!-- Contenedor de Detalles (Mostrará la tarjeta según el año activo) -->
+                    <div class="contenedorDetalles">
+
+                        <!-- Detalle 1992 -->
+                        <article class="tarjetaPaso" id="detalle1992">
+                            <span class="anioPaso">1992</span>
+                            <h3 class="tituloPaso">Comienzo en Rafaela</h3>
+                            <p class="descripcionPaso">
+                                Fundamos el primer grupo voluntario informal de asistencia vecinal en Rafaela, Santa Fe, sentando las bases del compromiso comunitario y organizando colectas de alimentos en escuelas.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 1994 -->
+                        <article class="tarjetaPaso" id="detalle1994">
+                            <span class="anioPaso">1994</span>
+                            <h3 class="tituloPaso">Primer Comedor Asociado</h3>
+                            <p class="descripcionPaso">
+                                Establecemos soporte logístico regular con el comedor comunitario "Manitos Unidas", coordinando la entrega mensual estable de víveres secos y leche para más de 80 niños.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2001 -->
+                        <article class="tarjetaPaso" id="detalle2001">
+                            <span class="anioPaso">2001</span>
+                            <h3 class="tituloPaso">Crisis y Expansión</h3>
+                            <p class="descripcionPaso">
+                                Frente a la crisis socioeconómica nacional, ampliamos de emergencia nuestra red operativa para dar soporte urgente a 10 comedores comunitarios de la región de Rafaela y alrededores.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2003 -->
+                        <article class="tarjetaPaso" id="detalle2003">
+                            <span class="anioPaso">2003</span>
+                            <h3 class="tituloPaso">Personería Jurídica</h3>
+                            <p class="descripcionPaso">
+                                Nos constituimos legalmente como Asociación Civil sin fines de lucro bajo la sigla DonaTrack, formalizando estatutos y abriendo canales formales para donantes corporativos.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2004 -->
+                        <article class="tarjetaPaso" id="detalle2004">
+                            <span class="anioPaso">2004</span>
+                            <h3 class="tituloPaso">Programa Donación Textil</h3>
+                            <p class="descripcionPaso">
+                                Inauguramos nuestro programa textil estable, recolectando y clasificando abrigos, frazadas y calzados para la temporada invernal en barrios vulnerables.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2005 -->
+                        <article class="tarjetaPaso" id="detalle2005">
+                            <span class="anioPaso">2005</span>
+                            <h3 class="tituloPaso">Primera Sede Física</h3>
+                            <p class="descripcionPaso">
+                                Abrimos las puertas de nuestra primera sede administrativa en Rafaela, optimizando el depósito de mercadería y la coordinación presencial de los equipos voluntarios.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2006 -->
+                        <article class="tarjetaPaso" id="detalle2006">
+                            <span class="anioPaso">2006</span>
+                            <h3 class="tituloPaso">Expansión Provincial</h3>
+                            <p class="descripcionPaso">
+                                Extendemos la red logística asistiendo a comedores comunitarios y heladeras solidarias en las ciudades de Rosario y Santa Fe capital.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2008 -->
+                        <article class="tarjetaPaso" id="detalle2008">
+                            <span class="anioPaso">2008</span>
+                            <h3 class="tituloPaso">Alianzas con Supermercados</h3>
+                            <p class="descripcionPaso">
+                                Comenzamos el programa de rescate de excedentes y mermas comerciales aptas para consumo, logrando recuperar toneladas de comida de grandes cadenas locales.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2010 -->
+                        <article class="tarjetaPaso" id="detalle2010">
+                            <span class="anioPaso">2010</span>
+                            <h3 class="tituloPaso">Campaña 100 Voluntarios</h3>
+                            <p class="descripcionPaso">
+                                Alcanzamos los 100 colaboradores activos trabajando en territorio, lo que nos permitió descentralizar y optimizar las rutas de transporte diarios de viandas.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2014 -->
+                        <article class="tarjetaPaso" id="detalle2014">
+                            <span class="anioPaso">2014</span>
+                            <h3 class="tituloPaso">Digitalización de Procesos</h3>
+                            <p class="descripcionPaso">
+                                Lanzamos el primer software de inventario interno, digitalizando los ingresos y egresos de productos para certificar las entregas a los donantes de forma manual.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2016 -->
+                        <article class="tarjetaPaso" id="detalle2016">
+                            <span class="anioPaso">2016</span>
+                            <h3 class="tituloPaso">Heladeras Sociales</h3>
+                            <p class="descripcionPaso">
+                                Instalamos la primera heladera social urbana del proyecto, reduciendo drásticamente el desperdicio de comida cocinada a través de donantes particulares y rotiserías locales.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2021 -->
+                        <article class="tarjetaPaso" id="detalle2021">
+                            <span class="anioPaso">2021</span>
+                            <h3 class="tituloPaso">Soporte en Emergencia</h3>
+                            <p class="descripcionPaso">
+                                Frente al confinamiento global por pandemia, diseñamos rutas de distribución segura y logramos entregar más de 50.000 viandas calientes por mes.
+                            </p>
+                        </article>
+
+                        <!-- Detalle 2024 -->
+                        <article class="tarjetaPaso" id="detalle2024">
+                            <span class="anioPaso">2024</span>
+                            <h3 class="tituloPaso">DonaTrack 2.0</h3>
+                            <p class="descripcionPaso">
+                                Lanzamos el portal web interactivo que permite rastrear la donación de forma transparente, permitiendo que cada donante individual o corporativo vea el impacto exacto de su ayuda.
+                            </p>
+                        </article>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    <th:block th:fragment="estilosExtra">
+        <link rel="stylesheet" href="/css/acceso/quienesSomos.css">
+    </th:block>
+</html>

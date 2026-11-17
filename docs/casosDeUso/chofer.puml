@@ -1,0 +1,28 @@
+@startuml casosUsoChofer
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam actorStyle awesome
+
+actor "Chofer" as chofer
+
+rectangle "DonaTrack" {
+  usecase "Iniciar sesión" as UC_Login
+  usecase "Iniciar ruta\n(las entregas pasan a\n'En traslado')" as UC_Ruta
+}
+
+chofer --> UC_Login
+chofer --> UC_Ruta
+
+note bottom of UC_Ruta
+  Al iniciar la ruta, el sistema
+  actualiza las entregas a
+  'En traslado' y notifica a
+  entidades y donantes con el
+  enlace al mapa de seguimiento.
+end note
+
+@enduml

@@ -1,0 +1,11 @@
+<html th:replace="~{layout/headHtml :: html}">
+<body th:fragment="cuerpoPrincipal">
+    <!-- Botón flotante para regresar al inicio sin header en pantallas inmersivas -->
+    <a th:href="@{/}" class="botonVolverInicio" aria-label="Volver al inicio">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+    </a>
+
+    <!-- Inserción del contenido específico de login o registro -->
+    <th:block th:replace="~{:: contenido}"></th:block>
+</body>
+</html>

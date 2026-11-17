@@ -1,0 +1,32 @@
+@startuml casosUsoVisitante
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam actorStyle awesome
+
+actor "Visitante\n(sin sesión)" as visitante
+
+rectangle "DonaTrack" {
+  usecase "Visualizar landing page" as UC_Landing
+  usecase "Ver donaciones entregadas\n(sin login, con detalle\nal hacer clic)" as UC_Fotos
+  usecase "Consultar información\nlegal y de privacidad" as UC_Legal
+  usecase "Registrarse como\npersona donante" as UC_RegDonante
+  usecase "Registrarse como\nentidad beneficiaria" as UC_RegEntidad
+}
+
+visitante --> UC_Landing
+visitante --> UC_Fotos
+visitante --> UC_Legal
+visitante --> UC_RegDonante
+visitante --> UC_RegEntidad
+
+note bottom of UC_Fotos
+  Requisito mínimo 1: la visualización
+  de fotos de donaciones entregadas
+  debe ser accesible sin login.
+end note
+
+@enduml

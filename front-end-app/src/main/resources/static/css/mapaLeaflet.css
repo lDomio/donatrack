@@ -1,0 +1,335 @@
+/* ==========================================================================
+   ================= COMPONENTE MAPA LEAFLET REUTILIZABLE ===================
+   ========================================================================== */
+
+.donatrack-mapa-seguimiento-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--colorSuperficie, #ffffff);
+    border-radius: var(--radioBorde, 16px);
+    overflow: hidden;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: var(--sombraSuave, 0 4px 20px rgba(0, 0, 0, 0.05));
+}
+
+.donatrack-mapa-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background-color: var(--colorSuperficie, #ffffff);
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+}
+
+.donatrack-ruta-endpoints {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--colorTextoOscuro, #0f172a);
+}
+
+.donatrack-chip-origen,
+.donatrack-chip-destino {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background-color: var(--colorFondo, #f8fafc);
+    border: 1px solid #e2e8f0;
+}
+
+.donatrack-chip-origen i {
+    color: var(--colorPrimario, #0d9488);
+}
+
+.donatrack-chip-destino i {
+    color: var(--colorSecundario, #f97316);
+}
+
+.donatrack-flecha-ruta {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.donatrack-estado-vivo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background-color: #fff7ed;
+    color: var(--colorSecundario, #f97316);
+    border: 1px solid #fed7aa;
+}
+
+.donatrack-estado-vivo.entregado {
+    background-color: #ecfdf5;
+    color: #10b981;
+    border-color: #a7f3d0;
+}
+
+.dt-pulso-punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    animation: dtPulsoVivo 1.5s infinite;
+}
+
+@keyframes dtPulsoVivo {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.45; }
+}
+
+/* Lienzo Leaflet */
+.donatrack-leaflet-canvas {
+    width: 100%;
+    height: 460px;
+    z-index: 1;
+    background-color: #e2e8f0;
+}
+
+.donatrack-mapa-publico-wrapper {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    position: relative;
+}
+
+.donatrack-leaflet-publico {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    border-radius: 12px;
+}
+
+/* Barra inferior de telemetría */
+.donatrack-barra-telemetria {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 20px;
+    background-color: var(--colorFondo, #f8fafc);
+    border-top: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+}
+
+.dt-progreso-bloque {
+    flex: 1;
+    min-width: 220px;
+}
+
+.dt-progreso-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.dt-etiqueta-telemetria {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--colorTextoMedio, #475569);
+    display: block;
+}
+
+.dt-valor-progreso {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--colorPrimario, #0d9488);
+}
+
+.dt-barra-progreso-fondo {
+    width: 100%;
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.dt-barra-progreso-relleno {
+    height: 100%;
+    background: linear-gradient(90deg, var(--colorPrimario, #0d9488), var(--colorSecundario, #f97316));
+    border-radius: 999px;
+    transition: width 0.5s ease;
+}
+
+.dt-metricas-bloque {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dt-metrica-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--colorSuperficie, #ffffff);
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.dt-metrica-item i {
+    color: var(--colorPrimario, #0d9488);
+    font-size: 1rem;
+}
+
+.dt-valor-metrica {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro, #0f172a);
+}
+
+.dt-coords {
+    font-family: monospace;
+    font-size: 0.82rem;
+}
+
+/* Pines personalizados en Leaflet */
+.dt-leaflet-pin-wrapper {
+    background: transparent;
+    border: none;
+    transition: transform 0.8s ease-in-out;
+}
+
+.dt-pin-circulo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1rem;
+    border: 2.5px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+    position: relative;
+}
+
+.dt-pin-origen {
+    background-color: var(--colorPrimario, #0d9488);
+}
+
+.dt-pin-destino {
+    background-color: #10b981;
+}
+
+.dt-pin-camion {
+    width: 44px;
+    height: 44px;
+    background-color: var(--colorSecundario, #f97316);
+    font-size: 1.15rem;
+    z-index: 2;
+}
+
+.dt-pin-camion-pulso {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: rgba(249, 115, 22, 0.35);
+    animation: dtPulsoRadar 1.6s infinite;
+    z-index: 1;
+}
+
+@keyframes dtPulsoRadar {
+    0% { transform: scale(0.7); opacity: 1; }
+    100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Pin Caso de Éxito en Landing */
+.dt-pin-caso-exito {
+    background-color: var(--colorPrimario, #0d9488);
+    transition: transform 0.2s ease;
+}
+
+.dt-pin-caso-exito.con-foto {
+    background-color: var(--colorSecundario, #f97316);
+}
+
+.dt-pin-caso-exito:hover {
+    transform: scale(1.15);
+}
+
+/* Popup de Caso de Éxito con Fotografía */
+.dt-popup-caso-exito {
+    width: 245px;
+    font-family: inherit;
+}
+
+.dt-popup-foto-contenedor {
+    width: 100%;
+    height: 135px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    background-color: #f1f5f9;
+    position: relative;
+}
+
+.dt-popup-foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.dt-popup-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #ecfdf5;
+    color: #059669;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.dt-popup-titulo {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+}
+
+.dt-popup-donacion {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #0d9488;
+    margin: 0 0 4px 0;
+}
+
+.dt-popup-direccion {
+    font-size: 0.76rem;
+    color: #64748b;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .donatrack-leaflet-canvas {
+        height: 360px;
+    }
+    .donatrack-barra-telemetria {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

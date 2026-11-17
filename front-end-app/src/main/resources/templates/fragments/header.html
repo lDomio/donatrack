@@ -1,0 +1,63 @@
+<header th:fragment="header" class="cabeceraPrincipal" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="contenedorCabecera">
+        <a th:href="@{/}" class="logotipo" id="logotipoPrincipal" aria-label="Volver a página principal de DonaTrack">
+            <i class="fas fa-heart-pulse iconoCorazon"></i>
+            <span>DonaTrack</span>
+        </a>
+
+        <!-- Navegación para pantallas grandes -->
+        <nav th:replace="~{:: listaNavegacion ?: ~{}}" ></nav>
+
+        <!-- Botón de CTA y Perfil -->
+        <div class="grupoCabeceraDerecha">
+            <div th:replace="~{:: botonUnirse ?: ~{}}"></div>
+
+            <!-- Contenedor del perfil de usuario con dropdown (CSS Puro Hover) -->
+            <div class="perfilContenedor">
+                <button class="botonPerfil" id="botonMenuUsuario" aria-expanded="false" aria-haspopup="true" aria-label="Menú del usuario">
+                    <span class="iconoPerfilRemplazo"><i class="fas fa-user-circle"></i></span>
+                </button>
+                <div class="menuDesplegable" id="menuUsuario" aria-labelledby="botonMenuUsuario">
+                    <!-- Cabecera dinámica de usuario logueado -->
+                    <div class="menuDesplegableCabecera" sec:authorize="isAuthenticated()">
+                        <p class="nombreUsuario" sec:authentication="name">Usuario</p>
+                        <p class="correoUsuario" sec:authorize="hasRole('ADMINISTRADOR')">Administrador</p>
+                        <p class="correoUsuario" sec:authorize="hasRole('DONANTE')">Donante</p>
+                        <p class="correoUsuario" sec:authorize="hasRole('ENTIDAD_BENEFICIARIA')">Entidad Beneficiaria</p>
+                        <p class="correoUsuario" sec:authorize="hasRole('CAMIONERO')">Chofer</p>
+                    </div>
+
+                    <!-- Cabecera si no ha iniciado sesión -->
+                    <div class="menuDesplegableCabecera" sec:authorize="isAnonymous()">
+                        <p class="nombreUsuario">Invitado</p>
+                        <p class="correoUsuario">Inicia sesión en DonaTrack</p>
+                    </div>
+
+                    <!-- Opciones de perfil según el layout activo -->
+                    <div th:replace="~{:: perfilOpciones}"></div>
+                </div>
+            </div>
+
+            <!-- Botón Menú responsive -->
+            <a href="#menuLateralMovil" class="botonHamburguesa" aria-label="Abrir menú de navegación móvil">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Menú lateral móvil -->
+    <div class="menuLateralMovil" id="menuLateralMovil">
+        <div class="cabeceraMenuMovil">
+            <a th:href="@{/}" class="logotipo">
+                <i class="fas fa-heart-pulse iconoCorazon"></i>
+                <span>DonaTrack</span>
+            </a>
+            <a th:href="@{|${requestURI}|}" class="botonCerrarMenuMovil" aria-label="Cerrar menú móvil">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+        <ul th:replace="~{:: listaMovil ?: ~{}}" ></ul>
+
+        <div th:replace="~{:: botonUnirseMovil ?: ~{}}"></div>
+    </div>
+</header>

@@ -1,0 +1,114 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity ranking_de_donantes{
+    id: BIGINT <<PK>>
+    fecha_ranking: DATETIME
+}
+entity donante_en_ranking{
+    * donante: int <<PK, FK>>
+    * ranking: int <<PK, FK>>
+    * puesto: int
+}
+entity donante{
+    * id: BIGINT <<PK>>
+    * id_donante_donaciones_service: BIGINT <<UNIQUE>>
+    * nombre_usuario: VARCHAR
+    * categoria_id: BIGINT <<FK>>
+    * mision_actual_id: BIGINT <<FK>>
+    * progreso_mision_actual: DOUBLE
+    * cantidad_mision_actual: DOUBLE
+    * cantidad_objetivo_mision_actual: DOUBLE
+}
+ranking_de_donantes ||--|{ donante_en_ranking
+donante ||--o{ donante_en_ranking
+entity donacion{
+    * id: BIGINT <<PK>>
+    id_donacion_donaciones_service: BIGINT
+    * donante_id: BIGINT <<FK>>
+    * fecha_de_creacion: DATETIME
+    * cantidad_de_bien: DOUBLE
+    * categoria: VARCHAR
+    * entidad_beneficiaria_id: VARCHAR
+    * fecha_de_recepcion: DATETIME
+    * fue_recibida: TINYINT
+}
+donacion }o--|| donante
+entity mision_completada{
+    * id: BIGINT <<PK>>
+    * donante_id: BIGINT <<FK>>
+    * insignia_otorgada_id: BIGINT <<FK>>
+    * fecha_de_complecion: DATETIME
+    * mision_id: BIGINT <<FK>>
+    * categoria_donante_id: int <<FK>>
+}
+donante ||--o{ mision_completada
+entity insignia{
+    * id: int <<PK>>
+    * descripcion: VARCHAR
+}
+entity medio_de_contacto{
+    * id: BIGINT <<PK>>
+    * donante_id: BIGINT <<FK>>
+    * tipo_contacto: CHECK
+    * valor: VARCHAR
+}
+entity mision{
+    * id: BIGINT <<PK>>
+    * nombre: VARCHAR
+    * insignia_id: BIGINT <<FK>>
+    * mision_anterior_id: BIGINT <<FK>>
+    * mision_siguiente_id: BIGINT <<FK>>
+    * categoria_donante_id: BIGINT <<FK>>
+    * estado_mision_id: BIGINT <<FK>>
+}
+entity categoria_completada{
+    * id: BIGINT <<PK>>
+    * categoria_donante_id: BIGINT <<FK>>
+    * fecha_de_complecion: DATETIME
+}
+entity estado_mision{
+    * id: BIGINT <<PK>>
+    * tipo: VARCHAR
+    * cantidad_categorias_distintas: DOUBLE
+    * donaciones_recibidas: DOUBLE
+    * cantidad_bienes_en_donacion: DOUBLE
+    * meses_consecutivos: DOUBLE
+}
+entity categoria_donante{
+    * id: BIGINT <<PK>>
+    * nombre: VARCHAR
+    * cantidad_de_misiones_a_completar: int
+    * primera_mision_id: int <<FK>>
+}
+entity paquete{
+    * id: BIGINT <<PK>>
+    * fue_enviado: TINYINT
+    * fecha_de_creacion: DATETIME
+    * tipo: VARCHAR
+    * donante_id: BIGINT <<FK>>
+    * fechaDeCreacion: DATETIME
+    * routing_key: VARCHAR
+    * payload: VARCHAR
+    * content_type: VARCHAR
+    * correlation_id: VARCHAR
+    * prioridad: int
+    * reply_to: VARCHAR
+    * headers: VARCHAR
+}
+donante ||--o{ paquete
+categoria_donante ||--|| "Primera mision" mision
+mision }|--|| estado_mision
+categoria_donante ||--o{ "Categoria de mision" mision
+mision ||--o| "mision Anterior" mision
+mision ||--o| "mision Siguiente" mision
+mision }o--|| insignia
+medio_de_contacto }o--|| donante
+donante ||--o{ categoria_completada
+categoria_completada }o--|| categoria_donante
+mision_completada }o--|| mision
+mision ||--o{ donante
+mision_completada }o--|| insignia
+categoria_donante ||--o{ donante
+mision_completada }o--|| categoria_donante
+@enduml

@@ -1,0 +1,44 @@
+<html th:replace="~{layout/baseEntidadBeneficiaria :: html}" xmlns:th="http://www.thymeleaf.org">
+<main th:fragment="contenido">
+  <h1>Mis Necesidades</h1>
+  <div class="contenedorNecesidades">
+  <ul class="listaNecesidades">
+    <li th:each="necesidad : ${necesidades}" class="necesidad">
+      <a th:href="@{/entidadBeneficiaria/detalleNecesidad/{id}(id=${necesidad.id})}" class="necesidad-ver-mas" title="Ver detalle">
+        <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+      </a>
+      <span class="badgeTipo" th:text="${necesidad.tipoNecesidad}">Recurrente</span>
+      <span class="textoSubcategoria" th:text="${necesidad.subcategoria != null ? necesidad.subcategoria.nombre : 'General'}">Fideos</span>
+      <span class="cantidadTexto" th:text="|${necesidad.cantidadDonada != null ? necesidad.cantidadDonada : 0}/${necesidad.cantidad} ${necesidad.subcategoria != null ? necesidad.subcategoria.unidadDeMedida : ''}|">29/400 Kg</span>
+      
+      <!-- Barra de progreso visual -->
+      <div class="barraProgresoContenedor" th:if="${necesidad.cantidad != null and necesidad.cantidad > 0}">
+        <div class="barraProgresoRelleno"
+             th:style="'width: ' + ${T(java.lang.Math).min(100.0, ((necesidad.cantidadDonada != null ? necesidad.cantidadDonada : 0.0) / necesidad.cantidad) * 100.0)} + '%;'"
+             th:classappend="${necesidad.cantidadDonada != null and necesidad.cantidadDonada >= necesidad.cantidad ? 'progresoCompleto' : ''}">
+        </div>
+      </div>
+
+      <!-- Estado de cobertura: Satisfecha vs En progreso vs Pendiente -->
+      <span th:if="${necesidad.cantidadDonada != null and necesidad.cantidad != null and necesidad.cantidadDonada >= necesidad.cantidad}" class="badgeEstado badgeSatisfecha">
+        <i class="fas fa-check-circle"></i> Satisfecha
+      </span>
+      <span th:if="${necesidad.cantidadDonada != null and necesidad.cantidad != null and necesidad.cantidadDonada > 0 and necesidad.cantidadDonada < necesidad.cantidad}" class="badgeEstado badgeParcial">
+        <i class="fas fa-spinner"></i> En progreso (Restante: [[${necesidad.cantidad - necesidad.cantidadDonada}]])
+      </span>
+      <span th:if="${necesidad.cantidadDonada == null or necesidad.cantidadDonada == 0}" class="badgeEstado badgeAbierta">
+        <i class="fas fa-box-open"></i> Abierta
+      </span>
+
+      <div th:if="${necesidad.periodoRecurrencia != null}" class="tiempoReinicio alerta">
+        <i class="far fa-clock"></i>[[${necesidad.tiempoParaProximoReinicio}]]
+      </div>
+    </li>
+  </ul>
+  </div>
+  <a th:href="@{/entidadBeneficiaria/nuevaNecesidad}" class="boton-aniadir-necesidad"><i class="fa-solid fa-circle-plus fa-4x"></i></a>
+</main>
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/entidadBeneficiaria/misNecesidades.css">
+</th:block>
+</html>

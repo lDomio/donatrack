@@ -1,0 +1,26 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+<main th:fragment="contenido" class="seccionPrincipal" style="display: flex; justify-content: center; align-items: center; min-height: 70vh; padding: 40px 20px;">
+    <div style="background-color: var(--colorSuperficie, #ffffff); max-width: 540px; width: 100%; border-radius: 16px; padding: 48px 36px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08); text-align: center; border: 1px solid #f1f5f9;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #fee2e2; color: #dc2626; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; margin-bottom: 24px;">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--colorTextoOscuro, #0f172a); margin-bottom: 12px;">Acceso Denegado (403)</h1>
+        <p style="color: var(--colorTextoMedio, #475569); font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">
+            No cuentas con los permisos o el rol necesario para acceder a esta sección con tu cuenta actual.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a th:href="@{/}" class="botonPrimario" style="text-decoration: none; padding: 12px 24px;">
+                <i class="fas fa-house"></i> Ir al Inicio
+            </a>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" style="padding: 12px 24px; border: 1.5px solid #cbd5e1; background: none; border-radius: var(--radioBorde, 16px); font-family: inherit; font-weight: 600; cursor: pointer; color: var(--colorTextoMedio, #475569); transition: all 0.2s ease;">
+                    <i class="fas fa-arrow-right-from-bracket"></i> Cambiar cuenta
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/acceso/login.css">
+</th:block>
+</html>

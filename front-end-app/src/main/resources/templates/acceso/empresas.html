@@ -1,0 +1,156 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+    <main th:fragment="contenido" class="seccionPrincipal">
+        <div class="contenedorEmpresas">
+
+            <!-- Título de la Página -->
+            <h1 class="tituloSeccion">Nos acompañan</h1>
+            <h2 class="subtituloSeccion">Alianzas corporativas de impacto social</h2>
+
+            <!-- Rejilla de Logos Corporativos Vectoriales -->
+            <section class="cuadriculaEmpresas" aria-label="Logos de empresas patrocinadoras">
+
+                <!-- McDonald's -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo McDonald's">
+                            <path d="M15,85 Q30,15 45,55 Q60,15 75,55 Q90,15 105,85" fill="none" stroke="#FBC02D" stroke-width="13" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">McDonald's</h3>
+                    <span class="tipoAlianza alianzaPlata">Aliado Alimentario</span>
+                </article>
+
+                <!-- Toyota -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 60" class="logoSvg" aria-label="Logo Toyota">
+                            <ellipse cx="50" cy="30" rx="45" ry="25" fill="none" stroke="#E53935" stroke-width="4.5"/>
+                            <ellipse cx="50" cy="30" rx="28" ry="16" fill="none" stroke="#E53935" stroke-width="4.5"/>
+                            <line x1="50" y1="5" x2="50" y2="55" stroke="#E53935" stroke-width="5.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Toyota</h3>
+                    <span class="tipoAlianza alianzaOro">Socio Logístico</span>
+                </article>
+
+                <!-- Pepsi -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo Pepsi">
+                            <circle cx="50" cy="50" r="45" fill="#1E88E5"/>
+                            <path d="M5,50 Q50,15 95,50 A45,45 0 0,1 5,50" fill="#E53935"/>
+                            <path d="M5,50 Q50,85 95,50 A45,45 0 0,1 5,50" fill="#1E88E5"/>
+                            <path d="M5,50 Q50,15 95,50 Q50,85 5,50" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Pepsi</h3>
+                    <span class="tipoAlianza alianzaBronce">Patrocinador Oro</span>
+                </article>
+
+                <!-- BMW -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo BMW">
+                            <circle cx="50" cy="50" r="45" fill="black" stroke="#BDBDBD" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="32" fill="white"/>
+                            <path d="M50,18 A32,32 0 0,1 82,50 L50,50 Z" fill="#039BE5"/>
+                            <path d="M50,50 L18,50 A32,32 0 0,1 50,18 Z" fill="white"/>
+                            <path d="M50,50 L50,82 A32,32 0 0,1 18,50 Z" fill="#039BE5"/>
+                            <path d="M82,50 A32,32 0 0,1 50,82 L50,50 Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">BMW</h3>
+                    <span class="tipoAlianza alianzaPlata">Patrocinador Plata</span>
+                </article>
+
+                <!-- Apple -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <i class="fab fa-apple iconoApple" aria-label="Logo Apple"></i>
+                    </div>
+                    <h3 class="nombreEmpresa">Apple</h3>
+                    <span class="tipoAlianza alianzaOro">Aliado Tecnológico</span>
+                </article>
+
+                <!-- Adidas -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 80" class="logoSvg" aria-label="Logo Adidas">
+                            <rect x="25" y="40" width="12" height="35" transform="rotate(-25 25 40)" fill="black"/>
+                            <rect x="45" y="25" width="12" height="55" transform="rotate(-25 45 25)" fill="black"/>
+                            <rect x="65" y="10" width="12" height="75" transform="rotate(-25 65 10)" fill="black"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Adidas</h3>
+                    <span class="tipoAlianza alianzaBronce">Patrocinador Ropa</span>
+                </article>
+
+                <!-- NBC -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo NBC">
+                            <path d="M50,50 L40,15 A15,15 0 0,1 60,15 Z" fill="#E53935"/>
+                            <path d="M50,50 L75,25 A15,15 0 0,1 85,45 Z" fill="#FFB300"/>
+                            <path d="M50,50 L85,60 A15,15 0 0,1 70,80 Z" fill="#43A047"/>
+                            <path d="M50,50 L50,85 A15,15 0 0,1 30,80 Z" fill="#1E88E5"/>
+                            <path d="M50,50 L15,60 A15,15 0 0,1 15,40 Z" fill="#3949AB"/>
+                            <path d="M50,50 L25,20 A15,15 0 0,1 40,10 Z" fill="#8E24AA"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">NBC</h3>
+                    <span class="tipoAlianza alianzaPlata">Socio de Difusión</span>
+                </article>
+
+                <!-- Volkswagen -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo Volkswagen">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#0D47A1" stroke-width="6"/>
+                            <path d="M22,35 L40,75 L50,75 L50,15 L46,15 L46,65 L26,25 Z" fill="#0D47A1"/>
+                            <path d="M78,35 L60,75 L50,75 L50,15 L54,15 L54,65 L74,25 Z" fill="#0D47A1"/>
+                            <path d="M36,25 L50,55 L64,25 L60,17 L50,38 L40,17 Z" fill="#0D47A1"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Volkswagen</h3>
+                    <span class="tipoAlianza alianzaOro">Socio de Transporte</span>
+                </article>
+
+                <!-- Mercedes-Benz -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 100 100" class="logoSvg" aria-label="Logo Mercedes-Benz">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#757575" stroke-width="4"/>
+                            <path d="M50,50 L50,10 L46,46 Z" fill="#757575"/>
+                            <path d="M50,50 L50,10 L54,46 Z" fill="#BDBDBD"/>
+                            <path d="M50,50 L15,70 L46,54 Z" fill="#757575"/>
+                            <path d="M50,50 L15,70 L20,64 Z" fill="#BDBDBD"/>
+                            <path d="M50,50 L85,70 L54,54 Z" fill="#757575"/>
+                            <path d="M50,50 L85,70 L80,64 Z" fill="#BDBDBD"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Mercedes-Benz</h3>
+                    <span class="tipoAlianza alianzaOro">Socio Corporativo</span>
+                </article>
+
+                <!-- Google -->
+                <article class="tarjetaEmpresa">
+                    <div class="contenedorLogo">
+                        <svg viewBox="0 0 48 48" class="logoSvg" aria-label="Logo Google">
+                            <path d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z" fill="#4285F4"/>
+                            <path d="M6 14.7l7.5 5.6C15.3 16.5 19.3 14 24 14c5.6 0 10.3 3.6 11.8 8.6l7.8-6C40.6 10.4 32.9 6 24 6c-7.8 0-14.7 3.5-19.4 8.7z" fill="#EA4335"/>
+                            <path d="M24 42c8.9 0 16.6-4.4 19.6-10.6l-7.8-6c-1.5 5-6.2 8.6-11.8 8.6-4.7 0-8.7-2.5-10.5-6.3l-7.5 5.6C10.7 38.5 17.6 42 24 42z" fill="#34A853"/>
+                            <path d="M2 24c0-2.8.5-5.4 1.5-7.8l-7.5-5.6C2.7 15.6 2 19.7 2 24s.7 8.4 2 12.2l7.5-5.6c-1-2.4-1.5-5-1.5-7.8z" fill="#FBBC05"/>
+                        </svg>
+                    </div>
+                    <h3 class="nombreEmpresa">Google</h3>
+                    <span class="tipoAlianza alianzaOro">Socio Tecnológico</span>
+                </article>
+
+            </section>
+
+        </div>
+    </main>
+    <th:block th:fragment="estilosExtra">
+        <link rel="stylesheet" href="/css/acceso/empresas.css">
+    </th:block>
+</html>

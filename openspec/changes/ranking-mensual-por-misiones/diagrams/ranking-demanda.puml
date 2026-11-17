@@ -1,0 +1,31 @@
+@startuml ranking-demanda
+!theme plain
+
+actor "Persona administradora" as ADMIN
+participant "ranking.html" as VIEW
+participant "PersonaAdministradoraController" as FE
+participant "IncentivosApiService" as API
+participant "RankingController" as RC
+participant "RankingService" as RS
+database "MySQL\nranking_de_donantes" as DB
+
+ADMIN -> VIEW : selecciona período +\n"Generar ranking"
+VIEW -> FE : POST /personaAdministradora/ranking/generar\n(HTTP + cookie + CSRF)
+FE -> API : generarRanking(mes, anio)
+API -> RC : POST /ranking/generar\n(HTTP + JWT)
+RC -> RS : generarRanking(periodo)
+RS -> DB : reemplazar ranking del período
+DB --> RS : ranking
+RS --> RC : RankingResponse
+RC --> API : RankingResponse
+API --> FE : RankingResponseDto
+FE --> VIEW : redirect /ranking?periodo=...
+VIEW --> ADMIN : ranking actualizado + mensaje
+
+note right of RC
+  @PreAuthorize("hasRole('ADMINISTRADOR')
+                 and hasAuthority('VER_RANKING')")
+  request: { mes, anio }
+end note
+
+@enduml

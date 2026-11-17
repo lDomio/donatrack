@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: logistica-service
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USER:guest}
+    password: ${SPRING_RABBITMQ_PASS:guest}
+
+server:
+  port: 8083
+
+service:
+  role: ROLE_LOGISTICA_SERVICE
+  username: Logistica service
+
+services:
+  donaciones:
+    url: ${SERVICES_DONACIONES_URL:http://localhost:8080}
+  incentivos:
+    url: ${SERVICES_INCENTIVOS_URL:http://localhost:8081}
+donatrack:
+  events:
+    exchange: eventos
+    routing-keys:
+      notificacion:
+        critica: notificacion.critica
+        general: notificacion.general
+        bulk: notificacion.bulk
+      inicio-ruta: inicio.ruta
+      cambio-evento: cambio.evento
+      entrega-exito: entrega.exito
+      entrega-no-satisfactoria: entrega.no.satisfactoria
+
+rutasApi:
+  url: https://api-ddsi-route-generator.dds.apps.disilab.ar/api
+  apiKey: ${XSIGNATURE:}
+  clientSecret: ${CLIENT_SECRET:}
+warehouse:
+  latitude: -34.3556
+  longitude: -58.42015
+  address: Av. Corrientes 1234, CABA
+
+mongo:
+  host: ${MONGO_HOST:localhost}
+  port: ${MONGO_PORT:27017}
+  username: ${MONGO_USERNAME:-donatrack}
+  password: ${MONGO_PASSWORD:-donatrack}
+  database: ${MONGO_DATABASE:-logistica}
+
+horario:
+  comienzo: 9
+  fin: 18
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-change-me}

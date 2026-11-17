@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: logistica-service
+server:
+  port: 8083
+
+rutasApi:
+  url: https://api-ddsi-route-generator.dds.apps.disilab.ar/api
+  apiKey: ${XSIGNATURE:}
+  clientSecret: ${CLIENT_SECRET:}
+warehouse:
+  latitude: -34.3556
+  longitude: -58.42015
+  address: Av. Corrientes 1234, CABA
+horario:
+  comienzo: 9
+  fin: 18
+

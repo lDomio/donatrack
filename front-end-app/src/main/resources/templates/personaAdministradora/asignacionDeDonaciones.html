@@ -1,0 +1,324 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+  <!-- Migas de pan -->
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a href="/acceso/main">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <a href="/personaAdministradora/asignacionDeDonaciones">Donaciones</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Asignación de donaciones</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Asignación de donaciones</h1>
+    <p class="subtituloVista">Gestioná el inventario actual, marcá ítems vencidos y asigná donaciones pendientes a entidades beneficiarias.</p>
+  </div>
+
+  <!-- Alertas de estado -->
+  <div th:if="${exito}" class="alertaFormulario alertaExito" role="status">
+    <i class="fas fa-circle-check" aria-hidden="true"></i>
+    <span th:text="${exito}">Operación realizada con éxito.</span>
+  </div>
+  <div th:if="${error}" class="alertaFormulario alertaError" role="alert">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span th:text="${error}">Ocurrió un error.</span>
+  </div>
+
+  <!-- ============ BARRA DE FILTROS Y ACCIÓN MATCHMAKING ============ -->
+  <div class="contenedorBarraSuperiorDonaciones">
+    <form class="barraFiltrosDonaciones" th:action="@{/personaAdministradora/asignacionDeDonaciones}" method="GET" aria-label="Filtros de donaciones" style="flex: 1;">
+      <div class="grupoFiltro">
+        <label class="visualmenteOculto" for="filtroEstado">Estado</label>
+        <div class="cajaSelector">
+          <select id="filtroEstado" name="estado" class="selectorFiltro" onchange="this.form.submit()">
+            <option value="todos" th:selected="${paramEstado == null or paramEstado == 'todos'}">Todos los estados</option>
+            <option value="DEPOSITO" th:selected="${paramEstado == 'DEPOSITO'}">En Depósito</option>
+            <option value="ASIGNACION_REALIZADA" th:selected="${paramEstado == 'ASIGNACION_REALIZADA'}">Asignación Realizada</option>
+            <option value="LISTA_PARA_ENTREGAR" th:selected="${paramEstado == 'LISTA_PARA_ENTREGAR'}">Lista para entregar</option>
+            <option value="EN_TRASLADO" th:selected="${paramEstado == 'EN_TRASLADO'}">En Traslado</option>
+            <option value="ENTREGA_FALLIDA" th:selected="${paramEstado == 'ENTREGA_FALLIDA'}">Entrega Fallida</option>
+            <option value="ENTREGADA" th:selected="${paramEstado == 'ENTREGADA'}">Entregada</option>
+            <option value="VENCIDO" th:selected="${paramEstado == 'VENCIDO'}">Vencido</option>
+          </select>
+          <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="cajaBusquedaDonacion">
+        <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+        <label class="visualmenteOculto" for="campoBuscarDonacion">Buscar donación</label>
+        <input type="search" id="campoBuscarDonacion" name="buscar" th:value="${paramBuscar}" class="campoBusqueda" placeholder="Buscar por ID o descripción..." autocomplete="off">
+      </div>
+    </form>
+
+    <form th:action="@{/personaAdministradora/matcheos/ejecutar}" method="POST" class="formEjecutarMatchmaking">
+      <button type="submit" class="botonEjecutarMatchmaking">
+        <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
+        <span>Ejecutar Matchmaking</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- ============ LISTADO DE DONACIONES ============ -->
+  <section class="contenedorListaDonaciones" aria-label="Lista de donaciones en depósito">
+    <div th:if="${donaciones == null or #lists.isEmpty(donaciones)}" style="text-align: center; padding: 48px; color: var(--colorTextoMedio);">
+      <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+      <p>No se encontraron donaciones con los filtros seleccionados.</p>
+    </div>
+
+    <ul class="listaDonaciones" th:if="${donaciones != null and !#lists.isEmpty(donaciones)}">
+      <li th:each="donacion : ${donaciones}">
+        <article class="tarjetaDonacion">
+          <div class="contenedorImagenDonacion" aria-hidden="true">
+            <i class="fas fa-box"></i>
+          </div>
+          
+          <div class="cuerpoTarjeta">
+            <div class="encabezadoTarjeta">
+              <h2 class="tituloDonacion" th:text="'Donación #' + ${donacion.id}">Donación #110</h2>
+              <span th:if="${#strings.toString(donacion.estado) == 'VENCIDO'}" class="estadoDonacion estadoVencido">Vencido</span>
+              <span th:if="${#strings.toString(donacion.estado) == 'ENTREGA_FALLIDA'}" class="estadoDonacion estadoVencido">Entrega Fallida</span>
+              <span th:if="${#strings.toString(donacion.estado) == 'ENTREGADA'}" class="estadoDonacion estadoEntregada">Entregada</span>
+              <span th:if="${#strings.toString(donacion.estado) == 'DEPOSITO'}" class="estadoDonacion estadoPendiente">En Depósito</span>
+              <span th:if="${#strings.toString(donacion.estado) != 'VENCIDO' and #strings.toString(donacion.estado) != 'ENTREGA_FALLIDA' and #strings.toString(donacion.estado) != 'ENTREGADA' and #strings.toString(donacion.estado) != 'DEPOSITO'}" class="estadoDonacion estadoPendiente" th:text="${donacion.estado}">Pendiente</span>
+            </div>
+            
+            <p class="datosDonanteTarjeta">
+              <i class="fas fa-layer-group" aria-hidden="true"></i>
+              <span th:text="${donacion.subcategoria != null ? donacion.subcategoria.nombre : (donacion.descripcionGeneral != null ? donacion.descripcionGeneral : 'Donación general')}">General</span>
+            </p>
+            
+            <div class="detalleItemTarjeta">
+              <span th:if="${donacion.bienes != null and !donacion.bienes.isEmpty()}">
+                <strong>Bienes:</strong>
+                <span th:each="bien, iterStat : ${donacion.bienes}" th:text="(${iterStat.first ? '' : ', '} + (${bien.cantidad != null ? bien.cantidad + ' ' : ''}) + ${bien.nombre})">5 sillas</span>
+              </span>
+              <span th:if="${donacion.bienes == null or donacion.bienes.isEmpty()}">
+                <strong>Cantidad:</strong> <span th:text="${donacion.cantidadDonada != null ? donacion.cantidadDonada : 1}">1</span>
+              </span>
+              <span class="separadorDetalle">•</span>
+              <span><strong>Fecha:</strong> <span th:text="${donacion.ultimaActualizacion != null ? donacion.ultimaActualizacion : 'Hoy'}">05/04/2026</span></span>
+              <th:block th:if="${donacion.nombreEntidad != null}">
+                <span class="separadorDetalle">•</span>
+                <span>
+                    <i class="fas fa-building" style="margin-right: 4px; color: var(--colorSecundario);"></i>
+                    <strong>Entidad:</strong> <span th:text="${donacion.nombreEntidad}">Nombre Entidad</span>
+                    </span>
+              </th:block>
+            </div>
+          </div>
+
+          <div class="accionesTarjeta">
+            <!-- Botón registrar pesaje: Solo habilitado tras asignación -->
+            <a th:if="${#strings.toString(donacion.estado) == 'ASIGNACION_REALIZADA' or #strings.toString(donacion.estado) == 'LISTA_PARA_ENTREGAR'}"
+               th:href="'#modalPesaje-' + ${donacion.id}"
+               class="botonPesajeAccion"
+               aria-haspopup="dialog"
+               title="Registrar peso y volumen en depósito">
+              <i class="fas fa-weight-scale" aria-hidden="true"></i>
+              <span>Registrar Pesaje</span>
+            </a>
+
+            <!-- Indicador para donaciones en depósito sin asignar -->
+            <span th:if="${#strings.toString(donacion.estado) == 'DEPOSITO'}"
+                  class="badgeRequiereAsignacion"
+                  title="Primero asigná la donación a una entidad para poder registrar su pesaje">
+              <i class="fas fa-lock" style="font-size: 0.75rem;"></i> Asignar antes de pesar
+            </span>
+
+            <!-- Botón vencer si está en depósito o con entrega fallida -->
+            <form th:if="${#strings.toString(donacion.estado) == 'DEPOSITO' or #strings.toString(donacion.estado) == 'ENTREGA_FALLIDA'}" th:action="@{/personaAdministradora/donaciones/{id}/vencer(id=${donacion.id})}" method="POST" style="display:inline;">
+              <button type="submit" class="botonPeligroAccion" onclick="return confirm('¿Confirmás marcar la donación como vencida?');">Marcar Vencida</button>
+            </form>
+
+            <!-- Botón reingresar al depósito si está en ENTREGA_FALLIDA -->
+            <form th:if="${#strings.toString(donacion.estado) == 'ENTREGA_FALLIDA'}" th:action="@{/personaAdministradora/donaciones/{id}/reingresar(id=${donacion.id})}" method="POST" style="display:inline;">
+              <button type="submit" class="botonPrimario" onclick="return confirm('¿Confirmás reingresar la donación al depósito para poder reasignarla?');">
+                <i class="fas fa-warehouse" aria-hidden="true" style="margin-right: 6px;"></i>Reingresar al depósito
+              </button>
+            </form>
+
+            <!-- Botón seleccionar beneficiario si está en depósito -->
+            <a th:if="${#strings.toString(donacion.estado) == 'DEPOSITO'}" th:href="'#modalMatch-' + ${donacion.id}" class="botonPrimario" aria-haspopup="dialog">Seleccionar Beneficiario</a>
+          </div>
+        </article>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ====================== MODALES: ASIGNAR DONACIÓN ====================== -->
+  <div th:each="donacion : ${donaciones}" th:if="${donaciones != null and #strings.toString(donacion.estado) == 'DEPOSITO'}" class="capaModal" th:id="'modalMatch-' + ${donacion.id}" role="dialog" aria-modal="true">
+    <a href="#" class="fondoModal" aria-label="Cerrar el modal" tabindex="-1"></a>
+
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <h2 class="tituloModal">Seleccionar Beneficiario</h2>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar modal">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+
+      <th:block th:with="matcheoEncontrado=${matcheos != null ? matcheos.?[idDonacion == #root.donacion.id and (yaFueSeleccionadoPorElAdministrador == null or !yaFueSeleccionadoPorElAdministrador)] : null}">
+        <div th:if="${matcheoEncontrado == null or #lists.isEmpty(matcheoEncontrado)}" class="cuerpoModal">
+          <div class="resumenDonacionModal">
+            <div class="filaResumen">
+              <span class="etiquetaResumen">Donación:</span>
+              <span class="valorResumen" th:text="'#' + ${donacion.id}">#110</span>
+            </div>
+          </div>
+          <p style="text-align: center; color: var(--colorTextoMedio); padding: 24px;">No hay sugerencias de matcheo automáticas para esta donación en este momento.</p>
+          <div class="pieModal">
+            <a href="#" class="botonOpcion">Cerrar</a>
+          </div>
+        </div>
+
+        <form th:if="${matcheoEncontrado != null and !#lists.isEmpty(matcheoEncontrado)}"
+              th:with="match=${matcheoEncontrado[0]}"
+              class="formularioAsignacion"
+              th:action="@{/personaAdministradora/matcheos/{idMatcheo}/asignar/{idNecesidad}(idMatcheo=${match.id})}"
+              onsubmit="const sel = this.querySelector('input[name=idNecesidad]:checked')?.value; if(!sel) return false; this.action = decodeURIComponent(this.action).replace('{idNecesidad}', sel); return true;"
+              method="POST">
+          <div class="cuerpoModal">
+            <div class="resumenDonacionModal">
+              <div class="filaResumen">
+                <span class="etiquetaResumen">Donación:</span>
+                <span class="valorResumen" th:text="'#' + ${donacion.id}">#110</span>
+                <span class="separadorResumen">|</span>
+                <span class="valorResumen" th:text="${donacion.subcategoria != null ? donacion.subcategoria.nombre : 'General'}">Bienes</span>
+              </div>
+            </div>
+
+            <h3 class="subtituloModal">Ranking comparativo de algoritmos (Compatibilidad Semántica vs Prioridad Sub-atendidos)</h3>
+
+            <fieldset class="grupoOpcionesBeneficiario">
+              <legend class="visualmenteOculto">Entidades sugeridas por el algoritmo</legend>
+              
+              <label th:each="nec, iter : ${match.necesidadesSugeridas}" class="opcionBeneficiario" th:for="'nec_' + ${match.id} + '_' + ${nec.id}">
+                <div class="contenedorRadio">
+                  <input type="radio" name="idNecesidad" th:id="'nec_' + ${match.id} + '_' + ${nec.id}" th:value="${nec.id}" class="radioBeneficiario" th:checked="${iter.first}" required>
+                </div>
+                <div class="infoPrincipalBeneficiario">
+                  <div class="filaTituloBeneficiario">
+                    <span class="nombreBeneficiario" th:text="${(nec.razonSocialEntidad != null ? nec.razonSocialEntidad : 'Entidad') + (nec.subcategoria != null ? ' — ' + nec.subcategoria.nombre : '')}">Comedor Los Bajitos — Arroz</span>
+                    <span class="etiquetaAlgoritmo"
+                          th:classappend="${nec.algoritmoRecomendador != null and #strings.contains(nec.algoritmoRecomendador, 'Consenso')} ? 'badgeConsenso' : (${nec.algoritmoRecomendador != null and #strings.contains(nec.algoritmoRecomendador, 'Semántica')} ? 'badgeSemantica' : 'badgePrioridad')">
+                      <i class="fas fa-microchip" aria-hidden="true"></i>
+                      <span th:text="${nec.algoritmoRecomendador != null ? nec.algoritmoRecomendador : 'Compatibilidad Semántica'}">Algoritmo</span>
+                    </span>
+                  </div>
+                  <span class="descripcionBeneficiario" th:text="(${nec.subcategoria != null ? nec.subcategoria.nombre + ' — ' : ''}) + 'Cantidad requerida: ' + ${nec.cantidad} + (${nec.subcategoria != null and nec.subcategoria.unidadDeMedida != null ? ' ' + nec.subcategoria.unidadDeMedida : ''}) + (${nec.descripcion != null ? ' (' + nec.descripcion + ')' : ''})">Refugio</span>
+                  <div class="comparativaAlgoritmos">
+                    <span class="chipRanking chipSemantica">
+                      <strong>Compatibilidad Semántica:</strong>
+                      <span th:text="'Puesto #' + (${nec.rankingSemantica != null ? nec.rankingSemantica : iter.count})">Puesto #1</span>
+                    </span>
+                    <span class="chipRanking chipPrioridad">
+                      <strong>Prioridad Sub-atendidos:</strong>
+                      <span th:text="'Puesto #' + (${nec.rankingPrioridad != null ? nec.rankingPrioridad : iter.count}) + (${nec.donacionesTrimestreEntidad != null ? ' (' + nec.donacionesTrimestreEntidad + ' donaciones últ. trim.)' : ''})">Puesto #2</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="infoUbicacionBeneficiario">
+                  <span class="distanciaBeneficiario" th:text="'Necesidad #' + ${nec.id}">ID</span>
+                  <span class="localidadBeneficiario" th:text="${nec.tipoNecesidad != null ? nec.tipoNecesidad : 'Prioritaria'}">Normal</span>
+                </div>
+              </label>
+
+              <div th:if="${#lists.isEmpty(match.necesidadesSugeridas)}" style="padding: 16px; color: var(--colorTextoMedio); text-align: center;">
+                No hay necesidades compatibles sugeridas en este momento.
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="pieModal">
+            <a href="#" class="botonOpcion">Cancelar</a>
+            <button th:if="${!#lists.isEmpty(match.necesidadesSugeridas)}" type="submit" class="botonPrimarioNegro">Asignar Donación</button>
+          </div>
+        </form>
+      </th:block>
+    </div>
+  </div>
+
+  <!-- ====================== MODALES: REGISTRAR PESAJE ====================== -->
+  <div th:each="donacion : ${donaciones}"
+       th:if="${donaciones != null and (#strings.toString(donacion.estado) == 'ASIGNACION_REALIZADA' or #strings.toString(donacion.estado) == 'LISTA_PARA_ENTREGAR')}"
+       class="capaModal"
+       th:id="'modalPesaje-' + ${donacion.id}"
+       role="dialog"
+       aria-modal="true">
+    <a href="#" class="fondoModal" aria-label="Cerrar el modal" tabindex="-1"></a>
+
+    <div class="contenidoModal modalPesajeContenido">
+      <header class="cabeceraModal">
+        <h2 class="tituloModal">
+          <i class="fas fa-weight-scale" style="color: var(--colorPrimario); margin-right: 8px;"></i>
+          Registrar Pesaje - Donación #<span th:text="${donacion.id}">1</span>
+        </h2>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar modal">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+
+      <div class="cuerpoModal">
+        <div class="resumenDonacionModal">
+          <div class="filaResumen">
+            <span class="etiquetaResumen">Donación:</span>
+            <span class="valorResumen" th:text="'#' + ${donacion.id} + ' - ' + (${donacion.descripcionGeneral != null ? donacion.descripcionGeneral : 'Donación en depósito'})">#1</span>
+          </div>
+          <div class="filaResumen" th:if="${donacion.subcategoria != null}">
+            <span class="etiquetaResumen">Subcategoría:</span>
+            <span class="valorResumen" th:text="${donacion.subcategoria.nombre}">Alimentos</span>
+          </div>
+        </div>
+
+        <p class="descripcionModalPesaje">
+          Ingresá los datos obtenidos en balanza y cubicaje de depósito para registrar el pesaje físico y habilitar la planificación de rutas en el camión.
+        </p>
+
+        <form th:action="@{/personaAdministradora/donaciones/{id}/pesaje(id=${donacion.id})}" method="POST" class="formularioPesaje">
+          <div class="grupoCampoPesaje">
+            <label th:for="'peso-' + ${donacion.id}" class="etiquetaCampoPesaje">
+              <i class="fas fa-balance-scale"></i> Peso en Balanza (kg):
+            </label>
+            <input type="number"
+                   step="0.01"
+                   min="0.1"
+                   th:id="'peso-' + ${donacion.id}"
+                   name="peso"
+                   required
+                   class="inputPesaje"
+                   placeholder="Ej: 25.50">
+          </div>
+
+          <div class="grupoCampoPesaje">
+            <label th:for="'volumen-' + ${donacion.id}" class="etiquetaCampoPesaje">
+              <i class="fas fa-cubes"></i> Volumen Estimado (m³):
+            </label>
+            <input type="number"
+                   step="0.001"
+                   min="0.001"
+                   th:id="'volumen-' + ${donacion.id}"
+                   name="volumen"
+                   required
+                   class="inputPesaje"
+                   placeholder="Ej: 0.120">
+          </div>
+
+          <div class="pieModal" style="margin-top: 24px;">
+            <a href="#" class="botonOpcion">Cancelar</a>
+            <button type="submit" class="botonPrimario">
+              <i class="fas fa-check" aria-hidden="true"></i> Guardar Pesaje
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+    <link rel="stylesheet" href="/css/personaAdministradora/asignacionDeDonaciones.css">
+</th:block>
+</html>

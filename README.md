@@ -7,10 +7,12 @@
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-> Academic capstone project — **Diseño de Sistemas de Información**, UTN FRBA, 2026.
-> The production repository is private. This case study documents the architecture, my role and the main engineering decisions.
+[English](README.md) | [Español](README.es.md)
 
-## Overview
+> Academic capstone project for **Diseño de Sistemas de Información**, UTN FRBA, 2026.
+> Built with **5 colleagues**.
+
+## What is DonaTrack?
 
 DonaTrack connects **donors**, **beneficiary organizations** and **logistics** in one platform. Donations are registered, segmented by category and subcategory, matched with needs, assigned to delivery routes, and tracked through notifications and incentives.
 
@@ -35,7 +37,7 @@ flowchart TB
     NOT --> EMAIL[Email / n8n]
 ```
 
-The system is a Maven multi-module monorepo:
+### Services
 
 | Module | Responsibility |
 |---|---|
@@ -45,11 +47,23 @@ The system is a Maven multi-module monorepo:
 | `logistica-service` | Routes, deliveries and proof of delivery |
 | `notificacion-service` | Email and event-driven notifications |
 | `common-lib` | Shared domain, DTOs and infrastructure |
-| `front-end-app` | React frontend |
+| `front-end-app` | Thymeleaf/React-facing web app |
+
+## Key flows
+
+- **Donation intake:** one load is segmented into independent donations by subcategory, expiration and condition.
+- **Needs matching:** beneficiary organizations publish recurring and extraordinary needs.
+- **Monthly ranking:** a scheduled job builds the donor ranking at 03:00 on the first day of each month.
+- **Impact panel:** donors see their history, helped organizations and ranking position.
+
+![Donor use cases](docs/casosDeUso/casosUsoPersonaDonante.png)
+![Beneficiary entity use cases](docs/casosDeUso/casosUsoEntidadBeneficiaria.png)
+![Monthly ranking](openspec/changes/ranking-mensual-por-misiones/diagrams/ranking-programado.png)
+![Impact panel](openspec/changes/panel-impacto-donante/diagrams/impacto-donante.png)
 
 ## My role
 
-Full-stack developer in a 6-person team. I worked across the incentives and donations services and the React frontend:
+Full-stack developer in a 6-person team. I worked across the incentives and donations services and the frontend:
 
 - Monthly **incentive ranking** and on-demand ranking endpoints.
 - Beneficiary entity views with filters and monthly impact counters.
@@ -58,20 +72,55 @@ Full-stack developer in a 6-person team. I worked across the incentives and dona
 - Docker Compose setup and zero-intervention local startup.
 - Frontend flows for donations, entities and incentives.
 
-## Engineering decisions
+## Testing
 
-- **Microservices by business capability**, with a shared library for cross-cutting concerns.
-- **RabbitMQ** for asynchronous notification and event propagation.
-- **DTOs at the API boundary** to avoid leaking persistence entities.
-- **Docker Compose** for reproducible local environments.
-- **OpenSpec / spec-driven changes** to describe behavior and acceptance criteria before implementation.
+- **43 tests** across the services.
+- Domain, service and integration coverage for donations, incentives, logistics and notifications.
+
+## Spec-driven development
+
+- **12 OpenSpec changes** documenting proposals, design and tasks.
+- Specs and acceptance criteria are written before implementation.
 
 ## Stack
 
-`Java 21` · `Spring Boot` · `Spring Cloud` · `Spring Data JPA` · `Hibernate` · `MySQL` · `RabbitMQ` · `Thymeleaf` · `Docker Compose` · `Maven`
+`Java 21` · `Spring Boot` · `Spring Cloud` · `Spring Data JPA` · `Hibernate` · `MySQL` · `RabbitMQ` · `Docker Compose` · `Maven` · `JUnit`
 
-## Links
+## Running locally
 
-- [LinkedIn](https://www.linkedin.com/in/luca-domio-dev)
-- [Portfolio](https://github.com/lDomio)
-- Code and full documentation available on request.
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+The main services are exposed on:
+
+| Service | Port |
+|---|---:|
+| Donations API | 8080 |
+| Incentives API | 8081 |
+| Logistics API | 8083 |
+| RabbitMQ management | 15672 |
+| MySQL | 3307 |
+
+## Project structure
+
+```text
+├── autenticacion-service/
+├── common-lib/
+├── donaciones-service/
+├── incentivos-service/
+├── logistica-service/
+├── notificacion-service/
+├── front-end-app/
+├── docker/
+├── docs/
+├── openspec/
+└── docker-compose.yml
+```
+
+## Notes
+
+- Code published for portfolio purposes.
+- No credentials are committed; configure them through `.env`.
+- Full academic documentation is available under `docs/` and `openspec/`.

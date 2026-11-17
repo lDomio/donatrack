@@ -1,0 +1,12 @@
+.etiquetaRol { display: inline-block; margin-top: 6px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); border: 1px solid var(--colorPrimarioBorde); padding: 2px 10px; border-radius: 12px; }
+
+.botonOpcion, .botonOpcionCancelar {
+    border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 8px 16px; box-shadow: var(--sombraSuave); font: inherit; font-weight: 600;
+    color: var(--colorPrimario); text-decoration: none; cursor: pointer; transition: var(--transicionSuave);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-align: center; line-height: 1.2; min-height: 48px;
+}
+.botonOpcion { background-color: var(--colorPrimarioClaro); }
+.botonOpcionCancelar { background-color: var(--colorError); color: white; }
+.botonOpcion:hover { background-color: var(--colorPrimarioBorde); color: var(--colorPrimarioHover); transform: translateY(-2px); box-shadow: var(--sombraMedia); }
+.botonOpcionCancelar:hover { background-color: #b91c1c; color: white; transform: translateY(-2px); box-shadow: var(--sombraMedia); }

@@ -1,0 +1,554 @@
+/* ==========================================================================
+   ========================= MAIN (CONTENIDO) ===============================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* En Desktop, fijamos la altura del main para que quede perfectamente ordenado */
+@media (min-width: 1025px) {
+    .cuadriculaDiseño {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 24px;
+        height: 740px; /* Altura de diseño comoda para encajar main */
+    }
+}
+
+/* columnaNoticias (Ultimas Noticias) */
+.columnaNoticias {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 20px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tituloNoticias {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid var(--colorPrimarioBorde);
+    padding-bottom: 8px;
+}
+
+.tituloNoticias i {
+    color: var(--colorPrimario);
+}
+
+.listaNoticias {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Estilo barra scroll noticias */
+.listaNoticias::-webkit-scrollbar {
+    width: 4px;
+}
+.listaNoticias::-webkit-scrollbar-track {
+    background: transparent;
+}
+.listaNoticias::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.tarjetaNoticia {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: var(--colorFondo);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transicionSuave);
+    border: 1px solid transparent;
+}
+
+.tarjetaNoticia:hover {
+    background-color: var(--colorSuperficie);
+    border-color: var(--colorPrimarioBorde);
+    box-shadow: var(--sombraSuave);
+    transform: translateY(-2px);
+}
+
+.contenedorImagenNoticia {
+    width: 68px;
+    height: 68px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.cajaImagenNoticiaCampaña {
+    background-color: #ffe4e6;
+    color: #f43f5e;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.cajaImagenNoticiaComunidad {
+    background-color: #ecfdf5;
+    color: #10b981;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.cajaImagenNoticiaTransparencia {
+    background-color: #eff6ff;
+    color: #3b82f6;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.cajaImagenNoticiaAlianza {
+    background-color: #fef3c7;
+    color: #d97706;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.contenidoNoticia {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.categoriaNoticia {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--colorPrimario);
+    margin-bottom: 2px;
+}
+
+.tituloItemNoticia {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 2px;
+    color: var(--colorTextoOscuro);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.fechaNoticia {
+    font-size: 0.7rem;
+    color: var(--colorTextoClaro);
+}
+
+.seccionCentral {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+}
+
+/* heroeSeccion */
+.heroeSeccion {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 24px;
+    box-shadow: var(--sombraSuave);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.03);
+    flex: 1.1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.heroeSeccion::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--colorPrimarioBorde) 0%, transparent 70%);
+    opacity: 0.6;
+    z-index: 0;
+}
+
+.contenidoHeroe {
+    position: relative;
+    z-index: 1;
+    max-width: 95%;
+}
+
+.etiquetaHeroe {
+    display: inline-block;
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.sloganHeroe {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+
+.sloganHeroe span {
+    color: var(--colorPrimario);
+}
+
+.descripcionHeroe {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    margin-bottom: 16px;
+    max-width: 720px;
+    line-height: 1.45;
+}
+
+.filaAccionesHeroe {
+    display: flex;
+    gap: 12px;
+}
+
+/* seccionInfo (Mapa y Estadisticas) */
+.seccionInfo {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+    flex: 1.4;
+    min-height: 0;
+}
+
+/* tarjetaMapa */
+.tarjetaMapa {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 20px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.tituloMapa {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tituloMapa i {
+    color: var(--colorPrimario);
+}
+
+.descripcionMapa {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+}
+
+.contenedorMapa {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+    height: 300px; /* Alto fijo base para móviles y tabletas */
+}
+
+/* En Desktop, flexibilizamos la altura del contenedor del mapa sin romper el diseño */
+@media (min-width: 1025px) {
+    .contenedorMapa {
+        height: auto;
+        flex: 1;
+        min-height: 260px; /* Mayor alto minimo en desktop */
+    }
+}
+
+.imagenMapaReal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* fill asegura que los pines absolutos siempre se alineen exactamente con los pixeles correctos al reescalar */
+    display: block;
+}
+
+/* marcadoresMapaInteractivos */
+.marcadorMapa {
+    position: absolute;
+    cursor: pointer;
+    transform: translate(-50%, -100%);
+    animation: botarMarcador 1.5s infinite alternate;
+    z-index: 5;
+}
+
+.marcadorMapa i {
+    font-size: 1.75rem;
+    color: var(--colorSecundario);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.marcadorMapa::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 8px;
+    height: 4px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes botarMarcador {
+    0% { transform: translate(-50%, -100%) translateY(0); }
+    100% { transform: translate(-50%, -100%) translateY(-4px); }
+}
+
+.marcadorUno {
+    top: 28%;
+    left: 42%;
+}
+
+.marcadorDos {
+    top: 52%;
+    left: 33%;
+}
+
+.marcadorTres {
+    top: 68%;
+    left: 62%;
+}
+
+.tooltipMarcador {
+    position: absolute;
+    background-color: var(--colorTextoOscuro);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+    pointer-events: none;
+    box-shadow: var(--sombraSuave);
+    z-index: 10;
+}
+
+.tooltipMarcador::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--colorTextoOscuro);
+    transform: translateX(-50%);
+}
+
+.marcadorMapa:hover .tooltipMarcador {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* seccionNumeros (Estadisticas) */
+.tarjetaNumeros {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 20px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.tituloNumeros {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tituloNumeros i {
+    color: var(--colorPrimario);
+}
+
+.contenedorEstadisticas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    justify-content: space-around;
+}
+
+.tarjetaEstadistica {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--colorFondo);
+    border-radius: 12px;
+    transition: var(--transicionSuave);
+}
+
+.tarjetaEstadisticaUno {
+    border-left: 4px solid var(--colorPrimario);
+}
+.tarjetaEstadisticaUno:hover {
+    transform: translateX(4px);
+    background-color: var(--colorPrimarioClaro);
+}
+
+.tarjetaEstadisticaDos {
+    border-left: 4px solid var(--colorSecundario);
+}
+.tarjetaEstadisticaDos:hover {
+    transform: translateX(4px);
+    background-color: #fff7ed;
+}
+
+.tarjetaEstadisticaTres {
+    border-left: 4px solid #2563eb;
+}
+.tarjetaEstadisticaTres:hover {
+    transform: translateX(4px);
+    background-color: #eff6ff;
+}
+
+.iconoEstadistica {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--colorSuperficie);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: var(--sombraSuave);
+}
+
+.tarjetaEstadisticaUno .iconoEstadistica {
+    color: var(--colorPrimario);
+}
+.tarjetaEstadisticaDos .iconoEstadistica {
+    color: var(--colorSecundario);
+}
+.tarjetaEstadisticaTres .iconoEstadistica {
+    color: #2563eb;
+}
+
+.datosEstadistica {
+    display: flex;
+    flex-direction: column;
+}
+
+.numeroEstadistica {
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--colorTextoOscuro);
+}
+
+.etiquetaEstadistica {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--colorTextoMedio);
+}
+
+/* ---------- MEDIA QUERIES MAIN ---------- */
+@media (max-width: 1024px) {
+    .seccionPrincipal {
+        height: auto;
+    }
+
+    .cuadriculaDiseño {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        height: auto;
+    }
+
+    .columnaNoticias {
+        order: 2;
+        height: 480px;
+    }
+
+    .seccionCentral {
+        order: 1;
+        height: auto;
+    }
+
+    .heroeSeccion {
+        flex: none;
+        padding: 32px 24px;
+    }
+
+    .seccionInfo {
+        flex: none;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .seccionInfo {
+        grid-template-columns: 1fr;
+    }
+
+    .sloganHeroe {
+        font-size: 1.5rem;
+    }
+}
+

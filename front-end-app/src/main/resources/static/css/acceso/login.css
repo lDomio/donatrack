@@ -1,0 +1,487 @@
+/* ==========================================================================
+   ========================= VARIABLES Y GENERAL ============================
+   ========================================================================== */
+
+:root {
+    --colorPrimario: #0d9488; /* Teal 600 */
+    --colorPrimarioHover: #0f766e; /* Teal 700 */
+    --colorPrimarioClaro: #f0fdfa; /* Teal 50 */
+    --colorPrimarioBorde: #ccfbf1; /* Teal 100 */
+    --colorSecundario: #f97316; /* Orange 500 */
+    --colorSecundarioHover: #ea580c; /* Orange 600 */
+    --colorFondo: #f8fafc; /* Slate 50 */
+    --colorSuperficie: #ffffff; /* Blanco */
+    --colorTextoOscuro: #0f172a; /* Slate 900 */
+    --colorTextoMedio: #475569; /* Slate 600 */
+    --colorTextoClaro: #94a3b8; /* Slate 400 */
+    --colorFoco: #2563eb; /* Azul foco */
+    --colorExito: #16a34a; /* Verde */
+    --colorError: #dc2626; /* Rojo */
+    --sombraSuave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --sombraMedia: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --sombraElevada: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --fuentePrincipal: 'Outfit', system-ui, -apple-system, sans-serif;
+    --radioBorde: 16px;
+    --transicionSuave: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--fuentePrincipal);
+    background-color: var(--colorFondo);
+    color: var(--colorTextoOscuro);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Todo encaja en 100vh en escritorio */
+}
+
+/* accesibilidadFoco */
+*:focus-visible {
+    outline: 3px solid var(--colorFoco);
+    outline-offset: 3px;
+}
+
+/* Botón flotante para regresar al inicio sin header */
+.botonVolverInicio {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoMedio);
+    border: 1.5px solid #cbd5e1;
+    padding: 10px 18px;
+    border-radius: var(--radioBorde);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+    z-index: 90;
+}
+
+.botonVolverInicio:hover {
+    border-color: var(--colorPrimario);
+    color: var(--colorPrimario);
+    transform: translateX(-3px);
+    box-shadow: var(--sombraMedia);
+}
+
+
+/* ==========================================================================
+   ========================= LOGIN ==========================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    flex: 1;
+    min-height: 0;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenedorLogin {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    width: 100%;
+    max-width: 860px;
+    height: 100%;
+    max-height: 480px; /* Alto fijo proporcional en desktop */
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    overflow: hidden;
+    box-shadow: var(--sombraMedia);
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.columnaMarca {
+    background: linear-gradient(135deg, var(--colorPrimarioHover) 0%, var(--colorPrimario) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.columnaMarca::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.contenidoMarca {
+    z-index: 10;
+}
+
+.logotipoMarca {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.iconoCorazonMarca {
+    color: var(--colorSecundario);
+    animation: pulsoCorazon 2s infinite;
+}
+
+@keyframes pulsoCorazon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.sloganMarca {
+    font-size: 1.05rem;
+    font-weight: 500;
+    opacity: 0.9;
+    line-height: 1.5;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+.columnaFormulario {
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    height: 100%;
+}
+
+.tituloFormulario {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 28px;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+/* Alertas de autenticación */
+.alertaErrorLogin,
+.alertaExitoLogin,
+.alertaAdvertenciaLogin {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.alertaErrorLogin {
+    background-color: #fef2f2;
+    color: var(--colorError);
+    border: 1px solid #fecaca;
+}
+
+.alertaExitoLogin {
+    background-color: #f0fdf4;
+    color: var(--colorExito);
+    border: 1px solid #bbf7d0;
+}
+
+.alertaAdvertenciaLogin {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.formularioLogin {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.grupoCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.grupoCampo label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--colorTextoMedio);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.entradaTexto {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--colorTextoOscuro);
+    transition: var(--transicionSuave);
+    background-color: var(--colorSuperficie);
+}
+
+.entradaTexto:focus {
+    border-color: var(--colorPrimario);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.enlaceRecuperar {
+    font-size: 0.8rem;
+    color: var(--colorTextoMedio);
+    text-decoration: none;
+    align-self: flex-end;
+    margin-top: 4px;
+    transition: var(--transicionSuave);
+}
+
+.enlaceRecuperar:hover {
+    color: var(--colorPrimario);
+    text-decoration: underline;
+}
+
+.cajaBotonIngresar {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.botonIngresar {
+    background: none;
+    border: 2px solid var(--colorTextoOscuro);
+    color: var(--colorTextoOscuro);
+    font-family: inherit;
+    font-weight: 700;
+    padding: 10px 28px;
+    border-radius: var(--radioBorde);
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    font-size: 0.95rem;
+    min-width: 120px;
+    text-align: center;
+}
+
+.botonIngresar:hover {
+    background-color: var(--colorTextoOscuro);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--sombraSuave);
+}
+
+.botonIngresar:active {
+    transform: translateY(0);
+}
+
+.bloqueRegistroNuevo {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+    font-size: 0.85rem;
+}
+
+.textoRegistro {
+    color: var(--colorTextoMedio);
+    font-weight: 500;
+}
+
+.enlaceRegistro {
+    color: var(--colorSecundario);
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transicionSuave);
+}
+
+.enlaceRegistro:hover {
+    color: var(--colorSecundarioHover);
+    text-decoration: underline;
+}
+
+/* ---------- MEDIA QUERIES LOGIN ---------- */
+@media (max-width: 860px) {
+    body {
+        overflow: auto;
+        height: auto;
+    }
+
+    .seccionPrincipal {
+        height: auto;
+        padding: 80px 16px 24px;
+    }
+
+    .contenedorLogin {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+
+    .columnaMarca {
+        padding: 32px 20px;
+    }
+
+    .columnaFormulario {
+        padding: 32px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .botonIngresar {
+        width: 100%;
+    }
+
+    .bloqueRegistroNuevo {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+}
+
+
+/* ==========================================================================
+   ========================= POPUP RECUPERAR ================================
+   ========================================================================== */
+
+.cajaRecuperar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+    z-index: 200;
+    padding: 16px;
+}
+
+.cajaRecuperar:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+.capaCierreRecuperar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+}
+
+.contenidoRecuperar {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--sombraElevada);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: var(--transicionSuave);
+    position: relative;
+    z-index: 10;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.cajaRecuperar:target .contenidoRecuperar {
+    transform: scale(1);
+}
+
+.cabeceraRecuperar {
+    background-color: var(--colorTextoOscuro);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tituloRecuperar {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.botonCerrarRecuperar {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: var(--transicionSuave);
+}
+
+.botonCerrarRecuperar:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.cuerpoRecuperar {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.textoRecuperar {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+}
+
+.correoRecuperar {
+    font-size: 1.1rem;
+    color: var(--colorTextoOscuro);
+}
+
+.correoRecuperar strong {
+    color: var(--colorSecundario);
+    font-weight: 700;
+}
+
+.descripcionRecuperar {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.5;
+    background-color: var(--colorFondo);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 3px solid var(--colorTextoClaro);
+}

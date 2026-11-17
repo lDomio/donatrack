@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: notificacion-service
+
+  # Base de Datos MySQL y JPA
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/notificaciones_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:donatrack}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        default-requeue-rejected: false
+  mail:
+    host: ${SPRING_MAIL_HOST:localhost}
+    port: ${SPRING_MAIL_PORT:1025}
+    username: ${SPRING_MAIL_USERNAME:}
+    password: ${SPRING_MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SPRING_MAIL_SMTP_AUTH:false}
+          starttls:
+            enable: ${SPRING_MAIL_STARTTLS:false}
+
+service:
+  role: ROLE_NOTIFICACION_SERVICE
+  username: Notificacion service
+
+donatrack:
+  events:
+    exchange: eventos
+    routing-keys:
+      notificacion:
+        critica: notificacion.critica
+        general: notificacion.general
+        bulk: notificacion.bulk
+      #notificaciones: notificaciones
+      inicio-ruta: inicio.ruta
+      entrega-exito: entrega.exito
+      entrega-no-satisfactoria: entrega.no.satisfactoria
+    queues:
+      notificacion:
+        critica: notificacion.critica
+        general: notificacion.general
+        bulk: notificacion.bulk
+      inicio-ruta: logistica.inicio-ruta.queue
+      #notificaciones: notificaciones
+      #notificacion: notificacion
+
+server:
+  port: 8082
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-change-me}
+
+# Twilio (usar variables de entorno para datos reales)
+twilio:
+  account-sid: ${TWILIO_ACCOUNT_SID:}
+  auth-token: ${TWILIO_AUTH_TOKEN:}
+  whatsapp-from: ${TWILIO_WHATSAPP_FROM:}
+  sms-from: ${TWILIO_SMS_FROM:}

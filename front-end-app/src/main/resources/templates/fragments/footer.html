@@ -1,0 +1,43 @@
+<footer th:fragment="footer" class="piePagina">
+    <div class="contenedorPie">
+        <div class="columnaPieMarca">
+            <a href="#" class="logotipoPie">
+                <i class="fas fa-heart-pulse"></i> DonaTrack
+            </a>
+            <p class="descripcionPie">
+                Plataforma web académica orientada al desarrollo e integración del tercer sector para asegurar la distribución eficiente y auditable de donaciones de alimentos, indumentaria e insumos.
+            </p>
+            <div class="redesSociales">
+                <a href="#" class="iconoRed" aria-label="Síguenos en Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="iconoRed" aria-label="Síguenos en Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="iconoRed" aria-label="Síguenos en LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="columnaPieEnlaces">
+            <h3 class="tituloColumnaPie">Recursos</h3>
+            <ul class="listaEnlacesPie">
+                <li><a href="#" class="enlacePie">Mis Donaciones (Próximamente)</a></li>
+                <li><a href="#" class="enlacePie">Entidades Beneficiarias (Próximamente)</a></li>
+                <li><a href="#" class="enlacePie">Incentivos y Canjes (Próximamente)</a></li>
+            </ul>
+        </div>
+
+        <div class="columnaPieEnlaces">
+            <h3 class="tituloColumnaPie">Nosotros</h3>
+            <ul class="listaEnlacesPie">
+                <li><a th:href="@{/quienesSomos}" class="enlacePie">Quiénes Somos</a></li>
+                <li><a th:href="@{/programas}" class="enlacePie">Nuestros Programas</a></li>
+                <li><a href="#contacto" class="enlacePie">Contacto Directo</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="filaDerechosPie">
+        <p>&copy; 2026 DonaTrack. Todos los derechos reservados. Cátedra de Diseño de Sistemas - UTN FRBA.</p>
+        <div class="enlacesLegales">
+            <a href="#" class="enlaceLegal">Términos de Servicio</a>
+            <a href="#" class="enlaceLegal">Política de Privacidad</a>
+        </div>
+    </div>
+</footer>

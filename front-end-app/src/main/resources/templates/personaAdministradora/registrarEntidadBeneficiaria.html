@@ -1,0 +1,161 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a th:href="@{/personaAdministradora/}">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Registrar entidad beneficiaria</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Registrar entidad beneficiaria</h1>
+    <p class="subtituloVista">Da de alta una organización sin fines de lucro para que pueda recibir donaciones.</p>
+  </div>
+
+  <div th:if="${exito}" class="alertaFormulario alertaExito" role="status">
+    <i class="fas fa-circle-check" aria-hidden="true"></i>
+    <span th:text="${exito}">La entidad se registró correctamente.</span>
+  </div>
+  <div th:if="${error}" class="alertaFormulario alertaError" role="alert">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span th:text="${error}">No se pudo registrar la entidad.</span>
+  </div>
+
+  <form class="formularioRegistroRepresentante" th:action="@{/personaAdministradora/registrarEntidadBeneficiaria}"
+    method="post">
+
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">1</span>
+        Datos de la entidad
+      </legend>
+
+      <div class="gridDatosRepresentante">
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="razonSocial">Razón social *</label>
+          <input type="text" id="razonSocial" name="razonSocial" class="campoTexto" placeholder="Ej: Comedor Los Pibes"
+            th:value="${form?.razonSocial()}" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="tipoEntidad">Tipo de entidad *</label>
+          <div class="cajaSelector">
+            <select id="tipoEntidad" name="tipoEntidad" class="campoTexto selectorCampo" required>
+              <option value="" disabled th:selected="${form == null}">Seleccionar tipo</option>
+              <option th:each="tipo : ${ {'Escuela rural', 'Comedor', 'Espacio de tutoría', 'Hogar', 'Otro'} }"
+                th:value="${tipo}" th:text="${tipo}" th:selected="${form != null and form.tipoEntidad() == tipo}">
+                Comedor</option>
+            </select>
+            <i class="fas fa-chevron-down iconoSelector" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divisorFormulario">
+
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">2</span>
+        Dirección y contacto
+      </legend>
+
+      <div class="gridDatosRepresentante">
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="calle">Calle *</label>
+          <input type="text" id="calle" name="calle" class="campoTexto" placeholder="Ej: Medrano"
+            th:value="${form?.calle()}" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="altura">Altura *</label>
+          <input type="number" id="altura" name="altura" class="campoTexto" min="1" placeholder="Ej: 951"
+            th:value="${form?.altura()}" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="telefono">Teléfono de la entidad *</label>
+          <div class="cajaCampoIcono">
+            <i class="fas fa-phone iconoCampoDoble" aria-hidden="true"></i>
+            <input type="tel" id="telefono" name="telefono" class="campoTexto campoConIcono"
+              placeholder="Ej: 11 4567-8901" th:value="${form?.telefono()}" required>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divisorFormulario">
+
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">3</span>
+        Persona representante
+      </legend>
+      <p class="descripcionBloque">Persona de la entidad que va a recibir las comunicaciones.</p>
+
+      <div class="gridDatosRepresentante">
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="nombreRepresentante">Nombre y apellido *</label>
+          <input type="text" id="nombreRepresentante" name="nombreRepresentante" class="campoTexto"
+            placeholder="Ej: Laura Martínez" th:value="${form?.nombreRepresentante()}" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="emailRepresentante">Correo electrónico *</label>
+          <div class="cajaCampoIcono">
+            <i class="fas fa-envelope iconoCampoDoble" aria-hidden="true"></i>
+            <input type="email" id="emailRepresentante" name="emailRepresentante" class="campoTexto campoConIcono"
+              placeholder="correo@entidad.org" th:value="${form?.emailRepresentante()}" required>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divisorFormulario">
+
+    <fieldset class="bloqueFormulario">
+      <legend class="tituloBloque">
+        <span class="numeroPaso" aria-hidden="true">4</span>
+        Acceso al sistema
+      </legend>
+      <p class="descripcionBloque">Con estas credenciales la entidad va a poder iniciar sesión en DonaTrack.</p>
+
+      <div class="gridDatosRepresentante">
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="username">Nombre de usuario *</label>
+          <input type="text" id="username" name="username" class="campoTexto" placeholder="Ej: comedor.losbajitos"
+            th:value="${form?.username()}" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="password">Contraseña *</label>
+          <input type="password" id="password" name="password" class="campoTexto" required>
+        </div>
+
+        <div class="grupoCampo">
+          <label class="etiquetaCampo" for="confirmPassword">Confirmar contraseña *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" class="campoTexto" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="pieFormulario">
+      <span class="textoObligatorio">Los campos marcados con * son obligatorios.</span>
+      <div class="accionesFormulario">
+        <a th:href="@{/personaAdministradora/}" class="botonOpcion">Cancelar</a>
+        <button type="submit" class="botonPrimario">
+          <i class="fas fa-building-circle-check" aria-hidden="true"></i> Registrar entidad
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+</main>
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+  <link rel="stylesheet" href="/css/personaAdministradora/registrarRepresentante.css">
+  <link rel="stylesheet" href="/css/personaAdministradora/registrarEntidadBeneficiaria.css">
+</th:block>
+
+</html>

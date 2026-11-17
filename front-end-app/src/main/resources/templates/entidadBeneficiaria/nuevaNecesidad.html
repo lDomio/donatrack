@@ -1,0 +1,91 @@
+<html th:replace="~{layout/baseEntidadBeneficiaria :: html}" xmlns:th="http://www.thymeleaf.org">
+<main th:fragment="contenido">
+    <h1>Nueva necesidad</h1>
+    <form th:action="@{/entidadBeneficiaria/crearNecesidad}" th:object="${necesidad}" method="post" id="formulario-nueva-necesidad">
+        <fieldset>
+            <legend>Descripción:</legend>
+            <label class="sr-only" for="descripcion">Descripción</label>
+            <input  type="text" id="descripcion" name="descripcion" th:field="*{descripcion}" required>
+            <div th:if="${#fields.hasErrors('descripcion')}" class="text-danger">
+                <small th:errors="*{descripcion}">Error en nombre</small>
+            </div>
+        </fieldset>
+        <fieldset onchange="toggleRecurrencia();">
+            <legend>Tipo de necesidad:</legend>
+            <input type="radio" id="recurrente" name="tipoNecesidad" value="RECURRENTE" th:field="*{tipoNecesidad}" required>
+            <label for="recurrente">Recurrente</label>
+
+            <input type="radio" id="extraordinaria" name="tipoNecesidad" value="EXTRAORDINARIA" th:field="*{tipoNecesidad}" required>
+            <label for="extraordinaria">Extraordinaria</label>
+            <div th:if="${#fields.hasErrors('tipoNecesidad')}" class="text-danger">
+                <small th:errors="*{tipoNecesidad}">Error en nombre</small>
+            </div>
+        </fieldset>
+        <fieldset id="fieldset-recurrencia" style="display: none;">
+            <legend>Recurrencia:</legend>
+
+            <input type="hidden" id="periodo" required th:field="*{periodo}">
+
+            <label for="dias">Días</label>
+            <input type="number" id="dias" name="dias" th:value="${diasSeleccionados}" min="0">
+            <label for="meses">Meses</label>
+            <input type="number" id="meses" name="meses" th:value="${mesesSeleccionados}" min="0">
+            <label for="anios">Años</label>
+            <input type="number" id="anios" name="anios" th:value="${aniosSeleccionados}" min="0">
+            <div th:if="${#fields.hasErrors('periodo')}" class="text-danger">
+                <small th:errors="*{periodo}">Error en nombre</small>
+            </div>
+            <br>
+            <label for="fechaDeInicio">A partir del: </label>
+            <input type="date" id="fechaDeInicio" name="fechaDeInicio" th:field="*{inicioRecurrencia}" required>
+            <div th:if="${#fields.hasErrors('inicioRecurrencia')}" class="text-danger">
+                <small th:errors="*{inicioRecurrencia}">Error en nombre</small>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Categoría</legend>
+            <th:block th:each="categoria : ${categorias}">
+                <label th:for="${categoria.nombre}" th:text="${categoria.nombre}">Ropa</label>
+                <input type="radio" th:id="${categoria.nombre}" name="categoriaId" th:value="${categoria.id}" th:checked="${categoria.id == categoriaSeleccionadaId}" required onChange="cargarSubcategorias(this.value)">
+            </th:block>
+        </fieldset>
+        <fieldset id="fieldset-subcategorias" onchange="cargarOpcionesDeUnidades()">
+            <legend>Subcategoría</legend>
+            <div id="subcategorias-container">
+                <p th:if="${#lists.isEmpty(subcategorias)}">Selecciona una categoría</p>
+                <th:block th:each="subcategoria : ${subcategorias}">
+                    <label th:for="${subcategoria.nombre}" th:text="${subcategoria.nombre}">Ropa</label>
+                    <input type="radio" th:id="${subcategoria.nombre}" name="subcategoriaId" th:field="*{subcategoriaId}" th:value="${subcategoria.id}" th:data-unidad="${subcategoria.unidadDeMedida}" required>
+                </th:block>
+            </div>
+            <div th:if="${#fields.hasErrors('subcategoriaId')}" class="text-danger">
+                <small th:errors="*{subcateogoriaId}">Error en nombre</small>
+            </div>
+        </fieldset>
+        <fieldset class="contenedor-cantidad">
+            <legend>Cantidad necesitada:</legend>
+
+            <input type="hidden" id="cantidad-necesitada" required th:field="*{cantidad}">
+
+            <label class="label-cantidad" for="cantidad">Cantidad</label>
+            <input class="campo-cantidad" type="number" id="cantidad" th:value="${cantidadSeleccionada}" name="cantidadPreConversion" step="any" min="0.00001" required onChange="cargarCantidadNecesitada()">
+            <div th:if="${#fields.hasErrors('cantidad')}" class="text-danger">
+                <small th:errors="*{cantidad}">Error en nombre</small>
+            </div>
+            <br>
+            <label class="label-cantidad" for="unidad">Unidad: </label>
+            <select class="campo-cantidad" name="unidad" id="unidad" th:data-unidad-previa="${unidadSeleccionada}" onChange="cargarCantidadNecesitada()">
+                <option value="KG">Kg</option>
+                <option value="M">m</option>
+                <option value="L">L</option>
+                <option value="UNIDADES">Unidades</option>
+            </select>
+        </fieldset>
+        <button type="submit" class="botonPrimario">Confirmar</button>
+    </form>
+    <script src="/js/entidadBeneficiaria/nuevaNecesidad.js"></script>
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/entidadBeneficiaria/nuevaNecesidad.css">
+</th:block>
+</html>

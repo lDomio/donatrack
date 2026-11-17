@@ -1,0 +1,102 @@
+<html th:replace="~{layout/basePersonaDonante :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+    <div class="bloqueNavegacionSuperior">
+        <a class="botonVolverMisDonaciones" th:href="@{/personaDonante/misDonaciones}">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver a mis donaciones
+        </a>
+    </div>
+
+    <div class="encabezadoSeccion">
+        <h1 class="tituloVista">Mapa de donaciones</h1>
+        <p class="subtituloVista">Seguí tus donaciones en tránsito y encontrá los puntos de acopio más cercanos.</p>
+        <p class="notaMapaIlustrativo">Mapa ilustrativo: las rutas y tiempos estimados son de ejemplo.</p>
+    </div>
+
+    <!-- Selector de entregas si hay más de 1 donación en traslado -->
+    <div class="selectorEntregasEnRuta" th:if="${donacionesEnRuta != null and #lists.size(donacionesEnRuta) > 1}" style="display:flex; gap:10px; margin-bottom:16px; align-items:center; flex-wrap:wrap;">
+        <span style="font-weight:600; color:#334155; font-size:0.95rem;"><i class="fas fa-boxes-packing" style="color:#0d9488;"></i> Tus donaciones en camino:</span>
+        <a th:each="d : ${donacionesEnRuta}"
+           th:href="@{/personaDonante/mapaDonaciones(donacionId=${d.id})}"
+           class="btn-pill-envio"
+           th:style="${donacionEnRuta != null and donacionEnRuta.id == d.id} ? 'padding:6px 14px; border-radius:20px; font-size:0.88rem; font-weight:600; text-decoration:none; background:#0d9488; color:#fff; box-shadow:0 2px 4px rgba(13,148,136,0.3);' : 'padding:6px 14px; border-radius:20px; font-size:0.88rem; font-weight:500; text-decoration:none; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;'">
+            <i class="fas fa-truck"></i>
+            <span th:text="|#${d.id} · ${d.titulo}|"></span>
+        </a>
+    </div>
+
+    <!-- Comprobante con foto si la entrega fue completada -->
+    <div class="comprobanteEntregaCard" th:if="${donacionEnRuta != null and donacionEnRuta.imagenUrl != null and donacionEnRuta.estado == 'Entregada'}" style="background:#f0fdf4; border:1px solid #86efac; border-radius:12px; padding:16px; margin-bottom:20px; display:flex; gap:20px; align-items:center;">
+        <img th:src="${donacionEnRuta.imagenUrl}" alt="Comprobante de entrega" style="width:120px; height:90px; object-fit:cover; border-radius:8px; border:2px solid #22c55e;"/>
+        <div>
+            <h3 style="margin:0 0 4px 0; color:#15803d; font-size:1.1rem;"><i class="fas fa-check-circle"></i> ¡Entrega confirmada por la entidad!</h3>
+            <p style="margin:0; color:#374151; font-size:0.9rem;">La entidad beneficiaria confirmó la recepción satisfactoria de tu donación adjuntando esta fotografía como constancia.</p>
+        </div>
+    </div>
+
+    <section class="tarjetaDonacionEnRuta" th:if="${donacionEnRuta != null}">
+        <div>
+            <span class="insigniaEstadoEnRuta">
+                <i class="fas fa-truck" aria-hidden="true"></i>
+                <span th:text="${donacionEnRuta.estado}">En transporte</span>
+            </span>
+            <h2 class="tituloRutaDonacion" th:text="${donacionEnRuta.titulo}">3 camperas de abrigo</h2>
+            <p class="detalleRutaDonacion">
+                <span th:text="${donacionEnRuta.categoria}">Ropa</span> ·
+                <span th:text="${donacionEnRuta.subcategoria}">Abrigos</span> ·
+                <span th:text="${donacionEnRuta.descripcion}">Donación de la campaña de invierno.</span>
+            </p>
+        </div>
+        <div class="estadoTiempoEstimado">
+            <span class="etiquetaTiempo">Tiempo estimado</span>
+            <span class="valorTiempo">25 min</span>
+        </div>
+    </section>
+
+    <div class="contenedorMapaInteractivo">
+
+        <div class="barraFiltrosMapa">
+            <div class="cajaBusquedaMapa">
+                <i class="fas fa-location-dot iconoBusquedaMapa" aria-hidden="true"></i>
+                <input type="search" class="campoUbicacion" name="ubicacion"
+                       placeholder="Buscar por ubicación" aria-label="Buscar por ubicación">
+            </div>
+            <div class="chipsTipoPunto">
+                <span class="chipFunto" th:each="tipo : ${tiposPunto}"
+                      th:classappend="${tipo == tipoPuntoActivo} ? 'activo' : ''"
+                      th:text="${tipo}">Todos</span>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments/mapaLeaflet :: mapaSeguimiento(${origenLat}, ${origenLng}, ${destinoLat}, ${destinoLng}, ${destinoNombre})}"></div>
+
+        <section class="seccionPuntosCercanos">
+            <h2 class="tituloPuntosCercanos">
+                <i class="fas fa-map-pin" aria-hidden="true"></i> Puntos cercanos
+            </h2>
+            <div class="cuadriculaPuntos">
+                <article class="tarjetaPuntoMapa" th:each="punto : ${puntosCercanos}"
+                         th:classappend="${punto.destacado} ? 'destacada' : ''">
+                    <div>
+                        <h3 class="nombrePuntoPoblado">
+                            <span th:text="${punto.nombre}">Punto Community Centro</span>
+                        </h3>
+                        <p class="direccionPunto" th:text="${punto.direccion}">Av. Corrientes 1200</p>
+                        <span class="horarioPunto" th:text="${punto.horario}">Lun a Sáb de 9 a 18 hs</span>
+                    </div>
+                    <a class="botonSecundarioMapa" th:href="@{/personaDonante/mapaDonaciones}">
+                        <span th:text="${punto.etiquetaEstado}">En ruta</span>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaDonante/mapaDonaciones.css">
+</th:block>
+<th:block th:fragment="scriptsExtra">
+</th:block>
+</html>

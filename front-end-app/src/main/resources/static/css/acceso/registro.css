@@ -1,0 +1,564 @@
+/* ==========================================================================
+   ========================= VARIABLES Y GENERAL ============================
+   ========================================================================== */
+
+:root {
+    --colorPrimario: #0d9488; /* Teal 600 */
+    --colorPrimarioHover: #0f766e; /* Teal 700 */
+    --colorPrimarioClaro: #f0fdfa; /* Teal 50 */
+    --colorPrimarioBorde: #ccfbf1; /* Teal 100 */
+    --colorSecundario: #f97316; /* Orange 500 */
+    --colorSecundarioHover: #ea580c; /* Orange 600 */
+    --colorFondo: #f8fafc; /* Slate 50 */
+    --colorSuperficie: #ffffff; /* Blanco */
+    --colorTextoOscuro: #0f172a; /* Slate 900 */
+    --colorTextoMedio: #475569; /* Slate 600 */
+    --colorTextoClaro: #94a3b8; /* Slate 400 */
+    --colorFoco: #2563eb; /* Azul foco */
+    --colorExito: #16a34a; /* Verde */
+    --colorError: #dc2626; /* Rojo */
+    --sombraSuave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --sombraMedia: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --sombraElevada: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --fuentePrincipal: 'Outfit', system-ui, -apple-system, sans-serif;
+    --radioBorde: 16px;
+    --transicionSuave: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--fuentePrincipal);
+    background-color: var(--colorFondo);
+    color: var(--colorTextoOscuro);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+/* accesibilidadFoco */
+*:focus-visible {
+    outline: 3px solid var(--colorFoco);
+    outline-offset: 3px;
+}
+
+/* Botón flotante para regresar al inicio sin header */
+.botonVolverInicio {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoMedio);
+    border: 1.5px solid #cbd5e1;
+    padding: 10px 18px;
+    border-radius: var(--radioBorde);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+    z-index: 90;
+}
+
+.botonVolverInicio:hover {
+    border-color: var(--colorPrimario);
+    color: var(--colorPrimario);
+    transform: translateX(-3px);
+    box-shadow: var(--sombraMedia);
+}
+
+
+/* ==========================================================================
+   ========================= REGISTRO =======================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    flex: 1;
+    min-height: 100vh;
+    max-width: 1320px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 50px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenedorRegistro {
+    display: grid;
+    grid-template-columns: 0.85fr 1.35fr;
+    width: 100%;
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    box-shadow: var(--sombraMedia);
+    border: 1px solid rgba(0,0,0,0.03);
+    overflow: hidden;
+}
+
+.columnaImagen {
+    position: relative;
+    height: 100%;
+    background-color: #f1f5f9;
+}
+
+.imagenRegistro {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.insigniaMovimiento {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    background-color: rgba(15, 23, 42, 0.85);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    max-width: 220px;
+    backdrop-filter: blur(2px);
+    border-left: 4px solid var(--colorSecundario);
+    box-shadow: var(--sombraSuave);
+    line-height: 1.3;
+}
+
+.columnaFormulario {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch; /* Estira el formulario y el bloque de colaboracion a todo el ancho */
+    height: 100%;
+}
+
+.tituloFormulario {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -0.5px;
+    text-align: center; /* Mantiene centrado el titulo principal */
+}
+
+.formularioRegistro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cuadriculaCampos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.bloqueCampos {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.grupoCampo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grupoCampo label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--colorTextoMedio);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.entradaTexto, .entradaSeleccion {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--colorTextoOscuro);
+    transition: var(--transicionSuave);
+    background-color: var(--colorSuperficie);
+}
+
+.entradaTexto:focus, .entradaSeleccion:focus {
+    border-color: var(--colorPrimario);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.cajaBotonCrear {
+    margin-top: 4px;
+}
+
+.botonCrear {
+    background-color: var(--colorSecundario);
+    color: white;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: var(--radioBorde);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
+    transition: var(--transicionSuave);
+    font-size: 1rem;
+}
+
+.botonCrear:hover {
+    background-color: var(--colorSecundarioHover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(249, 115, 22, 0.4);
+}
+
+.botonCrear:active {
+    transform: translateY(0);
+}
+
+/* Bloque colaborativo empresas y entidades */
+.bloqueColaboracion {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.filaColaboracion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.textoEmpresa {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    font-weight: 500;
+}
+
+.botonContacto {
+    background-color: var(--colorTextoOscuro);
+    color: white;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+}
+
+.botonContacto:hover {
+    background-color: var(--colorPrimario);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   ========================= CONTACTOS DINÁMICOS ============================
+   ========================================================================== */
+
+.seccionContactosDinamicos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f8fafc;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 4px;
+}
+
+.cabeceraContactos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.etiquetaSeccion {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--colorTextoMedio);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.botonAgregarContacto {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+    border: 1.5px solid var(--colorPrimarioBorde);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transicionSuave);
+}
+
+.botonAgregarContacto:hover {
+    background-color: var(--colorPrimario);
+    color: white;
+    box-shadow: var(--sombraSuave);
+}
+
+.listaContactosDinamica {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filaContacto {
+    display: grid;
+    grid-template-columns: 130px 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    background-color: var(--colorSuperficie);
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.checkPreferido {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.checkPreferido input[type="checkbox"] {
+    accent-color: var(--colorPrimario);
+    cursor: pointer;
+}
+
+.botonEliminarFila {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    transition: var(--transicionSuave);
+}
+
+.botonEliminarFila:hover:not(:disabled) {
+    color: var(--colorError);
+    background-color: #fee2e2;
+}
+
+.botonEliminarFila:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ---------- MEDIA QUERIES REGISTRO ---------- */
+@media (max-width: 1024px) {
+    body {
+        overflow: auto;
+        height: auto;
+    }
+
+    .seccionPrincipal {
+        height: auto;
+        padding: 80px 16px 24px; /* Espacio superior para boton flotante */
+    }
+
+    .contenedorRegistro {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+
+    .columnaImagen {
+        height: 200px;
+    }
+
+    .columnaFormulario {
+        padding: 32px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cuadriculaCampos {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .filaColaboracion {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .botonContacto {
+        width: 100%;
+    }
+
+    .botonCrear {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+    }
+}
+
+
+/* ==========================================================================
+   ========================= POPUP CONTACTO =================================
+   ========================================================================== */
+
+.cajaContacto {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+    z-index: 200;
+    padding: 16px;
+}
+
+/* Despliega el popup de contacto mediante :target */
+.cajaContacto:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+.capaCierreContacto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+}
+
+.contenidoContacto {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    width: 100%;
+    max-width: 460px;
+    box-shadow: var(--sombraElevada);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: var(--transicionSuave);
+    position: relative;
+    z-index: 10;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.cajaContacto:target .contenidoContacto {
+    transform: scale(1);
+}
+
+.cabeceraContacto {
+    background-color: var(--colorTextoOscuro);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tituloContacto {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.botonCerrarContacto {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: var(--transicionSuave);
+}
+
+.botonCerrarContacto:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.cuerpoContacto {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.correoContacto {
+    font-size: 1.1rem;
+    color: var(--colorTextoOscuro);
+}
+
+.correoContacto strong {
+    color: var(--colorSecundario);
+    font-weight: 700;
+}
+
+.subtituloDatos {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--colorTextoMedio);
+    margin-top: 4px;
+}
+
+.descripcionDatos {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.5;
+    background-color: var(--colorFondo);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 3px solid var(--colorTextoClaro);
+}
+
+/* ---------- MEDIA QUERIES POPUP ---------- */
+/* (El modal se adapta automáticamente por ancho de porcentaje y padding) */

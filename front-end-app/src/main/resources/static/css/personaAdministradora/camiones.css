@@ -1,0 +1,350 @@
+/* ==========================================================================
+   ============== VISTA: CAMIONES (PERSONA ADMINISTRADORA) ==================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 24px 48px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================= ENCABEZADO DE LA VISTA ================= */
+.encabezadoVista { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.subtituloVista { font-size: 1rem; color: var(--colorTextoMedio); max-width: 560px; }
+
+.migasPan { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--colorTextoClaro); font-weight: 500; margin-top: 24px; }
+.migasPan a { color: var(--colorTextoMedio); text-decoration: none; transition: var(--transicionSuave); }
+.migasPan a:hover { color: var(--colorPrimario); }
+.migasPan .migaActual { color: var(--colorPrimario); font-weight: 600; }
+
+/* Mensajes Flash */
+.alertaMensaje {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.alertaExito {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1.5px solid #bbf7d0;
+}
+.alertaError {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1.5px solid #fecaca;
+}
+
+/* ==========================================================================
+   ================= BARRA DE HERRAMIENTAS (BUSCAR + AGREGAR) ===============
+   ========================================================================== */
+.barraHerramientas {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cajaBusquedaCamion { position: relative; display: flex; align-items: center; flex: 1; min-width: 240px; }
+
+.iconoBusqueda {
+    position: absolute;
+    left: 16px;
+    color: var(--colorTextoClaro);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.campoBusquedaCamion {
+    width: 100%;
+    padding: 12px 16px 12px 46px;
+    font-family: inherit;
+    font-size: 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    min-height: 48px;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+.campoBusquedaCamion:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.botonAgregarCamion { flex-shrink: 0; }
+
+/* Resumen del listado */
+.resumenListado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+    flex-wrap: wrap;
+}
+.contadorCamiones {
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--colorPrimario); background-color: var(--colorPrimarioClaro);
+    border: 1px solid var(--colorPrimarioBorde); padding: 4px 12px; border-radius: 12px;
+}
+
+/* ==========================================================================
+   ========================= TARJETAS DE CAMIÓN =============================
+   ========================================================================== */
+.listaCamiones { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+
+.tarjetaCamion {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: var(--sombraSuave);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 20px;
+    transition: var(--transicionSuave);
+}
+.tarjetaCamion:hover { transform: translateY(-2px); box-shadow: var(--sombraMedia); }
+
+.contenedorImagenCamion {
+    width: 100%;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+}
+.imagenCamion { width: 100%; height: 100%; object-fit: cover; }
+
+.contenidoCamion { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+/* Encabezado de la tarjeta: identificación + acciones */
+.encabezadoCamion {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.identificacionCamion { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.marcaCamion { font-size: 1.25rem; font-weight: 800; color: var(--colorTextoOscuro); }
+.filaIdentificacion { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.patenteCamion {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--colorTextoMedio);
+    background-color: var(--colorFondo);
+    border: 1.5px solid #e2e8f0;
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+/* Estado del camión */
+.estadoCamion {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+.estadoCamion::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background-color: currentColor; }
+
+.estadoDisponible { color: var(--colorPrimarioHover); background-color: var(--colorPrimarioClaro); border: 1px solid var(--colorPrimarioBorde); }
+.estadoEnViaje { color: var(--colorSecundarioHover); background-color: #fff7ed; border: 1px solid #ffedd5; }
+.estadoMantenimiento { color: var(--colorTextoMedio); background-color: var(--colorFondo); border: 1px solid #e2e8f0; }
+
+/* Acciones de la tarjeta */
+.accionesCamion { display: flex; align-items: center; gap: 10px; margin-left: auto; flex-wrap: wrap; }
+.accionesCamion .botonOpcion { padding: 8px 18px; }
+
+/* Detalles: conducción y capacidad */
+.detallesCamion {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+}
+
+.detalleCamion { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--colorTextoMedio); }
+.detalleCamion i { color: var(--colorPrimario); width: 16px; text-align: center; }
+.detalleCamion strong { color: var(--colorTextoOscuro); font-weight: 600; }
+
+/* Estado vacío (sin resultados de búsqueda) */
+.estadoVacio {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--colorTextoMedio);
+    background-color: var(--colorSuperficie);
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radioBorde);
+}
+.estadoVacio i { font-size: 2.5rem; color: var(--colorTextoClaro); }
+
+/* ==========================================================================
+   ================= MODALES (CSS puro con :target) =========================
+   ========================================================================== */
+.capaModal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+}
+.capaModal:target {
+    opacity: 1;
+    visibility: visible;
+}
+.fondoModal {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+}
+.contenidoModal {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - 48px);
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    box-shadow: var(--sombraElevada);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(16px) scale(0.98);
+    transition: var(--transicionSuave);
+}
+.capaModal:target .contenidoModal {
+    transform: translateY(0) scale(1);
+}
+.contenidoModalAngosto { max-width: 460px; }
+
+.cabeceraModal {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+}
+.titulosModal { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.tituloModal { font-size: 1.35rem; font-weight: 800; color: var(--colorTextoOscuro); margin: 0; }
+.subtituloModalInfo { font-size: 0.9rem; color: var(--colorTextoMedio); }
+
+.botonCerrarModal {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoMedio);
+    font-size: 1.1rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicionSuave);
+}
+.botonCerrarModal:hover { color: var(--colorError); border-color: #fecaca; background-color: #fef2f2; }
+
+.cuerpoModal { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+.formularioModal { display: flex; flex-direction: column; min-height: 0; }
+
+.pieModal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #f1f5f9;
+    background-color: var(--colorFondo);
+    flex-shrink: 0;
+}
+.pieModal .botonPrimario, .pieModal .botonOpcion, .pieModal .botonOpcionCancelar {
+    min-height: 44px;
+    padding: 8px 22px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+/* Campos de formulario */
+.grupoCampo { display: flex; flex-direction: column; gap: 6px; }
+.etiquetaCampo { font-size: 0.9rem; font-weight: 600; color: var(--colorTextoMedio); }
+.campoTexto {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    min-height: 44px;
+    box-sizing: border-box;
+    transition: var(--transicionSuave);
+}
+.campoTexto:focus { outline: none; border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.gridDosColumnas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.gridTresColumnas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* Modales de Confirmación */
+.cuerpoConfirmacion { align-items: center; text-align: center; gap: 12px; }
+.iconoConfirmacion {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background-color: #fef2f2;
+    color: var(--colorError);
+    border: 1px solid #fecaca;
+}
+.textoConfirmacion { font-size: 1rem; color: var(--colorTextoOscuro); line-height: 1.5; }
+.detalleConfirmacion { font-size: 0.9rem; color: var(--colorTextoMedio); line-height: 1.5; }
+
+/* ==========================================================================
+   ========================= RESPONSIVE =====================================
+   ========================================================================== */
+@media (max-width: 768px) {
+    .barraHerramientas { flex-direction: column; align-items: stretch; }
+    .botonAgregarCamion { width: 100%; text-align: center; }
+
+    .tarjetaCamion { grid-template-columns: 1fr; }
+    .contenedorImagenCamion { height: 170px; }
+
+    .encabezadoCamion { flex-direction: column; align-items: stretch; }
+    .accionesCamion { margin-left: 0; }
+    .accionesCamion .botonOpcion, .accionesCamion .botonOpcionCancelar { flex: 1; }
+
+    .detallesCamion { flex-direction: column; gap: 8px; }
+    .gridDosColumnas, .gridTresColumnas { grid-template-columns: 1fr; }
+}

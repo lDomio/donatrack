@@ -1,0 +1,190 @@
+@startuml
+
+    ' hide the spot (quita el ícono de clase)
+    hide circle
+
+    ' avoid problems with angled crows feet
+    skinparam linetype ortho
+
+    entity "categoria" as categoria {
+      *id : BIGINT <<PK>>
+      --
+      nombre : VARCHAR(100)
+    }
+
+    entity "subcategoria" as subcategoria {
+      *id : BIGINT <<PK>>
+      --
+      categoria_id : BIGINT <<FK>>
+      nombre : VARCHAR(100)
+      unidad : VARCHAR(30)
+    }
+
+    entity "Donantes" as donantes {
+      *id_donante : BIGINT <<PK>>
+      --
+      tipoPersona : VARCHAR(255)
+      ' -- Embebido Humana --
+      nombre : VARCHAR(255)
+      apellido : VARCHAR(255)
+      fechaDeNacimiento : DATE
+      genero : VARCHAR(255)
+      numeroDeDocumento : VARCHAR(255)
+      ' -- Embebido Direccion (de Humana) --
+      calle : VARCHAR(255)
+      altura : INT
+      latitud : DOUBLE
+      longitud : DOUBLE
+      nombreCiudad : VARCHAR(255)
+      nombrePais : VARCHAR(255)
+      codigoIsoPais : VARCHAR(255)
+      ' -- Embebido Juridica --
+      razonSocial : VARCHAR(255)
+      tipoPersonaJuridica : VARCHAR(255)
+      rubro : VARCHAR(255)
+    }
+
+    entity "MediosDeContacto" as mediosDeContacto {
+      *id_medioDeContacto : BIGINT <<PK>>
+      --
+      tipoDeContacto : VARCHAR(255)
+      valorDelContacto : VARCHAR(255)
+      esPreferido : BOOLEAN
+      id_titularDonante : BIGINT <<FK>>
+      id_titularRepresentante : BIGINT <<FK>>
+      id_titularEntidadBeneficiaria : BIGINT <<FK>>
+    }
+
+    entity "Representantes" as representantes {
+      *id_representante : BIGINT <<PK>>
+      --
+      nombre : VARCHAR(255)
+      id_donantePersonaJuridicaRepresentado : BIGINT <<FK>>
+      id_entidadBeneficiariaRepresentada : BIGINT <<FK>>
+    }
+
+    entity "formulario_de_donacion" as formulario_de_donacion {
+      *id : BIGINT <<PK>>
+      --
+      id_donante : BIGINT <<FK>>
+      fecha_creacion : DATE
+      descripcion_general : VARCHAR(500)
+    }
+
+    entity "Donaciones" as donaciones {
+      *id : BIGINT <<PK>>
+      --
+      subcategoria_id : BIGINT <<FK>>
+      necesidad_id : BIGINT <<FK>>
+      periodo_id : BIGINT <<FK>>
+      id_entidadBeneficiaAsignada : BIGINT <<FK>>
+      id_donante : BIGINT
+      fecha_creacion : DATE
+      descripcion_general : VARCHAR(255)
+    }
+
+    entity "bien" as bien {
+      *id : BIGINT <<PK>>
+      --
+      donacion_id : BIGINT <<FK>>
+      subcategoria_id : BIGINT <<FK>>
+      nombre : VARCHAR(150)
+      descripcion : VARCHAR(500)
+      cantidad : DECIMAL(12,2)
+      unidad_de_medida : VARCHAR(30)
+      fecha_vencimiento : DATE
+      estado : VARCHAR(20)
+      ' -- Embebido Foto --
+      foto_url : VARCHAR(500)
+      foto_descripcion : VARCHAR(255)
+    }
+
+    entity "EstadosDeDonaciones" as estadosDeDonaciones {
+      *id : BIGINT <<PK>>
+      --
+      donacion_id : BIGINT <<FK>>
+      tipo_estado : VARCHAR(255)
+      fecha : DATE
+      descripcion : VARCHAR(255)
+      autor_del_cambio : VARCHAR(255)
+    }
+
+    entity "EntidadesBeneficiarias" as entidadesBeneficiarias {
+      *id_entidadBeneficiaria : BIGINT <<PK>>
+      --
+      razonSocial : VARCHAR(255)
+      ' -- Embebido TipoEntidad --
+      tipoEntidadBeneficiaria : VARCHAR(255)
+      ' -- Embebido Direccion --
+      calle : VARCHAR(255)
+      altura : INT
+      latitud : DOUBLE
+      longitud : DOUBLE
+      nombreCiudad : VARCHAR(255)
+      nombrePais : VARCHAR(255)
+      codigoIsoPais : VARCHAR(255)
+    }
+
+    entity "Necesidades" as necesidades {
+      *id : BIGINT <<PK>>
+      --
+      entidad_beneficiaria_id : BIGINT <<FK>>
+      subcategoria_id : BIGINT <<FK>>
+      donacion_id : BIGINT <<FK>>
+      cantidad : DOUBLE
+      cantidad_donada_total : DOUBLE
+      fecha_creacion : DATE
+      descripcion : VARCHAR(255)
+      tipo_necesidad : VARCHAR(255)
+      unidad_medida : VARCHAR(255)
+      periodo_correspondiente : VARCHAR(255)
+      inicio_recurrencia : DATE
+      cantidad_donada : FLOAT
+    }
+
+    entity "Periodos" as periodos {
+      *id : BIGINT <<PK>>
+      --
+      id_necesidad : BIGINT <<FK>>
+      periodo : VARCHAR(255)
+      fecha_inicio : DATE
+      fecha_fin : DATE
+      cantidad_donada : DOUBLE
+    }
+
+
+    ' ==========================================
+    ' RELACIONES
+    ' ==========================================
+
+    categoria ||..o{ subcategoria
+
+    ' Relaciones de Donantes
+    donantes ||..|| formulario_de_donacion
+    donantes ||..o{ mediosDeContacto
+    donantes ||..o{ representantes
+
+    ' Relaciones de Representantes
+    representantes ||..o{ mediosDeContacto
+
+    ' Relaciones de EntidadesBeneficiarias
+    entidadesBeneficiarias ||..o{ mediosDeContacto
+    entidadesBeneficiarias ||..o{ representantes
+    entidadesBeneficiarias ||..o{ necesidades
+    entidadesBeneficiarias ||..o{ donaciones
+
+    ' Relaciones de Subcategoria
+    subcategoria ||..o{ donaciones
+    subcategoria ||..o{ bien
+    subcategoria ||..o{ necesidades
+
+    ' Relaciones de Donaciones
+    donaciones ||..o{ bien
+    donaciones ||..o{ estadosDeDonaciones
+    donaciones ||..|| necesidades
+    donaciones ||..|| periodos
+
+    ' Relaciones de Necesidades
+    necesidades ||..o{ periodos
+
+    @enduml

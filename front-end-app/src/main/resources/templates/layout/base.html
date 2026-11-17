@@ -1,0 +1,9 @@
+<html th:replace="~{layout/headHtml :: html}">
+
+<body th:fragment="cuerpoPrincipal">
+    <header th:replace="~{fragments/header:: header}" ></header>
+    <main th:replace="~{:: contenido}"></main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <th:block th:replace="~{:: scriptsExtra} ?: ~{}"></th:block>
+</body>
+</html>

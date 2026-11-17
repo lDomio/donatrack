@@ -1,0 +1,216 @@
+/* ==========================================================================
+   ========================= PROGRAMAS ======================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 800px; /* Ancho compacto y centrado tipo blog/documento */
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.contenedorProgramas {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.tituloSeccion {
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -1px;
+}
+
+.subtituloSeccion {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--colorTextoMedio);
+    margin-top: -16px;
+    margin-bottom: 16px;
+}
+
+/* Contenedor de Acordeon */
+.contenedorAcordeon {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Item del Acordeon (details) */
+.itemAcordeon {
+    background-color: var(--colorSuperficie);
+    border: 1.5px solid #cbd5e1;
+    border-radius: var(--radioBorde);
+    overflow: hidden;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.itemAcordeon[open] {
+    border-color: var(--colorPrimario);
+    box-shadow: var(--sombraMedia);
+}
+
+/* Cabecera (summary) */
+.cabeceraAcordeon {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    list-style: none; /* Oculta flecha nativa */
+    user-select: none;
+    transition: var(--transicionSuave);
+    color: var(--colorTextoOscuro);
+}
+
+.cabeceraAcordeon::-webkit-details-marker {
+    display: none; /* Oculta flecha nativa en Chrome/Safari */
+}
+
+.cabeceraAcordeon:hover {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+}
+
+.tituloCabecera {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.iconoPrograma {
+    font-size: 1.35rem;
+    color: var(--colorPrimario);
+    transition: var(--transicionSuave);
+}
+
+.cabeceraAcordeon:hover .iconoPrograma {
+    transform: scale(1.1);
+    color: var(--colorPrimarioHover);
+}
+
+/* Flecha Caret */
+.iconoCaret {
+    font-size: 1rem;
+    color: var(--colorTextoClaro);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.itemAcordeon[open] .iconoCaret {
+    transform: rotate(180deg);
+    color: var(--colorPrimario);
+}
+
+/* Cuerpo del Acordeon (Desplegado) */
+.cuerpoAcordeon {
+    padding: 0 24px 24px 24px;
+    border-top: 1px solid #f1f5f9;
+    animation: deslizarAbajo 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes deslizarAbajo {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.textoPrograma {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.6;
+    margin: 16px 0;
+}
+
+.listaDetallesPrograma {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.listaDetallesPrograma li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+}
+
+.listaDetallesPrograma li i {
+    color: var(--colorExito);
+    font-size: 0.85rem;
+}
+
+.bloqueAccionPrograma {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.botonAccion {
+    background-color: var(--colorSecundario);
+    color: white;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    font-size: 0.85rem;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botonAccion:hover {
+    background-color: var(--colorSecundarioHover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* ---------- MEDIA QUERIES PROGRAMAS ---------- */
+@media (max-width: 600px) {
+    .seccionPrincipal {
+        padding: 24px 16px;
+    }
+
+    .tituloSeccion {
+        font-size: 2.25rem;
+    }
+
+    .tituloCabecera {
+        font-size: 1rem;
+        gap: 10px;
+    }
+
+    .cabeceraAcordeon {
+        padding: 16px;
+    }
+
+    .cuerpoAcordeon {
+        padding: 0 16px 16px 16px;
+    }
+
+    .bloqueAccionPrograma {
+        justify-content: stretch;
+    }
+
+    .botonAccion {
+        width: 100%;
+    }
+}

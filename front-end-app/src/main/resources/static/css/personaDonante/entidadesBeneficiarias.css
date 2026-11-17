@@ -1,0 +1,654 @@
+
+/* ==========================================================================
+   ========================= CONTENIDO PRINCIPAL ============================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Encabezado de la Sección */
+.encabezadoSeccion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.tituloVista {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -0.02em;
+}
+
+.subtituloVista {
+    color: var(--colorTextoMedio);
+    font-size: 1.05rem;
+    max-width: 720px;
+}
+
+.tarjetaImpactoRapido {
+    background: linear-gradient(135deg, var(--colorPrimarioClaro) 0%, #e6fffa 100%);
+    border: 1px solid var(--colorPrimarioBorde);
+    padding: 12px 20px;
+    border-radius: var(--radioBorde);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--sombraSuave);
+    margin-top: 8px;
+}
+
+.iconoImpacto {
+    font-size: 1.8rem;
+    color: var(--colorPrimario);
+}
+
+.numeroImpacto {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--colorPrimarioHover);
+    line-height: 1;
+}
+
+.etiquetaImpacto {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   ========================= FILTROS Y BÚSQUEDA =============================
+   ========================================================================== */
+
+.seccionFiltros {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 20px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contenedorFiltros {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cajaBusqueda {
+    flex: 1;
+    min-width: 280px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.iconoBusqueda {
+    position: absolute;
+    left: 16px;
+    color: var(--colorTextoClaro);
+    font-size: 1rem;
+}
+
+.campoEntrada {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-family: inherit;
+    font-size: 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoOscuro);
+    transition: var(--transicionSuave);
+    min-height: 48px;
+}
+
+.campoEntrada:focus {
+    outline: none;
+    border-color: var(--colorPrimario);
+    background-color: var(--colorSuperficie);
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.cajaFiltroSelect {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+}
+
+.iconoFiltro {
+    position: absolute;
+    left: 16px;
+    color: var(--colorTextoClaro);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.selectorFiltro,
+.botonFiltroPersonalizado {
+    width: 100%;
+    padding: 12px 40px 12px 40px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoOscuro);
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    min-height: 48px;
+    appearance: none;
+}
+
+.selectorFiltro:hover,
+.botonFiltroPersonalizado:hover {
+    border-color: var(--colorPrimario);
+}
+
+.selectorFiltro:focus,
+.selectorFiltro:focus-visible,
+.botonFiltroPersonalizado:focus,
+.botonFiltroPersonalizado:focus-visible {
+    outline: none;
+    border-color: var(--colorPrimario);
+}
+
+/* Botón que reemplaza visualmente al <select> nativo (JS) */
+.botonFiltroPersonalizado {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-family: inherit;
+}
+
+.botonFiltroPersonalizado .textoFiltroPersonalizado {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--colorTextoMedio);
+}
+
+/* Oculta el <select> nativo cuando el JS ya construyó el dropdown personalizado
+   (se mantiene en el DOM como respaldo si el script no llega a cargar) */
+.selectorFiltro[hidden] {
+    display: none;
+}
+
+.iconoChevronFiltro {
+    position: absolute;
+    right: 14px;
+    color: var(--colorTextoClaro);
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: transform 0.25s ease;
+}
+
+.cajaFiltroSelect.abierto .iconoChevronFiltro {
+    transform: rotate(180deg);
+    color: var(--colorPrimario);
+}
+
+/* Listado de opciones personalizado (JS) */
+.listaOpcionesFiltro {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    max-height: 240px;
+    overflow-y: auto;
+    background-color: var(--colorSuperficie);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: var(--sombraMedia);
+}
+
+.opcionFiltroEntidad {
+    color: var(--colorTextoMedio);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+}
+
+.opcionFiltroEntidad:hover,
+.opcionFiltroEntidad:focus,
+.opcionFiltroEntidad:focus-visible {
+    outline: none;
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+}
+
+.opcionFiltroEntidad[aria-selected="true"] {
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+    font-weight: 600;
+}
+
+.etiquetasFiltroRapido {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.etiquetaFiltro {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background-color: #f1f5f9;
+    color: var(--colorTextoMedio);
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+    min-height: 36px;
+}
+
+.etiquetaFiltro:hover {
+    background-color: var(--colorPrimarioBorde);
+    color: var(--colorPrimarioHover);
+}
+
+.etiquetaFiltro.activa {
+    background-color: var(--colorPrimario);
+    color: white;
+}
+
+/* ==========================================================================
+   ========================= CUADRÍCULA DE ENTIDADES ========================
+   ========================================================================== */
+
+.cuadriculaEntidades {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.columnaEntidades {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1 1 360px;
+    min-width: 0;
+}
+
+.tarjetaEntidad {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    overflow: hidden;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transicionSuave);
+}
+
+/* Reparto en filas de izquierda a derecha antes de que el JS agrupe las tarjetas en columnas */
+.cuadriculaEntidades > .tarjetaEntidad {
+    flex: 1 1 360px;
+}
+
+.tarjetaEntidad:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombraMedia);
+}
+
+.contenedorImagenEntidad {
+    position: relative;
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #e2e8f0;
+}
+
+.imagenEntidad {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.tarjetaEntidad:hover .imagenEntidad {
+    transform: scale(1.04);
+}
+
+.insigniaTipo {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--sombraSuave);
+    backdrop-filter: blur(4px);
+}
+
+.insigniaEducacion {
+    background-color: rgba(13, 148, 136, 0.9);
+    color: white;
+}
+
+.insigniaComedor {
+    background-color: rgba(249, 115, 22, 0.9);
+    color: white;
+}
+
+.insigniaSalud {
+    background-color: rgba(37, 99, 235, 0.9);
+    color: white;
+}
+
+.insigniaRefugio {
+    background-color: rgba(109, 40, 217, 0.9);
+    color: white;
+}
+
+.insigniaOng {
+    background-color: rgba(219, 39, 119, 0.9);
+    color: white;
+}
+
+.cuerpoTarjetaEntidad {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.encabezadoTarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nombreEntidad {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    line-height: 1.3;
+}
+
+.ubicacionEntidad {
+    font-size: 0.85rem;
+    color: var(--colorTextoClaro);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.descripcionEntidad {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.metricasEntidad {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    padding: 12px;
+    background-color: var(--colorFondo);
+    border-radius: 12px;
+}
+
+.metricaItem {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metricaItem.alertaCritica {
+    color: var(--colorError);
+    font-weight: 700;
+}
+
+.pieTarjetaEntidad {
+    margin-top: 8px;
+    padding: 16px 24px;
+    border-top: 1px solid #eef1f5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pieTarjetaEntidad .etiquetaImpacto {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--colorTextoMedio);
+    white-space: nowrap;
+}
+
+.pieTarjetaEntidad .etiquetaImpacto i {
+    color: var(--colorPrimario);
+    font-size: 0.95rem;
+}
+
+.pieTarjetaEntidad .numeroImpacto {
+    display: inline;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--colorPrimarioHover);
+}
+
+.botonVerNecesidades {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--colorPrimario);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transicionSuave);
+}
+
+.botonVerNecesidades:hover {
+    color: var(--colorPrimarioHover);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   ========================= MODAL NECESIDADES (:target) ====================
+   ========================================================================== */
+
+.modalContenedor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+}
+
+.modalContenedor:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modalContenido {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    max-width: 560px;
+    width: 100%;
+    box-shadow: var(--sombraElevada);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: var(--transicionSuave);
+}
+
+.modalContenedor:target .modalContenido {
+    transform: translateY(0);
+}
+
+.modalCabecera {
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: var(--colorPrimarioClaro);
+}
+
+.modalSubtitulo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colorPrimarioHover);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modalTitulo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    margin-top: 2px;
+}
+
+.botonCerrarModal {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: var(--colorTextoMedio);
+    cursor: pointer;
+    text-decoration: none;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicionSuave);
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.botonCerrarModal:hover {
+    color: var(--colorError);
+}
+
+.modalCuerpo {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modalDescripcion {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+}
+
+.listaNecesidades {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.itemNecesidad {
+    background-color: var(--colorFondo);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.itemNecesidad.urgente {
+    border-color: #fca5a5;
+    background-color: #fef2f2;
+}
+
+.infoNecesidad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.nombreNecesidad {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progresoNecesidad {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+}
+
+.barraProgreso {
+    width: 100%;
+    height: 8px;
+    background-color: #cbd5e1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progresoRelleno {
+    height: 100%;
+    background-color: var(--colorPrimario);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progresoRelleno.alerta {
+    background-color: var(--colorSecundario);
+}
+
+

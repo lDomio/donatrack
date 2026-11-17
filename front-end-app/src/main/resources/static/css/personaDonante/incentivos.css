@@ -1,0 +1,711 @@
+
+/* ==========================================================================
+   ========================= CONTENIDO INCENTIVOS ===========================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+}
+
+/* Encabezado de la Sección */
+.encabezadoSeccion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.tituloVista {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.subtituloVista {
+    color: var(--colorTextoMedio);
+    font-size: 1.05rem;
+    max-width: 720px;
+}
+
+.tituloSeccion {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   ================== PISTA DE CATEGORÍAS DE DONANTE ========================
+   ========================================================================== */
+
+.tarjetaCategoriaDonante {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--sombraSuave);
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.resumenCategoriaActual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.textoResumenCategoria {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.etiquetaCategoriaActual {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--colorTextoClaro);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.nombreCategoriaActual {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.progresoProximaCategoria {
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+}
+
+.progresoProximaCategoria strong {
+    color: var(--colorPrimario);
+}
+
+.pistaCategorias {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.pasoCategoria {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 180px;
+    position: relative;
+}
+
+.circuloPasoCategoria {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    background-color: #e2e8f0;
+    color: var(--colorTextoClaro);
+    border: 3px solid var(--colorFondo);
+    transition: var(--transicionSuave);
+}
+
+.pasoCategoria.alcanzada .circuloPasoCategoria {
+    background-color: #dcfce7;
+    color: var(--colorExito);
+}
+
+.pasoCategoria.actual .circuloPasoCategoria {
+    box-shadow: 0 0 0 4px var(--colorPrimarioBorde);
+    transform: scale(1.08);
+}
+
+.pasoCategoria.actual .circuloPasoCategoria.verde {
+    background-color: #dcfce7;
+    color: var(--colorExito);
+}
+
+.pasoCategoria.actual .circuloPasoCategoria.teal {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+}
+
+.pasoCategoria.actual .circuloPasoCategoria.dorada {
+    background-color: #fef9c3;
+    color: #ca8a04;
+}
+
+.nombrePasoCategoria {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--colorTextoMedio);
+}
+
+.pasoCategoria.actual .nombrePasoCategoria {
+    color: var(--colorTextoOscuro);
+}
+
+.conectorCategoria {
+    flex: 0 0 auto;
+    width: clamp(40px, 8vw, 120px);
+    height: 3px;
+    background-color: #e2e8f0;
+    margin-top: 27px;
+    border-radius: 2px;
+}
+
+.conectorCategoria.alcanzado {
+    background-color: var(--colorExito);
+}
+
+/* CUADRÍCULA PRINCIPAL (2 COLUMNAS SEGUNDO BOCETO) */
+.cuadriculaIncentivos {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 36px;
+    align-items: start;
+}
+
+/* COLUMNA IZQUIERDA: MISIONES */
+.columnaMisiones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pestanasCategoriaMision {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pestanaCategoriaMision {
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    background-color: var(--colorSuperficie);
+    border: 1.5px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+}
+
+.pestanaCategoriaMision:hover {
+    border-color: var(--colorPrimario);
+    color: var(--colorPrimario);
+}
+
+.pestanaCategoriaMision.activa {
+    background-color: var(--colorPrimario);
+    border-color: var(--colorPrimario);
+    color: white;
+}
+
+.cajaBusquedaMisiones {
+    position: relative;
+    width: 100%;
+}
+
+.iconoBusqueda {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--colorTextoClaro);
+    font-size: 1rem;
+}
+
+.campoBusquedaMision {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    box-shadow: var(--sombraSuave);
+    min-height: 48px;
+    transition: var(--transicionSuave);
+}
+
+.campoBusquedaMision:focus {
+    outline: none;
+    border-color: var(--colorPrimario);
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.listaMisiones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tarjetaMision {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--sombraSuave);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 20px;
+    transition: var(--transicionSuave);
+    position: relative;
+}
+
+.tarjetaMision:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombraMedia);
+}
+
+.tarjetaMision.bloqueada {
+    opacity: 0.65;
+}
+
+.tarjetaMision.bloqueada:hover {
+    transform: none;
+    box-shadow: var(--sombraSuave);
+}
+
+.contenedorImagenMision {
+    width: 100%;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--colorTextoClaro);
+    font-size: 1.8rem;
+}
+
+.imagenMision {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contenidoMision {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.encabezadoTarjetaMision {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.tituloMision {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.etiquetaEstadoMision {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.etiquetaEstadoMision.completada {
+    background-color: #dcfce7;
+    color: var(--colorExito);
+}
+
+.etiquetaEstadoMision.enProgreso {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+}
+
+.etiquetaEstadoMision.bloqueada {
+    background-color: #f1f5f9;
+    color: var(--colorTextoClaro);
+}
+
+.descripcionMision {
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.5;
+}
+
+.avisoRachaMision {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    color: var(--colorAdvertencia);
+    font-size: 0.82rem;
+    line-height: 1.4;
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-top: 4px;
+}
+
+.avisoRachaMision i {
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.insigniaOtorgadaMision {
+    font-size: 0.82rem;
+    color: var(--colorTextoClaro);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bloqueProgresoMision {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.textoPorcentaje {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.textoPorcentaje.completada {
+    color: var(--colorExito);
+}
+
+.contenedorBarraMision {
+    width: 100%;
+    height: 12px;
+    background-color: #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+}
+
+.barraRellenoMision {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+.barraRellenoMision.completada {
+    background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+}
+
+/* COLUMNA DERECHA: INSIGNIAS (SEGÚN BOCETO) */
+.columnaInsignias {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.encabezadoListaInsignias {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.tituloListaInsignias {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.contadorInsignias {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.contenedorListaInsignias {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--sombraSuave);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tarjetaInsignia {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 14px;
+    background-color: var(--colorFondo);
+    border: 1px solid #f1f5f9;
+    transition: var(--transicionSuave);
+}
+
+.tarjetaInsignia:hover {
+    background-color: var(--colorSuperficie);
+    box-shadow: var(--sombraSuave);
+    transform: translateX(4px);
+}
+
+.tarjetaInsignia.bloqueada {
+    opacity: 0.6;
+}
+
+.tarjetaInsignia.bloqueada:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.iconoInsigniaMedalla {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    box-shadow: var(--sombraSuave);
+    border: 2px solid white;
+}
+
+.iconoInsigniaMedalla.dorada {
+    background-color: #fef9c3;
+    color: #ca8a04;
+}
+
+.iconoInsigniaMedalla.azul {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.iconoInsigniaMedalla.naranja {
+    background-color: #ffedd5;
+    color: #ea580c;
+}
+
+.iconoInsigniaMedalla.verde {
+    background-color: #dcfce7;
+    color: var(--colorExito);
+}
+
+.iconoInsigniaMedalla.teal {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+}
+
+.tarjetaInsignia.bloqueada .iconoInsigniaMedalla {
+    background-color: #f1f5f9;
+    color: var(--colorTextoClaro);
+}
+
+.infoInsignia {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.tituloInsignia {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+}
+
+.descripcionInsignia {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.4;
+}
+
+/* Interruptor de visibilidad en el perfil */
+.controlVisibilidadInsignia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.interruptorVisibilidad {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.interruptorVisibilidad input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.interruptorVisibilidad .rielInterruptor {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #cbd5e1;
+    border-radius: 22px;
+    transition: var(--transicionSuave);
+}
+
+.interruptorVisibilidad .rielInterruptor::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: var(--transicionSuave);
+}
+
+.interruptorVisibilidad input:checked + .rielInterruptor {
+    background-color: var(--colorPrimario);
+}
+
+.interruptorVisibilidad input:checked + .rielInterruptor::before {
+    transform: translateX(18px);
+}
+
+.interruptorVisibilidad input:focus-visible + .rielInterruptor {
+    outline: 3px solid var(--colorFoco);
+    outline-offset: 2px;
+}
+
+.etiquetaVisibilidad {
+    font-size: 0.7rem;
+    color: var(--colorTextoClaro);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* FOOTER */
+.piePaginaPrincipal {
+    background-color: var(--colorTextoOscuro);
+    color: #94a3b8;
+    padding: 48px 24px 24px 24px;
+    margin-top: auto;
+}
+
+.contenedorPiePagina {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.logotipoPie {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+.descripcionPie { font-size: 0.9rem; line-height: 1.6; max-width: 360px; }
+.tituloColumnaPie { color: white; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+.listaPie { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.enlacePie { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: var(--transicionSuave); }
+.enlacePie:hover { color: white; }
+.subPiePagina { max-width: 1280px; margin: 24px auto 0 auto; text-align: center; font-size: 0.85rem; }
+
+/* MEDIA QUERIES MOBILE ADAPTATION */
+@media (max-width: 900px) {
+    .menuDesplegableNotificaciones {
+        position: fixed;
+        top: 76px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: calc(100vw - 32px);
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    .menuDesplegable {
+        position: fixed;
+        top: 76px;
+        right: 16px;
+        left: auto;
+    }
+
+    .cuadriculaIncentivos {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .tarjetaMision {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedorImagenMision {
+        height: 160px;
+    }
+
+    .resumenCategoriaActual {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .nombrePasoCategoria {
+        font-size: 0.78rem;
+        text-align: center;
+    }
+
+    .conectorCategoria {
+        width: clamp(24px, 6vw, 60px);
+    }
+
+    .contenedorPiePagina {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 520px) {
+    .tarjetaInsignia {
+        flex-wrap: wrap;
+    }
+
+    .controlVisibilidadInsignia {
+        margin-left: auto;
+    }
+}

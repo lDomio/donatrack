@@ -1,0 +1,85 @@
+<html th:replace="~{layout/basePersonaDonante :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+    <div class="encabezadoSeccion">
+        <h1 class="tituloVista">Mis donaciones</h1>
+        <p class="subtituloVista">Consultá el estado de todo lo que donaste y hacé seguimiento en tiempo real.</p>
+    </div>
+
+    <p th:if="${errorCarga}" style="color:#b00020;">
+        No se pudo cargar tus donaciones. Intentá recargar la página en unos minutos.
+    </p>
+
+    <form class="seccionFiltrosDonaciones" th:action="@{/personaDonante/misDonaciones}" method="get">
+        <div class="cajaBusquedaDonaciones">
+            <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+            <input type="search" name="busqueda" class="campoBusquedaDonacion"
+                   placeholder="Buscar" aria-label="Buscar donaciones">
+        </div>
+
+        <div class="gridSelectoresFiltro">
+            <div class="cajaSelectFiltro">
+                <select name="estado" class="selectorFiltroDonacion" aria-label="Filtrar por estado">
+                    <option value="">Estado</option>
+                    <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}" class="opcionFiltro"></option>
+                </select>
+                <i class="fas fa-chevron-down iconoSelectFilter" aria-hidden="true"></i>
+            </div>
+
+            <div class="cajaSelectFiltro">
+                <select name="categoria" class="selectorFiltroDonacion" aria-label="Filtrar por categoría">
+                    <option value="">Categoría</option>
+                    <option th:each="categoria : ${categorias}" th:value="${categoria}" th:text="${categoria}" class="opcionFiltro"></option>
+                </select>
+                <i class="fas fa-chevron-down iconoSelectFilter" aria-hidden="true"></i>
+            </div>
+
+            <div class="cajaSelectFiltro">
+                <select name="subcategoria" class="selectorFiltroDonacion" aria-label="Filtrar por subcategoría">
+                    <option value="">Subcategoría</option>
+                    <option th:each="subcategoria : ${subcategorias}" th:value="${subcategoria}" th:text="${subcategoria}" class="opcionFiltro"></option>
+                </select>
+                <i class="fas fa-chevron-down iconoSelectFilter" aria-hidden="true"></i>
+            </div>
+        </div>
+    </form>
+
+    <div class="listaDonacionesContenedor">
+        <article class="tarjetaDonacion" th:each="donacion : ${donaciones}">
+            <div class="contenedorImagenDonacion">
+                <img class="imagenDonacion" th:if="${donacion.imagenUrl != null}"
+                     th:src="${donacion.imagenUrl}" th:alt="${donacion.titulo}">
+            </div>
+
+            <div class="contenidoDonacion">
+                <div class="encabezadoTarjetaDonacion">
+                    <h2 class="tituloDonacion" th:text="${donacion.titulo}">3 sillas</h2>
+                    <span class="categoriaEtiqueta" th:text="${donacion.categoria}">Mobiliario</span>
+                </div>
+
+                <p class="descripcionDonacion" th:text="${donacion.descripcion}">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+                </p>
+
+                <div class="pieTarjetaDonacion">
+                    <p class="estadoDonacionTexto">
+                        Estado: <span class="estadoValor" th:classappend="${donacion.claseEstado}"
+                                  th:text="${donacion.estado}">Esperando asignación</span>
+                    </p>
+                    <a class="botonVerMapa" th:if="${donacion.destacado}"
+                       th:href="@{/personaDonante/mapaDonaciones(donacionId=${donacion.id})}">
+                        <i class="fas fa-map-location-dot" aria-hidden="true"></i> Ver en el mapa
+                    </a>
+                </div>
+            </div>
+        </article>
+    </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaDonante/misDonaciones.css">
+</th:block>
+<th:block th:fragment="scriptsExtra">
+    <script src="/js/personaDonante/misDonaciones.js" defer></script>
+</th:block>
+</html>

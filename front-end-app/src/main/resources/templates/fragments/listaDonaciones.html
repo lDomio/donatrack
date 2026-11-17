@@ -1,0 +1,42 @@
+<ul th:fragment="listaDonaciones(donaciones)" class="lista-donaciones centrado">
+    <li th:each="donacion : ${donaciones}" class="donacion-de-lista">
+        <span th:text="|${donacion.subcategoria.nombre} x${donacion.cantidadDonada} ${donacion.subcategoria.unidadDeMedida}|">Fideos x20 Kg</span>
+        <span th:text="${donacion.estado}" class="donacion-estado">Lista para entregar</span>
+        <th:block th:if="${donacion.estado.toString() == 'EN_TRASLADO'}">
+            <a th:href="@{/entidadBeneficiaria/donacionesEnMovimiento}"><i class="fa fa-map-marker-alt pin-circular"></i></a>
+            <form th:action="@{/entidadBeneficiaria/confirmarRecepcion/{id}(id=${donacion.id})}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="form-confirmar-recepcion"
+                  onsubmit="return confirm('¿Estás seguro que querés confirmar la recepción de la donación?');">
+                <label class="campo-foto-entrega">
+                    <i class="fas fa-camera" aria-hidden="true"></i>
+                    <span class="texto-foto-entrega">Adjuntar foto de entrega</span>
+                    <input type="file"
+                           name="fotoEntrega"
+                           accept="image/*"
+                           class="input-foto-entrega"
+                           onchange="this.parentElement.querySelector('.texto-foto-entrega').textContent = this.files.length ? this.files[0].name : 'Adjuntar foto de entrega'">
+                </label>
+                <button class="desplazadoAbajo botonOpcion">Confirmar<br>recepción</button>
+            </form>
+        </th:block>
+        <th:block th:if="${donacion.estado.toString() == 'ENTREGADA' and donacion.fotoEntrega != null and !#strings.isEmpty(donacion.fotoEntrega)}">
+            <button type="button" class="desplazadoAbajo botonOpcion" style="background:#0d9488; color:#fff; display:inline-flex; align-items:center; gap:6px; padding:6px 12px; font-size:0.85rem;" onclick="this.nextElementSibling.showModal()">
+                <i class="fas fa-camera" aria-hidden="true"></i> Ver constancia
+            </button>
+            <dialog class="modal-foto-constancia" style="border:none; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.3); max-width:500px; width:90%;" onclick="if(event.target === this) this.close()">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+                    <h3 style="margin:0; font-size:1.1rem; color:#0f766e;"><i class="fas fa-check-circle" style="color:#0d9488;"></i> Comprobante de Entrega</h3>
+                    <button type="button" style="background:none; border:none; font-size:1.4rem; cursor:pointer; color:#64748b;" onclick="this.closest('dialog').close()">&times;</button>
+                </div>
+                <div style="text-align:center;">
+                    <img th:src="${donacion.fotoEntrega}" alt="Foto de entrega" style="max-width:100%; max-height:350px; border-radius:8px; border:1px solid #cbd5e1; object-fit:contain;"/>
+                    <p style="margin-top:10px; font-size:0.9rem; color:#475569;" th:if="${donacion.ultimaActualizacion != null}">
+                        Fecha de recepción: <strong th:text="${donacion.ultimaActualizacion}"></strong>
+                    </p>
+                </div>
+            </dialog>
+        </th:block>
+    </li>
+</ul>

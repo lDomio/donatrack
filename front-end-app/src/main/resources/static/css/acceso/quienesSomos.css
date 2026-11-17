@@ -1,0 +1,245 @@
+/* ==========================================================================
+   ========================= NOSOTROS =======================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1000px; /* Centrado mas compacto para lectura de historia */
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.contenedorNosotros {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.tituloSeccion {
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--colorTextoOscuro);
+    letter-spacing: -1px;
+}
+
+.subtituloSeccion {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--colorTextoOscuro);
+    margin-bottom: 24px;
+    position: relative;
+    display: inline-block;
+    align-self: center;
+}
+
+.subtituloSeccion::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 20%;
+    width: 60%;
+    height: 3px;
+    background-color: var(--colorPrimario);
+    border-radius: 2px;
+}
+
+.cuadriculaHistoria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    background-color: var(--colorSuperficie);
+    padding: 32px;
+    border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.textoHistoria {
+    font-size: 1rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.6;
+}
+
+/* Componente Linea de Tiempo */
+.lineaTiempo {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.controlLineaTiempo {
+    display: none; /* Oculta los inputs de radio */
+}
+
+/* Barra de Años (Estilo barra azul marino del mockup) */
+.barraAnios {
+    background-color: #1e3a8a; /* Azul marino */
+    border-radius: 12px;
+    padding: 4px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: var(--sombraMedia);
+    flex-wrap: wrap; /* Envoltura para pantallas chicas */
+    gap: 4px;
+    position: relative;
+}
+
+.etiquetaAnio {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    text-align: center;
+    min-width: 54px;
+}
+
+.etiquetaAnio:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Contenedor de Detalle */
+.contenedorDetalles {
+    position: relative;
+    width: 100%;
+    min-height: 160px;
+}
+
+.tarjetaPaso {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    padding: 28px;
+    box-shadow: var(--sombraSuave);
+    border: 1.5px solid #cbd5e1;
+    display: none; /* Ocultas por defecto */
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+@keyframes mostrarDetalle {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.anioPaso {
+    display: inline-block;
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    border: 1px solid var(--colorPrimarioBorde);
+}
+
+.tituloPaso {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    margin-bottom: 8px;
+}
+
+.descripcionPaso {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.6;
+}
+
+/* LOGICA DE SELECCION (CSS Puro) */
+
+/* Resaltado del Año Activo (Fondo naranja e indicador caret) */
+#anio1992:checked ~ .barraAnios #lbl1992,
+#anio1994:checked ~ .barraAnios #lbl1994,
+#anio2001:checked ~ .barraAnios #lbl2001,
+#anio2003:checked ~ .barraAnios #lbl2003,
+#anio2004:checked ~ .barraAnios #lbl2004,
+#anio2005:checked ~ .barraAnios #lbl2005,
+#anio2006:checked ~ .barraAnios #lbl2006,
+#anio2008:checked ~ .barraAnios #lbl2008,
+#anio2010:checked ~ .barraAnios #lbl2010,
+#anio2014:checked ~ .barraAnios #lbl2014,
+#anio2016:checked ~ .barraAnios #lbl2016,
+#anio2021:checked ~ .barraAnios #lbl2021,
+#anio2024:checked ~ .barraAnios #lbl2024 {
+    background-color: var(--colorSecundario); /* Acento naranja */
+    color: white;
+    box-shadow: var(--sombraSuave);
+}
+
+/* Mostrar la tarjeta de detalle correspondiente */
+#anio1992:checked ~ .contenedorDetalles #detalle1992,
+#anio1994:checked ~ .contenedorDetalles #detalle1994,
+#anio2001:checked ~ .contenedorDetalles #detalle2001,
+#anio2003:checked ~ .contenedorDetalles #detalle2003,
+#anio2004:checked ~ .contenedorDetalles #detalle2004,
+#anio2005:checked ~ .contenedorDetalles #detalle2005,
+#anio2006:checked ~ .contenedorDetalles #detalle2006,
+#anio2008:checked ~ .contenedorDetalles #detalle2008,
+#anio2010:checked ~ .contenedorDetalles #detalle2010,
+#anio2014:checked ~ .contenedorDetalles #detalle2014,
+#anio2016:checked ~ .contenedorDetalles #detalle2016,
+#anio2021:checked ~ .contenedorDetalles #detalle2021,
+#anio2024:checked ~ .contenedorDetalles #detalle2024 {
+    display: block;
+    animation: mostrarDetalle 0.4s ease-out forwards;
+}
+
+/* ---------- MEDIA QUERIES NOSOTROS ---------- */
+@media (max-width: 768px) {
+    .seccionPrincipal {
+        padding: 24px 16px;
+    }
+
+    .tituloSeccion {
+        font-size: 2.25rem;
+    }
+
+    .cuadriculaHistoria {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .barraAnios {
+        display: flex;
+        justify-content: flex-start;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px 14px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch; /* Desplazamiento tactil suave en iOS */
+    }
+
+    /* Ocultar barra de scroll nativa para un diseño mas limpio */
+    .barraAnios::-webkit-scrollbar {
+        height: 4px;
+    }
+    .barraAnios::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+    .barraAnios::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .etiquetaAnio {
+        flex: 0 0 auto; /* Impide que los botones de año se deformen */
+        min-width: 60px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* No se requiere reestructuracion en 480px ya que es deslizable horizontalmente */
+}

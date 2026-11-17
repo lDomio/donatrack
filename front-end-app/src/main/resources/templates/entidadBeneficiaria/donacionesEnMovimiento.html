@@ -1,0 +1,34 @@
+<html th:replace="~{layout/baseEntidadBeneficiaria :: html}" xmlns:th="http://www.thymeleaf.org">
+<main th:fragment="contenido">
+  <h1>Donaciones en movimiento</h1>
+  <div class="contenedor-donaciones-mapa">
+    <div class="columna-donaciones-movimiento">
+      <div th:if="${donaciones == null or #lists.isEmpty(donaciones)}" class="estado-vacio-movimiento">
+        <i class="fas fa-truck-loading icono-vacio-movimiento" aria-hidden="true"></i>
+        <h3>Sin donaciones en traslado activo</h3>
+        <p>Cuando el chofer inicie el viaje desde el depósito, tus donaciones pasarán a estado <strong>EN_TRASLADO</strong> y aparecerán aquí para que puedas adjuntar la foto de entrega y confirmar la recepción.</p>
+        <a th:href="@{/entidadBeneficiaria/donacionesAsignadas}" class="enlace-ver-asignadas">
+          Ver todas mis donaciones asignadas
+        </a>
+      </div>
+      <th:block th:if="${donaciones != null and !#lists.isEmpty(donaciones)}">
+        <th:block th:replace="~{fragments/listaDonaciones :: listaDonaciones(${donaciones})}"></th:block>
+      </th:block>
+    </div>
+    <th:block th:if="${viajeActivo}">
+      <div th:replace="~{fragments/mapaLeaflet :: mapaSeguimiento(${origenLat}, ${origenLng}, ${destinoLat}, ${destinoLng}, ${destinoNombre})}"></div>
+    </th:block>
+    <div th:unless="${viajeActivo}" style="flex:1; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; text-align:center; min-height:420px;">
+      <i class="fas fa-route" style="font-size:3rem; color:#94a3b8; margin-bottom:16px;"></i>
+      <h3 style="color:#334155; margin-bottom:8px;">Mapa inactivo</h3>
+      <p style="color:#64748b; max-width:380px; margin-bottom:20px;">El mapa con seguimiento en tiempo real del camión se habilitará automáticamente en cuanto haya donaciones en tránsito hacia tu sede.</p>
+      <a th:href="@{/entidadBeneficiaria/donacionesAsignadas}" style="background:#0d9488; color:white; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+        <i class="fas fa-boxes-stacked"></i> Ver donaciones recibidas y asignadas
+      </a>
+    </div>
+  </div>
+</main>
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/entidadBeneficiaria/donacionesEnMovimiento.css">
+</th:block>
+</html>

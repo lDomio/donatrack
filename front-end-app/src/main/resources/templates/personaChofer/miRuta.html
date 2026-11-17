@@ -1,0 +1,258 @@
+<html th:replace="~{layout/baseAcceso :: html}">
+<main th:fragment="contenido" class="seccionPrincipal" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+
+    <!-- Encabezado del Chofer -->
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-truck-fast" style="color: #2563eb;"></i> Panel del Chofer
+        </h1>
+        <p style="color: #64748b; font-size: 1rem; margin-top: 4px;">
+            Control de inicio de recorrido y salida del depósito.
+        </p>
+    </div>
+
+    <!-- Mensajes de feedback -->
+    <div th:if="${mensajeExito}" style="background-color: #ecfdf5; border: 1px solid #10b981; color: #065f46; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-circle-check" style="color: #10b981; font-size: 1.2rem;"></i>
+        <span th:text="${mensajeExito}"></span>
+    </div>
+    <div th:if="${mensajeError}" style="background-color: #fef2f2; border: 1px solid #ef4444; color: #991b1b; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-circle-exclamation" style="color: #ef4444; font-size: 1.2rem;"></i>
+        <span th:text="${mensajeError}"></span>
+    </div>
+
+    <!-- Si tiene camión asignado -->
+    <div th:if="${camion != null}" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+            <div>
+                <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">Camión Asignado</span>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 4px 0;" th:text="${camion.patente}">ABC-123</h2>
+                <p style="color: #475569; font-size: 0.95rem; margin: 0;">
+                    <i class="fas fa-user" style="color: #94a3b8; margin-right: 6px;"></i> Conductor: <strong th:text="${camion.nombreChofer != null ? camion.nombreChofer : 'Chofer'}">Chofer</strong>
+                </p>
+            </div>
+            <div>
+                <span th:if="${camion.estaEnDeposito}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; background-color: #fef3c7; color: #92400e;">
+                    <i class="fas fa-warehouse"></i> En Depósito (Listo para partir)
+                </span>
+                <span th:unless="${camion.estaEnDeposito}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; background-color: #dbeafe; color: #1e40af;">
+                    <i class="fas fa-truck-moving"></i> En Viaje (Recorrido iniciado)
+                </span>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px;">
+            <div style="background-color: #f8fafc; padding: 14px; border-radius: 8px;">
+                <span style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">Capacidad de Carga</span>
+                <strong style="color: #1e293b; font-size: 1.1rem;" th:text="${camion.capacidadEnKg} + ' kg'">5000 kg</strong>
+            </div>
+            <div style="background-color: #f8fafc; padding: 14px; border-radius: 8px;">
+                <span style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">Capacidad en Volumen</span>
+                <strong style="color: #1e293b; font-size: 1.1rem;" th:text="${camion.volumen} + ' m3'">20 m3</strong>
+            </div>
+            <div style="background-color: #f8fafc; padding: 14px; border-radius: 8px;">
+                <span style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">Base de Salida</span>
+                <strong style="color: #1e293b; font-size: 1rem;" th:text="${camion.direccion != null ? camion.direccion : 'Depósito Central'}">Depósito Central</strong>
+            </div>
+        </div>
+
+        <!-- Acción: Iniciar o estado de viaje -->
+        <div style="text-align: center; padding-top: 10px;">
+            <!-- Caso 1: Ruta ya completada en su totalidad -->
+            <div th:if="${rutaFinalizada}" style="background-color: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 20px; display: inline-block; max-width: 520px;">
+                <p style="color: #15803d; font-size: 1.15rem; font-weight: 700; margin: 0 0 6px 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-circle-check" style="font-size: 1.3rem;"></i> Recorrido Finalizado
+                </p>
+                <p style="color: #166534; font-size: 0.9rem; margin: 0;">
+                    Todas las paradas de este recorrido fueron completadas o canceladas. El viaje ha concluido con éxito y no se puede reiniciar.
+                </p>
+            </div>
+
+            <!-- Caso 2A: En depósito pero aún sin paradas generadas -->
+            <div th:if="${!rutaFinalizada and camion.estaEnDeposito and (paradas == null or #lists.isEmpty(paradas))}" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 18px 24px; display: inline-block; max-width: 540px;">
+                <p style="color: #475569; font-size: 1rem; font-weight: 600; margin: 0 0 6px 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-hourglass-half" style="color: #64748b;"></i> Esperando generación de ruta
+                </p>
+                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">
+                    Cuando se asignen y pesen las donaciones en depósito, el planificador generará automáticamente la ruta con sus paradas y podrás iniciar el recorrido.
+                </p>
+            </div>
+
+            <!-- Caso 2B: En depósito, con paradas asignadas y listo para partir -->
+            <form th:if="${!rutaFinalizada and camion.estaEnDeposito and paradas != null and !#lists.isEmpty(paradas)}" th:action="@{/personaChofer/iniciarViaje/{id}(id=${camion.id})}" method="post">
+                <button type="submit" style="background-color: #10b981; color: white; border: none; padding: 14px 32px; font-size: 1.1rem; font-weight: 600; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: background 0.2s;">
+                    <i class="fas fa-play"></i> Iniciar mi recorrido
+                </button>
+                <p style="color: #64748b; font-size: 0.85rem; margin-top: 10px;">
+                    Al iniciar, las entregas pasarán a estado "En traslado" y se habilitará el monitoreo satelital para donantes y entidades.
+                </p>
+            </form>
+
+            <!-- Caso 3: En viaje activo -->
+            <div th:if="${!rutaFinalizada and !camion.estaEnDeposito}">
+                <div style="padding: 14px 20px; background-color: #f0fdf4; border-radius: 8px; display: inline-block; margin-bottom: 16px;">
+                    <p style="color: #15803d; font-size: 1rem; font-weight: 600; margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-truck-moving"></i> El recorrido ya fue iniciado y está en curso.
+                    </p>
+                    <p style="color: #64748b; font-size: 0.85rem; margin: 4px 0 0 0;">
+                        El vehículo se encuentra activo realizando las entregas del día.
+                    </p>
+                </div>
+
+                <div>
+                    <form th:action="@{/personaChofer/finalizarViaje/{id}(id=${camion.id})}" method="post"
+                          onsubmit="return confirm('¿Estás seguro de que deseás finalizar el viaje? Las paradas que sigan pendientes se cancelarán automáticamente por falta de tiempo.');">
+                        <button type="submit" style="background-color: #dc2626; color: white; border: none; padding: 12px 28px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); transition: background 0.2s;">
+                            <i class="fas fa-flag-checkered"></i> Finalizar viaje
+                        </button>
+                        <p style="color: #64748b; font-size: 0.85rem; margin-top: 8px;">
+                            Al finalizar el viaje, el camión regresará al depósito y las entregas pendientes se cerrarán por falta de tiempo.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección: Paradas y Entregas Asignadas -->
+    <div th:if="${camion != null}" style="margin-top: 32px;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-route" style="color: #2563eb;"></i> Paradas y Entregas Asignadas
+        </h2>
+
+        <!-- Si no tiene paradas -->
+        <div th:if="${paradas == null or #lists.isEmpty(paradas)}" style="background: white; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 32px 20px; text-align: center;">
+            <i class="fas fa-map-location-dot" style="font-size: 2.2rem; color: #94a3b8; margin-bottom: 12px;"></i>
+            <h3 style="font-size: 1.1rem; color: #334155; margin-bottom: 6px;">No hay paradas asignadas</h3>
+            <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Actualmente tu camión no tiene una ruta con paradas programadas.</p>
+        </div>
+
+        <!-- Lista de paradas -->
+        <div th:if="${paradas != null and !#lists.isEmpty(paradas)}" style="display: flex; flex-direction: column; gap: 14px;">
+            <div th:each="parada : ${paradas}" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 16px;">
+                
+                <div style="display: flex; align-items: flex-start; gap: 16px;">
+                    <!-- Número de Parada -->
+                    <div style="background-color: #eff6ff; color: #1d4ed8; font-weight: 700; font-size: 1.1rem; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <span th:text="${parada.numeroDeParada}">1</span>
+                    </div>
+
+                    <!-- Datos de la entrega -->
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                            <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #64748b;" th:text="'Parada #' + ${parada.numeroDeParada}">Parada #1</span>
+                            
+                            <!-- Badges de estado -->
+                            <span th:if="${parada.entrega != null and (parada.entrega.estadoActual == 'NO_RECIBIDA' or parada.entrega.estadoActual == 'CANCELADA' or parada.entrega.estadoActual == 'EN_DEPOSITO')}"
+                                  style="background-color: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-ban"></i> Cancelada
+                            </span>
+                            <span th:if="${parada.entrega != null and parada.entrega.estadoActual == 'EXITOSA'}"
+                                  style="background-color: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-circle-check"></i> Entregada
+                            </span>
+                            <span th:if="${parada.entrega != null and parada.entrega.estadoActual != 'NO_RECIBIDA' and parada.entrega.estadoActual != 'CANCELADA' and parada.entrega.estadoActual != 'EN_DEPOSITO' and parada.entrega.estadoActual != 'EXITOSA'}"
+                                  style="background-color: #fef3c7; color: #92400e; padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-clock"></i> Pendiente
+                            </span>
+                        </div>
+
+                        <!-- Dirección -->
+                        <p style="margin: 0; font-size: 1.05rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-location-dot" style="color: #ef4444; font-size: 0.95rem;"></i>
+                            <span th:text="${parada.entrega != null ? parada.entrega.direccionEntidad : 'Dirección no informada'}">Av. Medrano 951, CABA</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botón Cancelar Entrega -->
+                <div style="flex-shrink: 0;">
+                    <button th:if="${!rutaFinalizada and parada.entrega != null and parada.entrega.estadoActual != 'NO_RECIBIDA' and parada.entrega.estadoActual != 'CANCELADA' and parada.entrega.estadoActual != 'EN_DEPOSITO' and parada.entrega.estadoActual != 'EXITOSA'}"
+                            type="button"
+                            th:attr="onclick=|abrirModalCancelar('${parada.entrega.id}', '${parada.numeroDeParada}', '${parada.entrega.direccionEntidad}')|"
+                            style="background-color: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; white-space: nowrap;">
+                        <i class="fas fa-ban"></i> Cancelar entrega
+                    </button>
+                    <span th:if="${parada.entrega != null and (parada.entrega.estadoActual == 'NO_RECIBIDA' or parada.entrega.estadoActual == 'CANCELADA' or parada.entrega.estadoActual == 'EN_DEPOSITO')}"
+                          style="color: #94a3b8; font-size: 0.85rem; font-style: italic;">
+                        Cancelada por chofer
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Si NO tiene camión asignado -->
+    <div th:if="${camion == null}" style="background: white; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; text-align: center;">
+        <i class="fas fa-truck" style="font-size: 3rem; color: #94a3b8; margin-bottom: 16px;"></i>
+        <h2 style="font-size: 1.3rem; color: #334155; margin-bottom: 8px;">Sin camión asignado</h2>
+        <p style="color: #64748b; font-size: 0.95rem; max-width: 480px; margin: 0 auto;">
+            Tu usuario de chofer aún no tiene un camión asociado. Comunicate con el administrador para que te vincule a una unidad de la flota.
+        </p>
+    </div>
+
+    <!-- Modal Cancelar Entrega -->
+    <div id="modalCancelar" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px);">
+        <div style="background: white; border-radius: 12px; max-width: 480px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); overflow: hidden;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: #991b1b; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-triangle-exclamation"></i> Cancelar Entrega
+                </h3>
+                <button type="button" onclick="cerrarModalCancelar()" style="background: none; border: none; font-size: 1.4rem; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
+            </div>
+            
+            <form id="formCancelarEntrega" method="post" style="margin: 0;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div style="padding: 24px;">
+                    <p style="color: #475569; font-size: 0.95rem; margin-top: 0; margin-bottom: 16px;">
+                        ¿Estás seguro de que querés cancelar la <strong id="modalNumeroParada">Parada</strong> en <strong id="modalDireccionEntrega"></strong>?
+                    </p>
+                    <div style="margin-bottom: 16px;">
+                        <label for="modalMotivoInput" style="display: block; font-weight: 600; font-size: 0.9rem; color: #1e293b; margin-bottom: 6px;">
+                            Motivo de la cancelación *
+                        </label>
+                        <textarea id="modalMotivoInput" name="motivo" required rows="3" placeholder="Escribí el motivo (ej: destinatario ausente, entidad cerrada, problema de acceso...)"
+                                  style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; font-family: inherit; font-size: 0.95rem; box-sizing: border-box; resize: vertical; outline: none;"></textarea>
+                    </div>
+                    <p style="color: #64748b; font-size: 0.8rem; margin: 0;">
+                        Esta acción registrará la cancelación de la entrega en el sistema de logística y notificará al módulo de donaciones.
+                    </p>
+                </div>
+
+                <div style="padding: 16px 24px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="cerrarModalCancelar()" style="background: white; border: 1px solid #cbd5e1; color: #475569; padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer;">
+                        Volver
+                    </button>
+                    <button type="submit" style="background-color: #e11d48; border: none; color: white; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-ban"></i> Confirmar cancelación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script del Modal -->
+    <script>
+        function abrirModalCancelar(idEntrega, numeroParada, direccion) {
+            document.getElementById('formCancelarEntrega').action = '/personaChofer/cancelarEntrega/' + idEntrega;
+            document.getElementById('modalNumeroParada').textContent = 'Parada #' + numeroParada;
+            document.getElementById('modalDireccionEntrega').textContent = direccion;
+            document.getElementById('modalMotivoInput').value = '';
+            document.getElementById('modalCancelar').style.display = 'flex';
+        }
+
+        function cerrarModalCancelar() {
+            document.getElementById('modalCancelar').style.display = 'none';
+        }
+
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                cerrarModalCancelar();
+            }
+        });
+    </script>
+
+</main>
+<th:block th:fragment="estilosExtra">
+</th:block>
+</html>

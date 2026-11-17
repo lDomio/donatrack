@@ -1,0 +1,34 @@
+@startuml encoding-filtros-propuesto
+!theme plain
+
+actor "Persona donante" as U
+participant "entidadesBeneficiarias.html" as V
+participant "PersonaDonanteController" as C
+participant "EntidadBeneficiariaApiService" as S
+participant "WebApiCallerService\n(WebClient)" as W
+participant "donaciones-service" as B
+
+U -> V : selecciona "Educación"
+V -> C : GET ?tipo=Educación
+C -> S : obtenerConFiltros(null, "Educación")
+S -> S : construirUrl(...)\n.build().encode().toUri()
+S -> W : getList(URI)
+W -> B : GET ...?tipo=Educaci%C3%B3n
+B --> W : 200 [...] o []
+W --> S : lista
+S --> C : lista mapeada
+C --> V : errorCarga = false
+V --> U : listado sin mensaje de error
+
+note right of W
+  .uri(URI) envía la URL ya codificada
+  sin volver a codificar el símbolo '%'.
+end note
+
+note right of B
+  El backend recibe "Educación" y lo
+  normaliza a EDUCACION. Si no hay
+  entidades, devuelve [] sin error.
+end note
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml incentivos-tiempo-real
+!theme plain
+
+participant "incentivos-service" as I
+queue "RabbitMQ\nexchange eventos\nrouting incentivos.actualizado" as Q
+participant "front-end-app\nlistener + fragmento" as L
+participant "WebSocket\n/user/queue/incentivos" as W
+participant "Browser\nIncentivos" as B
+database "MySQL\nincentivos" as DB
+
+I -> DB : persiste progreso/misión/categoría
+I -> Q : publica IncentivoActualizadoEvent\n{idUsuarioAuth, tipo} after commit
+Q -> L : AMQP
+L -> W : convertAndSendToUser(idUsuarioAuth)
+W -> B : STOMP mensaje
+B -> L : GET /personaDonante/incentivos/contenido\n(cookie de sesión)
+L -> B : fragmento HTML actualizado
+B -> B : reemplaza contenido\n(debounce, sin polling)
+
+note right of L
+  Si no hay sesión o WebSocket,
+  el evento se descarta y la página
+  sigue usable con Actualizar.
+end note
+
+note right of Q
+  Cola nueva: incentivos.actualizacion.queue.
+  notificacion-service no se modifica.
+end note
+
+@enduml

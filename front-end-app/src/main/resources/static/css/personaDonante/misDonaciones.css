@@ -1,0 +1,417 @@
+
+/* ==========================================================================
+   ========================= CONTENIDO DE LA VISTA ==========================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Encabezado de la Sección */
+.encabezadoSeccion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.tituloVista {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.subtituloVista {
+    color: var(--colorTextoMedio);
+    font-size: 1.05rem;
+    max-width: 720px;
+}
+
+/* BÚSQUEDA Y FILTROS */
+.seccionFiltrosDonaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cajaBusquedaDonaciones {
+    position: relative;
+    width: 100%;
+}
+
+.iconoBusqueda {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--colorTextoClaro);
+    font-size: 1rem;
+}
+
+.campoBusquedaDonacion {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-family: inherit;
+    font-size: 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    min-height: 48px;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.campoBusquedaDonacion:focus {
+    outline: none;
+    border-color: var(--colorPrimario);
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.gridSelectoresFiltro {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.cajaSelectFiltro {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.selectorFiltroDonacion,
+.botonSelectPersonalizado {
+    width: 100%;
+    padding: 10px 36px 10px 14px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    cursor: pointer;
+    min-height: 44px;
+    appearance: none;
+    box-shadow: var(--sombraSuave);
+    transition: var(--transicionSuave);
+}
+
+.selectorFiltroDonacion:hover,
+.botonSelectPersonalizado:hover {
+    border-color: var(--colorPrimario);
+}
+
+.selectorFiltroDonacion:focus,
+.selectorFiltroDonacion:focus-visible,
+.botonSelectPersonalizado:focus,
+.botonSelectPersonalizado:focus-visible {
+    outline: none;
+    border-color: var(--colorPrimario);
+}
+
+/* Botón que reemplaza visualmente al <select> nativo (JS) */
+.botonSelectPersonalizado {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-family: inherit;
+}
+
+.botonSelectPersonalizado .textoSelectPersonalizado {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.botonSelectPersonalizado.mostrandoPlaceholder .textoSelectPersonalizado {
+    color: var(--colorTextoClaro);
+    font-weight: 500;
+}
+
+.botonSelectPersonalizado:not(.mostrandoPlaceholder) .textoSelectPersonalizado {
+    color: var(--colorTextoClaro);
+    font-weight: 500;
+}
+
+/* Oculta el <select> nativo cuando el JS ya construyó el dropdown personalizado
+   (se mantiene en el DOM como respaldo si el script no llega a cargar) */
+.selectorFiltroDonacion[hidden] {
+    display: none;
+}
+
+.iconoSelectFilter {
+    position: absolute;
+    right: 14px;
+    color: var(--colorTextoClaro);
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: transform 0.25s ease;
+}
+
+.cajaSelectFiltro.abierto .iconoSelectFilter {
+    transform: rotate(180deg);
+    color: var(--colorPrimario);
+}
+
+/* Listado de opciones personalizado (JS) */
+.listaOpcionesPersonalizada {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    max-height: 240px;
+    overflow-y: auto;
+    background-color: var(--colorSuperficie);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: var(--sombraMedia);
+}
+
+.opcionFiltro {
+    color: var(--colorTextoMedio);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+}
+
+.opcionFiltro:hover,
+.opcionFiltro:focus,
+.opcionFiltro:focus-visible {
+    outline: none;
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+}
+
+.opcionFiltro[aria-selected="true"] {
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+    font-weight: 600;
+}
+
+/* LISTA DE TARJETAS DE DONACIÓN (FIEL AL BOCETO) */
+.listaDonacionesContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tarjetaDonacion {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: var(--sombraSuave);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 20px;
+    transition: var(--transicionSuave);
+}
+
+.tarjetaDonacion:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombraMedia);
+}
+
+.contenedorImagenDonacion {
+    width: 100%;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+}
+
+.imagenDonacion {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contenidoDonacion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.encabezadoTarjetaDonacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.tituloDonacion {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.categoriaEtiqueta {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    background-color: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.descripcionDonacion {
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+    line-height: 1.5;
+}
+
+.pieTarjetaDonacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+
+.estadoDonacionTexto {
+    font-size: 0.9rem;
+    color: var(--colorTextoOscuro);
+}
+
+.estadoValor {
+    color: var(--colorTextoMedio);
+    font-weight: 600;
+}
+
+.estadoValor.activo {
+    color: var(--colorSecundario);
+}
+
+.estadoValor.exito {
+    color: var(--colorPrimario);
+}
+
+/* BOTÓN "VER EN EL MAPA" SEAGÚN BOCETO (Negro/Dark contrast) */
+.botonVerMapa {
+    background-color: #0f172a;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transicionSuave);
+    margin-left: auto;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+}
+
+.botonVerMapa:hover {
+    background-color: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3);
+}
+
+/* FOOTER */
+.piePaginaPrincipal {
+    background-color: var(--colorTextoOscuro);
+    color: #94a3b8;
+    padding: 48px 24px 24px 24px;
+    margin-top: auto;
+}
+
+.contenedorPiePagina {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.logotipoPie {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+.descripcionPie { font-size: 0.9rem; line-height: 1.6; max-width: 360px; }
+.tituloColumnaPie { color: white; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+.listaPie { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.enlacePie { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: var(--transicionSuave); }
+.enlacePie:hover { color: white; }
+.subPiePagina { max-width: 1280px; margin: 24px auto 0 auto; text-align: center; font-size: 0.85rem; }
+
+/* MEDIA QUERIES MOBILE ADAPTATION */
+@media (max-width: 768px) {
+    .menuDesplegableNotificaciones {
+        position: fixed;
+        top: 76px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: calc(100vw - 32px);
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    .menuDesplegable {
+        position: fixed;
+        top: 76px;
+        right: 16px;
+        left: auto;
+    }
+
+    .gridSelectoresFiltro {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjetaDonacion {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedorImagenDonacion {
+        height: 160px;
+    }
+
+    .pieTarjetaDonacion {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .botonVerMapa {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .contenedorPiePagina {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}

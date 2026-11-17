@@ -1,0 +1,40 @@
+@startuml casosUsoEntidadBeneficiaria
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam actorStyle awesome
+
+actor "Entidad beneficiaria" as entidad
+
+rectangle "DonaTrack" {
+  usecase "Iniciar sesión" as UC_Login
+  usecase "Registrar necesidad\nmaterial (recurrente\no extraordinaria)" as UC_Necesidad
+  usecase "Consultar estado de\ndonaciones asignadas" as UC_Estado
+  usecase "Confirmar recepción\nde donación (cargando fotos)" as UC_Confirmar
+  usecase "Seguir entregas activas\nen mapa (camión, ubicación\ny última actualización)" as UC_Seguir
+  usecase "Recibir notificaciones\n(asignación, confirmación\nde entrega)" as UC_Notif
+}
+
+entidad --> UC_Login
+entidad --> UC_Necesidad
+entidad --> UC_Estado
+entidad --> UC_Confirmar
+entidad --> UC_Seguir
+entidad --> UC_Notif
+
+note right of UC_Notif
+  Caso de uso disparado por el
+  Servicio de Notificaciones
+  (cola de mensajes), sin acción
+  de la entidad.
+end note
+
+note bottom of UC_Seguir
+  Mismo caso de uso que la
+  persona donante.
+end note
+
+@enduml

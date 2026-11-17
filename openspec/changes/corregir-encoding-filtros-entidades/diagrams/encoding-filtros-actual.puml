@@ -1,0 +1,30 @@
+@startuml encoding-filtros-actual
+!theme plain
+
+actor "Persona donante" as U
+participant "entidadesBeneficiarias.html" as V
+participant "PersonaDonanteController" as C
+participant "EntidadBeneficiariaApiService" as S
+participant "WebApiCallerService\n(WebClient)" as W
+participant "donaciones-service" as B
+
+U -> V : selecciona "Educación"
+V -> C : GET ?tipo=Educación
+C -> S : obtenerConFiltros(null, "Educación")
+S -> S : construirUrl(...)\n.build().encode()
+S -> W : getList("...?tipo=Educaci%C3%B3n")
+W -> W : .uri(String)\ncodifica '%' otra vez
+W -> B : GET ...?tipo=Educaci%25C3%25B3n
+B --> W : 400 "Tipo de entidad desconocido"
+W --> S : excepción
+S --> C : BackendNoDisponibleException
+C --> V : errorCarga = true
+V --> U : "No se pudieron cargar las entidades"
+
+note right of B
+  El backend recibe el texto codificado
+  literal "Educaci%C3%B3n" y no puede
+  normalizarlo a EDUCACION.
+end note
+
+@enduml

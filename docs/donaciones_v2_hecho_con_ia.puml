@@ -1,0 +1,378 @@
+@startuml DiagramaDeClases_ModelsEntities
+
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "modelsEntities.categorias" {
+    class Categoria {
+        - id: Long
+        - nombre: String
+        - subcategorias: List<Subcategoria>
+        + agregarSubcategoria(subcategoria: Subcategoria): void
+        + getSubcategorias(): List<Subcategoria>
+    }
+
+    class Subcategoria {
+        - id: Long
+        - nombre: String
+        - categoria: Categoria
+        - unidadDeMedida: String
+        + esIgual(subcategoria: Subcategoria): Boolean
+    }
+}
+
+package "modelsEntities.contactos" {
+    enum TipoDeContacto {
+        EMAIL
+        WHATSAPP
+        SMS
+        TELEFONO
+    }
+
+    class MedioDeContacto {
+        - tipoDeContacto: TipoDeContacto
+        - valorDelContacto: String
+        - esPreferido: Boolean
+    }
+}
+
+package "modelsEntities.localizacionGeograficaDeEntidades" {
+    class Pais {
+        ~ nombre: String
+        ~ codigoIso: String
+    }
+
+    class Ciudad {
+        - Nombre: String
+        - pais: Pais
+    }
+
+    class Direccion {
+        - calle: String
+        - altura: Integer
+        - ciudad: Ciudad
+        - latitud: Double
+        - longitud: Double
+    }
+}
+
+package "modelsEntities.donantes" {
+    class Donante {
+        - id: Long
+        - tipoPersona: TipoPersona
+        - datosDePersonaHumana: Humana
+        - datosDeEntidadRepresentada: Juridica
+        - bienesADonar: FormularioDeDonacion
+        - contactos: List<MedioDeContacto>
+        + agregarContacto(contacto: MedioDeContacto): void
+        + getContactos(): List<MedioDeContacto>
+    }
+
+    enum TipoPersona {
+      HUMANA
+      JURIDICA
+    }
+
+    class Humana {
+        - id: Long
+        - nombre: String
+        - apellido: String
+        - fechaDeNacimiento: LocalDate
+        - genero: String
+        - numeroDeDocumento: String
+        - direccion: Direccion
+    }
+
+    class Juridica {
+        - razonSocial: String
+        - tipoJuridica: TipoPersonaJuridica
+        - rubro: String
+        - representantes: List<Representante>
+        + agregarRepresentante(representante: Representante): void
+        + getRepresentantes(): List<Representante>
+    }
+
+    class Representante {
+        - nombre: String
+        - contactos: List<MedioDeContacto>
+    }
+
+    class TipoPersonaJuridica {
+        - tipo: String
+    }
+}
+
+package "modelsEntities.donaciones" {
+    class FormularioDeDonacion {
+        - fechaDeCreacion: LocalDate
+        - descripcionGeneral: String
+        - bienes: List<Bien>
+        + agregarBien(bien: Bien): void
+        + getBienes(): List<Bien>
+    }
+
+    class Bien {
+        - nombre: String
+        - descripcion: String
+        - foto: Foto
+        - cantidad: Double
+        - subcategoria: Subcategoria
+        - unidadDeMedida: String
+        - fechaVencimiento: LocalDate
+        - estado: EstadoDeBienNoPerecedero
+        + noEstaVencido(): Boolean
+    }
+
+    class Foto {
+        - urlFoto: String
+        - descripcion: String
+    }
+
+    enum EstadoDeBienNoPerecedero {
+        NUEVO
+        USADO
+    }
+
+    class Donacion {
+        - id: Long
+        - idDonante: Long
+        - fechaDeCreacion: LocalDate
+        - subcategoria: Subcategoria
+        - bienes: List<Bien>
+        - descripcionGeneral: String
+        - necesidad: Necesidad
+        - periodo: Periodo
+        - estadosDeDonaciones: List<EstadoDeUnaDonacion>
+        + agregarBien(bien: Bien): void
+        + getNombreBien(): String
+        + getBienes(): List<Bien>
+        + agregarEstado(estado: EstadoDeUnaDonacion): void
+        + getEstadosDeDonaciones(): List<EstadoDeUnaDonacion>
+        + getCantidad(): Double
+        + fechaUltimoEstado(): LocalDate
+        + noEstaVencida(): Boolean
+        + getUltimoEstado(): TipoDeEstado
+        + fechaMasProximaDeVencimiento(): LocalDate
+        + puedeCambiarDeEstado(nuevoEstado: TipoDeEstado): Boolean
+        + asignarNecesidad(necesidad: Necesidad): void
+        + desasignar(): void
+    }
+
+    class SegmentadorDeFormularioDonacion {
+        + segmentar(bienesADonar: List<Bien>): List<Donacion>
+    }
+}
+
+package "modelsEntities.estadoDonaciones" {
+    enum TipoDeEstado {
+        DEPOSITO
+        ASIGNACION_REALIZADA
+        LISTA_PARA_ENTREGAR
+        EN_TRASLADO
+        ENTREGADA
+        ENTREGA_FALLIDA
+        VENCIDO
+    }
+
+    class EstadoDeUnaDonacion {
+        - tipo: TipoDeEstado
+        - fecha: LocalDate
+        - descripcion: String
+        - autorDelCambioDeEstado: String
+    }
+}
+
+package "modelsEntities.entidadesBeneficiarias" {
+    class EntidadBeneficiaria {
+        - id: Long
+        - razonSocial: String
+        - tipo: TipoEntidad
+        - direccion: Direccion
+        - contactos: List<MedioDeContacto>
+        - necesidades: List<Necesidad>
+        - representantes: List<Representante>
+        - donacionesRecibidas: List<Donacion>
+        + getRepresentantes(): List<Representante>
+        + agregarRepresentante(representante: Representante): void
+        + agregarDonacion(donacion: Donacion): void
+        + agregarContacto(contacto: MedioDeContacto): void
+        + getContactos(): List<MedioDeContacto>
+        + agregarNecesidad(necesidad: Necesidad): void
+        + getNecesidades(): List<Necesidad>
+        + ultimasDonacionesDelTrimestre(): List<Donacion>
+        + removerDonacion(donacion: Donacion): void
+    }
+
+    class TipoEntidad {
+        - tipoEntidad: String
+    }
+}
+
+package "modelsEntities.necesidades" {
+    class Necesidad {
+        - id: Long
+        - cantidad: Double
+        - cantidadDonadaTotal: Double
+        - fechaCreacion: LocalDate
+        - subcategoria: Subcategoria
+        - descripcion: String
+        - tipoDeNecesidad: TipoNecesidad
+        - UnidadDeMedida: String
+        - periodoCorrespondiente: Period
+        - inicioRecurrencia: LocalDate
+        - entidadBeneficiaria: EntidadBeneficiaria
+        - historialPeriodos: List<Periodo>
+        + getDonacionesUltimoTrimestreDeEntidad(): List<Donacion>
+        - aumentarCantidad(cantidad: Double): void
+        + getCantidadDonada(): Double
+        + getTipoNecesidad(): TipoNecesidadEnum
+        + getUltimoPeriodo(): Periodo
+        + agregarDonacion(donacion: Donacion): void
+        + desasignar(donacion: Donacion): void
+        + getHistorialPeriodos(): List<Periodo>
+    }
+
+    class Periodo {
+        - id: Long
+        - periodoDeLaNecesidad: Period
+        - fechaInicio: LocalDate
+        - fechaFin: LocalDate
+        - cantidadDonada: Double
+    }
+
+    interface TipoNecesidad {
+        + aumentarCantidad(necesidad: Necesidad, cantidad: Double, periodos: List<Periodo>): void
+        + getCantidadDonada(necesidad: Necesidad, periodos: List<Periodo>): Double
+        + getTipoNecesidad(): TipoNecesidadEnum
+        + getUltimoPeriodo(necesidad: Necesidad, periodos: List<Periodo>): Periodo
+        + desasignar(donacion: Donacion): void
+        + actualizarPeriodos(necesidad: Necesidad, periodos: List<Periodo>): void
+    }
+
+    enum TipoNecesidadEnum {
+        RECURRENTE
+        EXTRAORDINARIA
+    }
+
+    class TipoNecesidadRecurrente implements TipoNecesidad {
+        + aumentarCantidad(necesidad: Necesidad, cantidad: Double, periodos: List<Periodo>): void
+        + getCantidadDonada(necesidad: Necesidad, periodos: List<Periodo>): Double
+        + getTipoNecesidad(): TipoNecesidadEnum
+        + getUltimoPeriodo(necesidad: Necesidad, periodos: List<Periodo>): Periodo
+        + desasignar(donacion: Donacion): void
+        + actualizarPeriodos(necesidad: Necesidad, periodos: List<Periodo>): void
+    }
+
+    class TipoNecesidadExtraordinaria implements TipoNecesidad {
+        + aumentarCantidad(necesidad: Necesidad, cantidad: Double, periodos: List<Periodo>): void
+        + getCantidadDonada(necesidad: Necesidad, periodos: List<Periodo>): Double
+        + getTipoNecesidad(): TipoNecesidadEnum
+        + getUltimoPeriodo(necesidad: Necesidad, periodos: List<Periodo>): Periodo
+        + desasignar(donacion: Donacion): void
+        + actualizarPeriodos(necesidad: Necesidad, periodos: List<Periodo>): void
+    }
+}
+
+package "modelsEntities.matcheadorDonaciones" {
+    class MatcheadorDonacion {
+        - algoritmosDeSeleccion: List<AlgoritmoDeSeleccion>
+        + seleccionarNecesidad(donacion: Donacion, necesidades: List<Necesidad>): MatcheoSugerido
+        - calcularInterseccion(resultadosDeSeleccion: List<List<Necesidad>>): List<Necesidad>
+    }
+
+    class MatcheoSugerido {
+        - id: Long
+        - idDonacion: Long
+        - necesidadesSugeridas: List<Necesidad>
+        - yaFueSeleccionadoPorElAdministrador: Boolean
+    }
+}
+
+package "modelsEntities.algoritmosEvaluacion" {
+    interface AlgoritmoDeSeleccion {
+        + aplicarCriterioDeSelecion(donacion: Donacion, necesidades: List<Necesidad>): List<Necesidad>
+    }
+
+    class CompatibilidadSemantica implements AlgoritmoDeSeleccion {
+        + aplicarCriterioDeSelecion(donacion: Donacion, necesidades: List<Necesidad>): List<Necesidad>
+        - calcularPuntaje(necesidad: Necesidad, donacion: Donacion): Double
+        - calcularSimilitudTextual(necesidad: Necesidad, donacion: Donacion): Double
+        - calcularCoberturaVolumen(necesidad: Necesidad): Double
+        - calcularTipoNecesidad(necesidad: Necesidad): Double
+    }
+
+    class PrioridadSubAtendidos implements AlgoritmoDeSeleccion {
+        + aplicarCriterioDeSelecion(donacion: Donacion, necesidades: List<Necesidad>): List<Necesidad>
+        - calcularPuntaje(necesidad: Necesidad): Double
+    }
+}
+
+' Relaciones entre módulos
+
+' Categorias
+Categoria "1" *--> "*" Subcategoria : subcategorias
+Subcategoria "1" --> "1" Categoria : categoria
+
+' Contactos
+MedioDeContacto "1" --> "1" TipoDeContacto : tipoDeContacto
+
+' Ubicacion
+Ciudad "1" --> "1" Pais : pais
+Direccion "1" --> "1" Ciudad : ciudad
+
+' Donantes
+Humana "1" --> "0..1" Direccion : direccion
+Juridica "1" --> "1" TipoPersonaJuridica : tipoJuridica
+Juridica "1" *--> "*" Representante : representantes
+Representante "1" --> "1" MedioDeContacto : contacto
+Donante "1" --> "0..1" Humana : datosDePersonaHumana
+Donante "1" --> "0..1" Juridica : datosDeEntidadRepresentada
+Donante "1" --> "0..1" FormularioDeDonacion : bienesADonar
+Donante "1" *--> "*" MedioDeContacto : contactos
+Donante  -->  TipoPersona
+
+' Donaciones
+Bien "1" --> "0..1" Foto : foto
+Bien "1" --> "0..1" Subcategoria : subcategoria
+Bien "1" --> "0..1" EstadoDeBienNoPerecedero : estado
+FormularioDeDonacion "1" *--> "*" Bien : bienes
+Donacion "1" --> "0..1" Subcategoria : subcategoria
+Donacion "1" o--> "*" Bien : bienes
+Donacion "1" --> "0..1" Necesidad : necesidad
+Donacion "1" --> "0..1" Periodo : periodo
+Donacion "1" *--> "*" EstadoDeUnaDonacion : estadosDeDonaciones
+SegmentadorDeFormularioDonacion ..> Bien : agrupa
+SegmentadorDeFormularioDonacion ..> Donacion : crea
+
+' Estados
+EstadoDeUnaDonacion "1" --> "1" TipoDeEstado : tipo
+
+' Entidades Beneficiarias
+EntidadBeneficiaria "1" --> "1" TipoEntidad : tipo
+EntidadBeneficiaria "1" --> "0..1" Direccion : direccion
+EntidadBeneficiaria "1" *--> "*" MedioDeContacto : contactos
+EntidadBeneficiaria "1" *--> "*" Necesidad : necesidades
+EntidadBeneficiaria "1" *--> "*" Representante : representantes
+EntidadBeneficiaria "1" o--> "*" Donacion : donacionesRecibidas
+
+' Necesidades
+Necesidad "1" --> "1" Subcategoria : subcategoria
+Necesidad "1" --> "1" TipoNecesidad : tipoDeNecesidad
+Necesidad "1" --> "1" EntidadBeneficiaria : entidadBeneficiaria
+Necesidad "1" *--> "*" Periodo : historialPeriodos
+TipoNecesidad ..> TipoNecesidadEnum : tipo
+
+' Matcheo y Evaluación
+MatcheadorDonacion "1" o--> "*" AlgoritmoDeSeleccion : algoritmosDeSeleccion
+MatcheadorDonacion ..> Donacion
+MatcheadorDonacion ..> Necesidad
+MatcheadorDonacion ..> MatcheoSugerido : crea
+MatcheoSugerido "1" o--> "*" Necesidad : necesidadesSugeridas
+CompatibilidadSemantica ..> Donacion
+CompatibilidadSemantica ..> Necesidad
+PrioridadSubAtendidos ..> Donacion
+PrioridadSubAtendidos ..> Necesidad
+
+@enduml

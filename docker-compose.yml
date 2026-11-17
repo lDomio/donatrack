@@ -1,0 +1,237 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: donatrack-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - donatrack
+
+  donaciones-service:
+    build:
+      context: .
+      dockerfile: donaciones-service/Dockerfile
+    container_name: donatrack-donaciones-service
+    restart: on-failure:5
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      incentivos-service:
+        condition: service_started
+      logistica-service:
+        condition: service_started
+      autenticacion-service:
+        condition: service_started
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+      SPRING_RABBITMQ_USER: guest
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-donatrack}
+      SERVICES_INCENTIVOS_URL: http://incentivos-service:8081
+      SERVICES_LOGISTICA_URL: http://logistica-service:8083
+    ports:
+      - "8080:8080"
+    networks:
+      - donatrack
+
+  mysql:
+    image: mysql:8.0
+    container_name: donatrack-mysql
+    restart: always
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-donatrack}
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-donatrack}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - donatrack
+
+  autenticacion-service:
+    build:
+      context: .
+      dockerfile: autenticacion-service/Dockerfile
+    container_name: donatrack-autenticacion-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-donatrack}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-change-me}
+    ports:
+      - "8084:8084"
+    networks:
+      - donatrack
+
+  mongo:
+    image: mongo:7.0
+    container_name: donatrack-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports:
+      - "27018:27017"
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - donatrack
+
+  incentivos-service:
+    build:
+      context: .
+      dockerfile: incentivos-service/Dockerfile
+    container_name: donatrack-incentivos-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+      SPRING_RABBITMQ_USER: guest
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-donatrack}
+    ports:
+      - "8081:8081"
+    networks:
+      - donatrack
+
+  notificacion-service:
+    build:
+      context: .
+      dockerfile: notificacion-service/Dockerfile
+    container_name: donatrack-notificacion-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+      SPRING_RABBITMQ_USER: guest
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-donatrack}
+    env_file:
+      - .env.twilio.local
+    ports:
+      - "8082:8082"
+    networks:
+      - donatrack
+
+  logistica-service:
+    build:
+      context: .
+      dockerfile: logistica-service/Dockerfile
+    container_name: donatrack-logistica-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+      SPRING_RABBITMQ_USER: guest
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+      SERVICES_DONACIONES_URL: http://donaciones-service:8080
+      SERVICES_INCENTIVOS_URL: http://incentivos-service:8081
+      XSIGNATURE: ${XSIGNATURE}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      MONGO_HOST: mongo
+      MONGO_PORT: "27017"
+      MONGO_USERNAME: ${MONGO_ROOT_USER:-donatrack}
+      MONGO_PASSWORD: ${MONGO_ROOT_PASSWORD:-donatrack}
+      MONGO_DATABASE: logistica
+    ports:
+      - "8083:8083"
+    networks:
+      - donatrack
+
+  front-end-app:
+    build:
+      context: .
+      dockerfile: front-end-app/Dockerfile
+    container_name: donatrack-front-end-app
+    restart: on-failure:5
+    depends_on:
+      autenticacion-service:
+        condition: service_started
+      donaciones-service:
+        condition: service_started
+      incentivos-service:
+        condition: service_started
+      logistica-service:
+        condition: service_started
+      notificacion-service:
+        condition: service_started
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Argentina/Buenos_Aires"
+      AUTH_SERVICE_URL: http://autenticacion-service:8084/api
+      DONACIONES_SERVICE_URL: http://donaciones-service:8080/donaciones-service
+      INCENTIVOS_SERVICE_URL: http://incentivos-service:8081
+      LOGISTICA_SERVICE_URL: http://logistica-service:8083/logistica-service
+      NOTIFICACIONES_SERVICE_URL: http://notificacion-service:8082
+      JWT_SECRET: ${JWT_SECRET:-dev-only-change-me}
+      DONANTE_DEMO_ID: ${DONANTE_DEMO_ID:-1}
+    ports:
+      - "8085:8085"
+    networks:
+      - donatrack
+
+networks:
+  donatrack:
+    driver: bridge
+
+volumes:
+  mysql-data:

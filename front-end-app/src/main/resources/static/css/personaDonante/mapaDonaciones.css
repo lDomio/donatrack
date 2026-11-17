@@ -1,0 +1,490 @@
+
+/* ==========================================================================
+   ========================= CONTENIDO MAPA =================================
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezadoSeccion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.tituloVista {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+}
+
+.subtituloVista {
+    color: var(--colorTextoMedio);
+    font-size: 1.05rem;
+    max-width: 720px;
+}
+
+.bloqueNavegacionSuperior {
+    display: flex;
+    align-items: center;
+}
+
+.botonVolverMisDonaciones {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--colorPrimario);
+    background-color: var(--colorPrimarioClaro);
+    padding: 10px 18px;
+    border-radius: var(--radioBorde);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: var(--transicionSuave);
+    border: 1px solid var(--colorPrimarioBorde);
+}
+
+.botonVolverMisDonaciones:hover {
+    background-color: var(--colorPrimarioBorde);
+    transform: translateX(-2px);
+}
+
+/* Tarjeta Rastreando */
+.tarjetaDonacionEnRuta {
+    background-color: var(--colorSuperficie);
+    border: 2px solid var(--colorSecundario);
+    border-radius: var(--radioBorde);
+    padding: 24px 28px;
+    box-shadow: var(--sombraSuave);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.insigniaEstadoEnRuta {
+    background-color: var(--colorSecundario);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+
+.tituloRutaDonacion {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro);
+    margin-top: 4px;
+}
+
+.detalleRutaDonacion {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    margin-top: 2px;
+}
+
+.estadoTiempoEstimado {
+    text-align: right;
+    background-color: var(--colorFondo);
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+}
+
+.etiquetaTiempo {
+    font-size: 0.8rem;
+    color: var(--colorTextoMedio);
+    display: block;
+    text-transform: uppercase;
+}
+
+.valorTiempo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--colorSecundario);
+}
+
+/* Panel de Mapa */
+.contenedorMapaInteractivo {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.barraFiltrosMapa {
+    padding: 20px;
+    background-color: var(--colorSuperficie);
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.cajaBusquedaMapa {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+}
+
+.iconoBusquedaMapa {
+    position: absolute;
+    left: 16px;
+    color: var(--colorPrimario);
+    font-size: 1rem;
+}
+
+.campoUbicacion {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorFondo);
+    min-height: 48px;
+}
+
+.chipsTipoPunto {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chipFunto {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background-color: #f1f5f9;
+    color: var(--colorTextoMedio);
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chipFunto.activo {
+    background-color: var(--colorPrimario);
+    color: white;
+}
+
+/* Visor del Mapa (Utiliza la imagen mapa.jpg requerida) */
+.visorMapaContenedor {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    background-color: #e2e8f0;
+    overflow: hidden;
+}
+
+.imagenMapaPrincipal {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Pines Interactivos superpuestos */
+.pinMapa {
+    position: absolute;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Pin Camión en Movimiento */
+.pinTrasladoActivo {
+    top: 48%;
+    left: 38%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pulsoRadar {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(249, 115, 22, 0.35);
+    animation: pulsoRadarAnim 1.8s infinite;
+}
+
+@keyframes pulsoRadarAnim {
+    0% { transform: scale(0.6); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+.iconoPinCamion {
+    background-color: var(--colorSecundario);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.5);
+    border: 2.5px solid white;
+    z-index: 2;
+    transition: var(--transicionSuave);
+}
+
+.pinTrasladoActivo:hover .iconoPinCamion {
+    transform: scale(1.15);
+}
+
+.pinDestinoEscuela { top: 32%; left: 62%; }
+.pinEntregadoComedor { top: 68%; left: 24%; }
+
+.iconoPin {
+    font-size: 2.4rem;
+    color: var(--colorPrimario);
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    transition: var(--transicionSuave);
+}
+
+.iconoPin.teal { color: var(--colorPrimario); }
+.iconoPin.verde { color: var(--colorExito); }
+
+/* Globito Popup al pasar sobre un Pin */
+.globitoPopup {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background-color: var(--colorSuperficie);
+    padding: 14px 18px;
+    border-radius: 14px;
+    box-shadow: var(--sombraElevada);
+    border: 1px solid rgba(0,0,0,0.08);
+    width: 230px;
+    font-size: 0.85rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicionSuave);
+    pointer-events: none;
+    z-index: 20;
+}
+
+.pinMapa:hover .globitoPopup, .pinMapa:focus .globitoPopup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-14px);
+    pointer-events: auto;
+}
+
+.etiquetaPopupEnRuta {
+    background-color: #fff7ed;
+    color: var(--colorSecundario);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.etiquetaPopupEntregado {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorExito);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.globitoPopup strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--colorTextoOscuro);
+}
+
+.globitoPopup p {
+    color: var(--colorTextoMedio);
+    margin: 4px 0 6px 0;
+}
+
+.subtextoPopup {
+    font-size: 0.75rem;
+    color: var(--colorTextoClaro);
+}
+
+.enlacePopup {
+    color: var(--colorPrimario);
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+/* Puntos Cercanos Lista */
+.seccionPuntosCercanos {
+    padding: 24px;
+    background-color: var(--colorFondo);
+    border-top: 1px solid #e2e8f0;
+}
+
+.tituloPuntosCercanos {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cuadriculaPuntos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+}
+
+.tarjetaPuntoMapa {
+    background-color: var(--colorSuperficie);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.tarjetaPuntoMapa.destacada {
+    border-left: 4px solid var(--colorSecundario);
+}
+
+.nombrePuntoPoblado {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--colorTextoOscuro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.direccionPunto {
+    font-size: 0.85rem;
+    color: var(--colorTextoMedio);
+    margin-top: 4px;
+}
+
+.horarioPunto {
+    font-size: 0.8rem;
+    color: var(--colorTextoClaro);
+    display: block;
+    margin-top: 4px;
+}
+
+.botonSecundarioMapa {
+    background-color: var(--colorFondo);
+    border: 1.5px solid #cbd5e1;
+    color: var(--colorTextoOscuro);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transicionSuave);
+    white-space: nowrap;
+}
+
+.botonSecundarioMapa:hover {
+    background-color: var(--colorPrimarioClaro);
+    border-color: var(--colorPrimario);
+    color: var(--colorPrimario);
+}
+
+/* Footer */
+.piePaginaPrincipal {
+    background-color: var(--colorTextoOscuro);
+    color: #94a3b8;
+    padding: 48px 24px 24px 24px;
+    margin-top: auto;
+}
+
+.contenedorPiePagina {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.logotipoPie {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+.descripcionPie { font-size: 0.9rem; line-height: 1.6; max-width: 360px; }
+.tituloColumnaPie { color: white; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+.listaPie { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.enlacePie { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: var(--transicionSuave); }
+.enlacePie:hover { color: white; }
+.subPiePagina { max-width: 1280px; margin: 24px auto 0 auto; text-align: center; font-size: 0.85rem; }
+
+@media (max-width: 768px) {
+    .menuDesplegableNotificaciones {
+        position: fixed;
+        top: 76px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: calc(100vw - 32px);
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    .menuDesplegable {
+        position: fixed;
+        top: 76px;
+        right: 16px;
+        left: auto;
+    }
+
+    .contenedorPiePagina { grid-template-columns: 1fr; gap: 32px; }
+    .visorMapaContenedor { height: 380px; }
+    .tarjetaPuntoMapa { flex-direction: column; align-items: flex-start; }
+    .tarjetaDonacionEnRuta { flex-direction: column; align-items: flex-start; }
+    .estadoTiempoEstimado { text-align: left; width: 100%; }
+}

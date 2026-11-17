@@ -1,0 +1,165 @@
+/* Layout del mapa solucionado y estilizado */
+.contenedor-donaciones-mapa {
+    width: 100%; max-width: 1280px; margin: 0 auto; padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.mapa {
+    display: block; width: 100%;
+    max-height: 60vh;
+    object-fit: cover;
+    border-radius: var(--radioBorde); box-shadow: var(--sombraSuave); border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Estilos de Lista y DonacionItem orientados en columna */
+.lista-donaciones { display: flex; flex-direction: column; gap: 48px; align-items: center; width: 100%; padding-bottom: 24px; }
+
+.donacion-de-lista {
+    position: relative; height: auto; min-height: 230px; width: 100%; max-width: 320px; padding: 24px 20px 48px 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    background-color: var(--colorSuperficie); border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave); border: 1px solid rgba(0, 0, 0, 0.05); transition: var(--transicionSuave);
+}
+
+.donacion-de-lista:hover { transform: translateY(-4px); box-shadow: var(--sombraMedia); }
+
+.donacion-de-lista span:first-child {
+    font-size: 1.35rem; font-weight: 800; color: var(--colorTextoOscuro); text-align: center;
+}
+
+.donacion-estado {
+    text-align: center; margin-top: 8px; font-size: 0.85rem; font-weight: 600; color: var(--colorTextoMedio); background-color: var(--colorFondo); padding: 4px 12px; border-radius: 12px; border: 1px solid #e2e8f0;
+}
+
+.desplazadoAbajo { position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); z-index: 10; width: 80%; cursor: pointer; }
+
+.columna-donaciones-movimiento {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.estado-vacio-movimiento {
+    background-color: var(--colorSuperficie, #ffffff);
+    border-radius: var(--radioBorde, 16px);
+    padding: 28px 24px;
+    border: 1px dashed #cbd5e1;
+    box-shadow: var(--sombraSuave);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.icono-vacio-movimiento {
+    font-size: 2rem;
+    color: var(--colorSecundario, #f97316);
+    margin-bottom: 4px;
+}
+
+.estado-vacio-movimiento h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--colorTextoOscuro, #0f172a);
+    margin: 0;
+}
+
+.estado-vacio-movimiento p {
+    font-size: 0.88rem;
+    color: var(--colorTextoMedio, #475569);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.enlace-ver-asignadas {
+    margin-top: 8px;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background-color: var(--colorPrimarioClaro, #f0fdfa);
+    color: var(--colorPrimario, #0d9488);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.pin-circular {
+    display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px;
+    border-radius: 50%; background-color: #fee2e2; color: var(--colorError); font-size: 18px;
+    position: absolute; top: -12px; right: -12px; box-shadow: var(--sombraSuave); transition: var(--transicionSuave); border: 2px solid white; text-decoration: none;
+}
+
+.pin-circular:hover { transform: scale(1.1); background-color: var(--colorError); color: white; }
+
+.botonOpcion.desplazadoAbajo {
+    background-color: var(--colorPrimario);
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+}
+
+.botonOpcion.desplazadoAbajo:hover {
+    background-color: var(--colorPrimarioHover);
+    box-shadow: 0 6px 14px rgba(13, 148, 136, 0.4);
+    transform: translate(-50%, 50%) scale(1.05);
+}
+
+.form-confirmar-recepcion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+    padding-bottom: 18px;
+}
+
+.campo-foto-entrega {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 10px;
+    background-color: var(--colorFondo, #f8fafc);
+    color: var(--colorTextoMedio, #475569);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    text-align: center;
+}
+
+.campo-foto-entrega:hover {
+    border-color: var(--colorPrimario, #0d9488);
+    color: var(--colorPrimario, #0d9488);
+    background-color: var(--colorPrimarioClaro, #f0fdfa);
+}
+
+.texto-foto-entrega {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.input-foto-entrega {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .contenedor-donaciones-mapa {
+        grid-template-columns: 1fr;
+    }
+    .mapa { max-height: 400px; grid-row:1; }
+    .lista-donaciones { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}

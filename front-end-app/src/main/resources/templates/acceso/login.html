@@ -1,0 +1,103 @@
+<html th:replace="~{layout/baseLoginRegistro :: html}">
+<th:block th:fragment="contenido">
+    <!-- Contenedor Principal de Login -->
+    <main class="seccionPrincipal">
+        <div class="contenedorLogin">
+
+            <!-- Columna izquierda: Identidad de Marca y Slogan -->
+            <section class="columnaMarca">
+                <div class="contenidoMarca">
+                    <div class="logotipoMarca">
+                        <i class="fas fa-heart-pulse iconoCorazonMarca"></i>
+                        <span>DonaTrack</span>
+                    </div>
+                    <p class="sloganMarca">Donaciones rastreables, impacto real en cada comunidad.</p>
+                </div>
+            </section>
+
+            <!-- Columna derecha: Formulario de Login -->
+            <section class="columnaFormulario">
+                <h1 class="tituloFormulario">Iniciar Sesión</h1>
+
+                <!-- Carteles de notificación (Error, Logout, etc.) -->
+                <div th:if="${param.error}" class="alertaErrorLogin">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span>Usuario o contraseña incorrectos.</span>
+                </div>
+                <div th:if="${param.registroExitoso}" class="alertaExitoLogin">
+                    <i class="fas fa-circle-check"></i>
+                    <span>¡Registro exitoso! Ya podés iniciar sesión con tu cuenta.</span>
+                </div>
+                <div th:if="${param.logout}" class="alertaExitoLogin">
+                    <i class="fas fa-circle-check"></i>
+                    <span>Has cerrado sesión correctamente.</span>
+                </div>
+                <div th:if="${param.unauthorized}" class="alertaAdvertenciaLogin">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>Debes iniciar sesión para continuar.</span>
+                </div>
+                <div th:if="${param.expired}" class="alertaAdvertenciaLogin">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>Tu sesión expiró. Vuelve a iniciar sesión.</span>
+                </div>
+                <form th:action="@{/login}" method="POST" class="formularioLogin">
+
+                    <!-- Campo Usuario / Email -->
+                    <div class="grupoCampo">
+                        <label for="identificadorUsuario">Email / Username</label>
+                        <input type="text"
+                               id="identificadorUsuario"
+                               name="username"
+                               class="entradaTexto"
+                               placeholder="test@mail.com"
+                               required
+                               autofocus>
+                    </div>
+
+                    <!-- Campo Contraseña -->
+                    <div class="grupoCampo">
+                        <label for="contraseniaUsuario">Password</label>
+                        <input type="password"
+                               id="contraseniaUsuario"
+                               name="password"
+                               class="entradaTexto"
+                               placeholder="••••"
+                               required>
+                        <a href="#popupRecuperarContrasenia" class="enlaceRecuperar">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <!-- Botón de acción ingresar -->
+                    <div class="cajaBotonIngresar">
+                        <button type="submit" class="botonIngresar">Ingresar</button>
+                    </div>
+
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal/Popup CSS para Recuperar Contraseña (Pure CSS usando :target) -->
+    <div class="cajaRecuperar" id="popupRecuperarContrasenia" role="dialog" aria-modal="true" aria-labelledby="tituloPopupRecuperar">
+        <a href="#" class="capaCierreRecuperar" aria-label="Cerrar ventana"></a>
+
+        <div class="contenidoRecuperar">
+            <div class="cabeceraRecuperar">
+                <h2 class="tituloRecuperar" id="tituloPopupRecuperar">Recuperar Contraseña</h2>
+                <a href="#" class="botonCerrarRecuperar" aria-label="Cerrar modal">&times;</a>
+            </div>
+            <div class="cuerpoRecuperar">
+                <p class="textoRecuperar">Por favor, comunícate con soporte técnico para restablecer tu cuenta:</p>
+                <p class="correoRecuperar">Soporte: <strong>soporte@donatrack.org</strong></p>
+                <p class="descripcionRecuperar">
+                    Envíanos tu nombre completo y nombre de usuario registrado. Responderemos a la brevedad con las instrucciones de blanqueo.
+                </p>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/acceso/login.css">
+</th:block>
+</html>

@@ -1,0 +1,75 @@
+g@startuml
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Notificacion" as notificacion {
+  *id : BIGINT <<PK>>
+  --
+  destinatario_id: BIGINT <<FK>>
+  mensaje:TEXT
+  asunto : VARCHAR(255)
+  cuerpo : TEXT
+  remitente : VARCHAR(255)
+  imagenUrl : TEXT
+  videoUrl : TEXT
+  audioUrl : TEXT
+  fechaEnvio : LocalDate
+  nombrePlantilla : VARCHAR(255)
+  canal: VARCHAR(255)
+}
+
+entity "ArchivoAdjunto" as archivoAdjunto {
+  *id : BIGINT <<PK>>
+  --
+  *notificacion_id : BIGINT <<FK>>
+  nombreArchivo : VARCHAR(255)
+  tipoArchivo: VARCHAR(255)
+  tamanioArchivo : FLOAT
+}
+
+entity "Destinatario" as destinatario {
+  *id : BIGINT <<PK>>
+  --
+  id_destinatario_origen : BIGINT
+  tipo_destinatario : VARCHAR(50)
+  nombreCompleto: VARCHAR(255)
+}
+
+entity "MedioDeContacto" as medioDeContacto{
+   *id : BIGINT <<PK>>
+   --
+   destinatario_id : BIGINT <<FK>>
+   valor: VARCHAR(255)
+   tipoDeContacto : VARCHAR(255)
+   esPreferido : BOOL
+}
+
+entity "EstadoNotificacion" as estadoNotificacion{
+   *id : BIGINT <<PK>>
+   --
+   notificacion_id : BIGINT <<FK>>
+   fechaHora: LocalTime
+   tipoEstado: VARCHAR(255)
+}
+
+  entity "PlantillaVariables" as plantillaVariables {
+      *notificacion_id : BIGINT <<PK>> <<FK>>
+      *clave : VARCHAR(255) <<PK>>
+      --
+      valor : TEXT
+    }
+
+
+notificacion ||..o{ plantillaVariables
+notificacion ||..o{  archivoAdjunto
+notificacion }o..|| destinatario
+notificacion ||..o{estadoNotificacion
+
+destinatario ||..o{medioDeContacto
+
+
+@enduml

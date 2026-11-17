@@ -1,0 +1,107 @@
+<html lang="es" th:replace="~{layout/basePersonaDonante :: html}">
+<main class="seccionPrincipal" th:fragment="contenido">
+
+    <div class="encabezadoSeccion">
+        <h1 class="tituloVista">Entidades beneficiarias</h1>
+        <p class="subtituloVista">Descubrí las organizaciones que reciben donaciones y conocé cómo ayudar.</p>
+
+        <div class="tarjetaImpactoRapido" th:if="${mostrarConteo}">
+            <i aria-hidden="true" class="fas fa-hand-holding-heart iconoImpacto"></i>
+            <div>
+                <span class="numeroImpacto" th:text="${cantidadEntidadesAyudadas}">33</span>
+                <span class="etiquetaImpacto">Entidades distintas ayudadas este mes</span>
+            </div>
+        </div>
+        <p style="color:#b00020;" th:if="${errorConteo}">
+            No se pudo cargar tu impacto de este mes. Intenta recargar la página en unos minutos.
+        </p>
+    </div>
+
+    <p class="avisoDonacionPresencial">
+        <i class="fas fa-circle-info" aria-hidden="true"></i>
+        <span>Las donaciones se registran presencialmente en el depósito. Acercate con los bienes y una persona administradora los carga a tu nombre.</span>
+    </p>
+
+    <p style="color:#b00020;" th:if="${errorCarga}">
+        No se pudieron cargar las entidades. Intenta recargar la página en unos minutos.
+    </p>
+
+    <form class="seccionFiltros" method="get" th:action="@{/personaDonante/entidadesBeneficiarias}">
+        <div class="contenedorFiltros">
+            <div class="cajaBusqueda">
+                <i aria-hidden="true" class="fas fa-magnifying-glass iconoBusqueda"></i>
+                <input aria-label="Buscar por nombre o ubicación" class="campoEntrada" name="busqueda"
+                        placeholder="Buscar por nombre o ubicación" th:value="${busquedaActiva}" type="search">
+            </div>
+
+            <div class="cajaFiltroSelect">
+                <i aria-hidden="true" class="fas fa-sliders iconoFiltro"></i>
+                <select aria-label="Filtrar por tipo de entidad" class="selectorFiltro" name="tipo">
+                    <option th:each="tipo : ${tiposEntidad}"
+                            th:selected="${tipo == tipoEntidadActivo}"
+                            th:text="${tipo}"
+                            th:value="${tipo}">Todas
+                    </option>
+                </select>
+                <i aria-hidden="true" class="fas fa-chevron-down iconoChevronFiltro"></i>
+            </div>
+        </div>
+    </form>
+
+    <div class="cuadriculaEntidades">
+        <article class="tarjetaEntidad" th:each="entidad : ${entidades}">
+
+            <div class="contenedorImagenEntidad" th:if="${entidad.imagenUrl != null}">
+                <img class="imagenEntidad" th:alt="${entidad.razonSocial}" th:src="${entidad.imagenUrl}">
+            </div>
+
+            <th:block th:switch="${entidad.tipo}">
+                <span class="insigniaTipo insigniaComedor" th:case="'COMEDOR'" th:text="${entidad.tipo}">COMEDOR</span>
+                <span class="insigniaTipo insigniaEducacion" th:case="'EDUCACION'"
+                      th:text="${entidad.tipo}">EDUCACION</span>
+                <span class="insigniaTipo insigniaSalud" th:case="'SALUD'" th:text="${entidad.tipo}">SALUD</span>
+                <span class="insigniaTipo insigniaRefugio" th:case="'REFUGIO'" th:text="${entidad.tipo}">REFUGIO</span>
+                <span class="insigniaTipo insigniaOng" th:case="'ONG'" th:text="${entidad.tipo}">ONG</span>
+                <span class="insigniaTipo" th:case="*" th:text="${entidad.tipo}">ONG</span>
+            </th:block>
+
+            <div class="cuerpoTarjetaEntidad">
+                <div class="encabezadoTarjeta">
+                    <h2 class="nombreEntidad" th:text="${entidad.razonSocial}">Comedor Los Bajitos</h2>
+                    <p class="ubicacionEntidad" th:if="${entidad.ubicacion != null}">
+                        <i aria-hidden="true" class="fas fa-location-dot"></i>
+                        <span th:text="${entidad.ubicacion}">Av. Siempreviva 742</span>
+                    </p>
+                </div>
+
+                <p class="descripcionEntidad" th:text="${entidad.descripcion}">Comedor de barrio.</p>
+
+                <div class="metricasEntidad">
+                    <div class="metricaItem" th:classappend="${metrica.critica} ? 'alertaCritica' : ''"
+                         th:each="metrica : ${entidad.metricas}">
+                        <span th:text="${metrica.nombre}">Arroz</span>
+                        <span th:text="'(' + ${metrica.cantidadDonada} + '/' + ${metrica.cantidadRequerida} + ')'">(150/200)</span>
+                        <div class="barraProgreso">
+                            <div class="progresoRelleno" th:classappend="${metrica.critica} ? 'alerta' : ''"
+                                 th:style="'width:' + ${metrica.porcentaje} + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pieTarjetaEntidad">
+                <a class="botonVerNecesidades"
+                   th:href="@{/personaDonante/verNecesidadEntidad/{id}(id=${entidad.id})}">Ver necesidades</a>
+            </div>
+
+        </article>
+    </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link href="/css/personaDonante/entidadesBeneficiarias.css" rel="stylesheet">
+</th:block>
+<th:block th:fragment="scriptsExtra">
+    <script defer src="/js/personaDonante/entidadesBeneficiarias.js"></script>
+</th:block>
+</html>

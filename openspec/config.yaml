@@ -1,0 +1,36 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+context: |
+  Proyecto: Donatrack — TPA de Diseño de Sistemas de Información (UTN FRBA), grupo 18.
+  Stack: Java 21, Maven multi-módulo, Spring Boot 4 / Spring Framework 7, Thymeleaf + JavaScript y CSS sin framework, JUnit 5 y Checkstyle.
+  Módulos: autenticacion-service, donaciones-service, incentivos-service, logistica-service y notificacion-service (APIs REST), front-end-app (Thymeleaf) y common-lib.
+  Infraestructura: MySQL, MongoDB, RabbitMQ y Docker Compose (`docker-compose.yml`).
+  Convenciones: Conventional Commits (`feat(...)`, `fix(...)`), indentación de 2 espacios en Java, imports con layout de Google y `mvn clean verify` para la validación completa.
+  Dominio: plataforma de donaciones (donantes, entidades beneficiarias, necesidades, donaciones, logística de entrega, incentivos y notificaciones).
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+rules:
+  design:
+    - "Todo design.md DEBE incluir al menos un diagrama .puml en diagrams/ referenciado como imagen (siguiendo el flujo del skill diagramador-plantuml: cargar el skill, guardar la fuente en openspec/changes/<cambio>/diagrams/<nombre>.puml con @startuml <nombre>, referenciarlo con [![<nombre>](diagrams/<nombre>.png)](diagrams/<nombre>.png) y renderizarlo con scripts/plantuml-render.sh). Nunca embeber bloques ```plantuml en el design.md."
+    - "Cada decisión de design.md que implique código, consultas o cambios de contrato DEBE incluir un bloque `Pseudocódigo` con la forma de la implementación propuesta (flujo, firma o query), para revisión temprana. No reemplaza al diagrama ni a las migraciones de referencia."
+  proposal:
+    - "Si el cambio proviene de un issue de GitHub, proposal.md debe declarar al inicio `> Issue: #<número>`. Si la verificación vive en otro issue, agregar además `> Issue de QA: #<número>`."
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+operations:
+  apply:
+    guidance:
+      - "Verificación E2E: si el cambio tiene comportamiento visible (UI de front-end-app, endpoints REST, mensajería, filtros, reportes, notificaciones o flujos entre servicios), antes de declarar el cambio completo recorré el flujo punta a punta con Playwright/browser. Reportá caso, esperado, obtenido y evidencia."
+      - "Verificación E2E: derivá al menos un caso por escenario del delta spec, incluidos los negativos, y verificá tres niveles cuando aplique: UI, parámetros del request HTTP y respuesta/efecto en la API o en la base."
+      - "Verificación E2E: si un caso falla, no marques la tarea correspondiente como completa; reportá la evidencia y pausá. Si el stack no está arriba, pedile al usuario que lo levante con `docker compose up --build` (no arranques Docker por tu cuenta). Si el cambio no es ejercitable punta a punta (refactor interno, migración de datos, documentación), dejá constancia del motivo y continuá."
+      - "Tests automatizados: ejecutá como mínimo `mvn -pl <módulo> -am test` sobre los módulos tocados antes de cerrar cada tarea. Si el cambio cruza varios módulos o toca configuración compartida, corré `mvn clean verify` al final."
+      - "QA final local: cuando todas las tasks estén completas, corré los casos de prueba definidos en el delta spec o en el proposal y reportá el resultado en el chat. No publiques evidencia ni la commitees."
+      - "Registro de decisiones: con la QA local en verde, proponé un resumen de decisiones, desvíos y riesgos para agregar al final del design.md; aplicalo solo con confirmación humana."
+  archive:
+    guidance:
+      - "Antes de archivar, verificá que todas las tasks estén completas, que `openspec validate <cambio>` pase y que cada design.md tenga sus fuentes .puml en diagrams/ (no solo los PNG)."
+      - "Revisá que las specs maestras no queden desactualizadas y resumí el resultado del archive al usuario."

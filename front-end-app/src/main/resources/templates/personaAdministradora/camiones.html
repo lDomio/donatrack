@@ -1,0 +1,290 @@
+<html th:replace="~{layout/basePersonaAdministradora :: html}">
+<main th:fragment="contenido" class="seccionPrincipal">
+
+
+  <!-- Migas de pan: máximo 3 niveles de profundidad -->
+  <nav class="migasPan" aria-label="Ruta de navegación">
+    <a href="/acceso/main">Inicio</a>
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <span class="migaActual" aria-current="page">Camiones</span>
+  </nav>
+
+  <div class="encabezadoVista">
+    <h1>Camiones</h1>
+    <p class="subtituloVista">Administrá la flota que retira y entrega las donaciones.</p>
+  </div>
+
+  <!-- Alertas de éxito / error (Flash attributes) -->
+  <div th:if="${mensajeExito}" class="alertaMensaje alertaExito" role="alert">
+    <i class="fas fa-circle-check" aria-hidden="true"></i>
+    <span th:text="${mensajeExito}"></span>
+  </div>
+  <div th:if="${mensajeError}" class="alertaMensaje alertaError" role="alert">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span th:text="${mensajeError}"></span>
+  </div>
+
+  <!-- ============ BUSCADOR Y ALTA DE CAMIÓN ============ -->
+  <div class="barraHerramientas">
+    <div class="cajaBusquedaCamion">
+      <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+      <label class="visualmenteOculto" for="campoBuscarCamion">Buscar camión</label>
+      <input type="search" id="campoBuscarCamion" name="buscarCamion" class="campoBusquedaCamion"
+             placeholder="Buscar por patente o conductor..." autocomplete="off">
+    </div>
+
+    <a href="#modalAgregarCamion" class="botonPrimario botonAgregarCamion" style="text-decoration: none;">
+      <i class="fas fa-plus" aria-hidden="true"></i> Agregar camión
+    </a>
+  </div>
+
+  <p class="resumenListado">
+    <span class="contadorCamiones">
+      <i class="fas fa-truck" aria-hidden="true"></i>
+      <span th:text="${totalCamiones} + ' camión' + (${totalCamiones} != 1 ? 'es' : '')">0 camiones</span>
+    </span>
+  </p>
+
+  <!-- ============ LISTADO DE CAMIONES ============ -->
+
+  <!-- Estado vacío: se muestra cuando no hay camiones -->
+  <div class="estadoVacio" th:if="${camiones == null or camiones.isEmpty()}">
+    <i class="fas fa-truck-fast" aria-hidden="true"></i>
+    <p>No hay camiones registrados en el sistema.</p>
+  </div>
+
+  <ul class="listaCamiones" th:if="${camiones != null and !camiones.isEmpty()}">
+
+    <li th:each="camion : ${camiones}">
+      <article class="tarjetaCamion">
+        <div class="contenedorImagenCamion">
+          <img src="/img/images (1).jpg" alt="Camión" class="imagenCamion">
+        </div>
+
+        <div class="contenidoCamion">
+          <div class="encabezadoCamion">
+            <div class="identificacionCamion">
+              <h2 class="marcaCamion" th:text="${camion.patente}">Patente</h2>
+              <div class="filaIdentificacion">
+                <span class="patenteCamion" th:text="${camion.patente}">XXX-000</span>
+                <span th:if="${camion.estaEnDeposito != null and camion.estaEnDeposito}"
+                      class="estadoCamion estadoDisponible">En depósito</span>
+                <span th:if="${camion.estaEnDeposito == null or !camion.estaEnDeposito}"
+                      class="estadoCamion estadoEnViaje">En viaje</span>
+              </div>
+            </div>
+
+            <div class="accionesCamion">
+              <a th:if="${camion.rutaActiva != null}"
+                 th:href="'#modalRutaActiva-' + ${camion.id}"
+                 class="botonOpcion"
+                 style="text-decoration: none; margin-right: 10px;"
+                 th:aria-label="'Ver ruta activa de ' + ${camion.patente}">
+                <i class="fas fa-route" aria-hidden="true"></i> Ruta Activa
+              </a>
+
+              <a th:href="'#modalEliminarCamion-' + ${camion.id}"
+                 class="botonOpcionCancelar"
+                 style="text-decoration: none;"
+                 th:aria-label="'Eliminar camión ' + ${camion.patente}">
+                <i class="fas fa-trash-can" aria-hidden="true"></i> Eliminar
+              </a>
+            </div>
+          </div>
+
+          <ul class="detallesCamion">
+            <li class="detalleCamion" th:if="${camion.nombreChofer != null}">
+              <i class="fas fa-user" aria-hidden="true"></i> Conducción:
+              <strong th:text="${camion.nombreChofer}">—</strong>
+            </li>
+            <li class="detalleCamion" th:if="${camion.nombreChofer == null}">
+              <i class="fas fa-user" aria-hidden="true"></i> Conducción:
+              <strong>Sin asignar</strong>
+            </li>
+            <li class="detalleCamion" th:if="${camion.capacidadEnKg != null}">
+              <i class="fas fa-weight-hanging" aria-hidden="true"></i> Capacidad:
+              <strong th:text="${camion.capacidadEnKg} + ' kg'">—</strong>
+            </li>
+            <li class="detalleCamion" th:if="${camion.direccion != null}">
+              <i class="fas fa-location-dot" aria-hidden="true"></i> Dirección:
+              <strong th:text="${camion.direccion}">—</strong>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Modal de Advertencia para Eliminar Camión (Uno por fila) -->
+      <div class="capaModal" th:id="'modalEliminarCamion-' + ${camion.id}" role="dialog" aria-modal="true">
+        <a href="#" class="fondoModal" aria-label="Cancelar eliminación" tabindex="-1"></a>
+        <div class="contenidoModal contenidoModalAngosto">
+          <header class="cabeceraModal">
+            <div class="titulosModal">
+              <h2 class="tituloModal">Eliminar camión</h2>
+              <p class="subtituloModalInfo" th:text="'Patente: ' + ${camion.patente}"></p>
+            </div>
+            <a href="#" class="botonCerrarModal" aria-label="Cancelar eliminación">
+              <i class="fas fa-xmark" aria-hidden="true"></i>
+            </a>
+          </header>
+          <form class="formularioModal" th:action="@{/personaAdministradora/camiones/{id}/eliminar(id=${camion.id})}" method="post">
+            <div class="cuerpoModal cuerpoConfirmacion">
+              <span class="iconoConfirmacion" aria-hidden="true"><i class="fas fa-triangle-exclamation"></i></span>
+              <p class="textoConfirmacion">¿Confirmás la eliminación del camión <strong th:text="${camion.patente}"></strong>?</p>
+              <p class="detalleConfirmacion">
+                Esta acción eliminará el camión del sistema. Solo se puede eliminar si <strong>no está en viaje</strong> y <strong>no tiene entregas asociadas</strong>.
+              </p>
+            </div>
+            <div class="pieModal">
+              <a href="#" class="botonOpcion">Cancelar</a>
+              <button type="submit" class="botonOpcionCancelar">
+                <i class="fas fa-trash-can" aria-hidden="true"></i> Eliminar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div th:if="${camion.rutaActiva != null}" class="capaModal" th:id="'modalRutaActiva-' + ${camion.id}" role="dialog" aria-modal="true">
+        <a href="#" class="fondoModal" aria-label="Cerrar modal de ruta activa" tabindex="-1"></a>
+        <div class="contenidoModal">
+          <header class="cabeceraModal">
+            <div class="titulosModal">
+              <h2 class="tituloModal">Ruta Activa - Entregas</h2>
+              <p class="subtituloModalInfo" th:text="'Camión: ' + ${camion.patente} + ' | Estado: ' + ${camion.rutaActiva.estadoActual}"></p>
+            </div>
+            <a href="#" class="botonCerrarModal" aria-label="Cerrar modal">
+              <i class="fas fa-xmark" aria-hidden="true"></i>
+            </a>
+          </header>
+
+          <div class="cuerpoModal">
+            <!-- Estado vacío de la ruta -->
+            <div th:if="${camion.rutaActiva.paradas == null or camion.rutaActiva.paradas.isEmpty()}">
+              <p><i class="fas fa-info-circle"></i> No hay paradas registradas en esta ruta.</p>
+            </div>
+
+            <!-- Listado de paradas -->
+            <div th:if="${camion.rutaActiva.paradas != null and !camion.rutaActiva.paradas.isEmpty()}">
+              <div th:each="parada : ${camion.rutaActiva.paradas}" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+
+                <h3 style="font-size: 1.1rem; margin-bottom: 5px; color: var(--colorPrimario);">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span th:text="'Parada ' + ${parada.numeroDeParada} + ' - ' + (${parada.nombreEntidad != null ? parada.nombreEntidad : 'Entidad a designar'})"></span>
+                </h3>
+                <p style="font-size: 0.9rem; margin-bottom: 2px;">
+                  <i class="fas fa-location-dot" style="margin-right: 4px; color: var(--colorSecundario);"></i>
+                  <span th:text="${parada.entrega.direccionEntidad}">Dirección</span>
+                </p>
+                <p style="font-size: 0.9rem; color: var(--colorSecundario); margin-bottom: 10px;"
+                   th:text="'Estado de la entrega: ' + ${parada.entrega.estadoActual}"></p>
+                <!-- Estado vacío de las donaciones en la entrega -->
+                <div th:if="${parada.entrega.donaciones == null or parada.entrega.donaciones.isEmpty()}">
+                  <p style="font-size: 0.9rem; color: var(--colorError);">No hay donaciones asociadas a esta entrega.</p>
+                </div>
+
+                <!-- Listado de donaciones de la entrega -->
+                <ul th:if="${parada.entrega.donaciones != null and !parada.entrega.donaciones.isEmpty()}" style="list-style-type: none; padding-left: 0;">
+                  <li th:each="donacion : ${parada.entrega.donaciones}" style="background-color: var(--colorFondo); padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; font-size: 0.95rem;">
+
+                    <i class="fas fa-box" aria-hidden="true"></i>
+                    <strong th:text="${donacion.descripcionGeneral}">Descripción</strong>
+
+                    <!-- Acá sumamos el ID, la cantidad, la unidad de medida y el nombre de la subcategoría -->
+                    — <span th:text="'Donacion #' + ${donacion.id} + ' | Cant: ' + ${donacion.cantidadDonada} + ' ' + ${donacion.subcategoria.unidadDeMedida} + ' (' + ${donacion.subcategoria.nombre} + ')'">
+                        ID: #1 | Cant: 10 kg (Subcategoría)
+                      </span>
+
+                    <span th:text="'(' + ${donacion.estado} + ')'" style="font-size: 0.85rem; color: var(--colorSecundario); margin-left: 5px;"></span>
+
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="pieModal">
+            <a href="#" class="botonOpcion">Cerrar</a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+
+  <!-- ======================================================================
+       MODAL: AGREGAR CAMIÓN
+       ====================================================================== -->
+  <div class="capaModal" id="modalAgregarCamion" role="dialog" aria-modal="true" aria-labelledby="tituloModalAgregarCamion">
+    <a href="#" class="fondoModal" aria-label="Cerrar modal de agregar camión" tabindex="-1"></a>
+    <div class="contenidoModal">
+      <header class="cabeceraModal">
+        <div class="titulosModal">
+          <h2 class="tituloModal" id="tituloModalAgregarCamion">Agregar camión</h2>
+          <p class="subtituloModalInfo">Ingresá los datos del nuevo vehículo para la flota</p>
+        </div>
+        <a href="#" class="botonCerrarModal" aria-label="Cerrar modal">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </a>
+      </header>
+      <form class="formularioModal" th:action="@{/personaAdministradora/camiones}" method="post">
+        <div class="cuerpoModal">
+          <div class="gridDosColumnas">
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="patente">Patente *</label>
+              <input type="text" id="patente" name="patente" class="campoTexto" placeholder="Ej: ABC-123" required>
+            </div>
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="nombreChofer">Nombre del chofer *</label>
+              <input type="text" id="nombreChofer" name="nombreChofer" class="campoTexto" placeholder="Ej: Juan Pérez" required>
+            </div>
+          </div>
+
+          <div class="gridTresColumnas">
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="capacidadEnKg">Capacidad (Kg) *</label>
+              <input type="number" step="0.1" id="capacidadEnKg" name="capacidadEnKg" class="campoTexto" placeholder="Ej: 5000" required>
+            </div>
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="volumen">Volumen (m³) *</label>
+              <input type="number" step="0.1" id="volumen" name="volumen" class="campoTexto" placeholder="Ej: 20" required>
+            </div>
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="altura">Altura (m) *</label>
+              <input type="number" step="0.1" id="altura" name="altura" class="campoTexto" placeholder="Ej: 3.5" required>
+            </div>
+          </div>
+
+          <div class="grupoCampo">
+            <label class="etiquetaCampo" for="direccion">Dirección / Base *</label>
+            <input type="text" id="direccion" name="direccion" class="campoTexto" placeholder="Ej: Av. Medrano 951, CABA" required>
+          </div>
+
+          <div class="gridDosColumnas">
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="latitud">Latitud *</label>
+              <input type="number" step="0.000001" id="latitud" name="latitud" class="campoTexto" placeholder="Ej: -34.5985" required>
+            </div>
+            <div class="grupoCampo">
+              <label class="etiquetaCampo" for="longitud">Longitud *</label>
+              <input type="number" step="0.000001" id="longitud" name="longitud" class="campoTexto" placeholder="Ej: -58.4201" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="pieModal">
+          <a href="#" class="botonOpcion">Cancelar</a>
+          <button type="submit" class="botonPrimario">
+            <i class="fas fa-plus" aria-hidden="true"></i> Guardar camión
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</main>
+<th:block th:fragment="estilosExtra">
+    <link rel="stylesheet" href="/css/personaAdministradora/global.css">
+    <link rel="stylesheet" href="/css/personaAdministradora/camiones.css">
+</th:block>
+</html>

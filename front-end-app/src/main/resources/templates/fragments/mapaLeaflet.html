@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Fragmento 1: Mapa de Seguimiento en Tiempo Real (Donante y Entidad Beneficiaria) -->
+<div th:fragment="mapaSeguimiento(origenLat, origenLng, destinoLat, destinoLng, destinoNombre)"
+     class="donatrack-mapa-seguimiento-wrapper">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" th:href="@{/css/mapaLeaflet.css}"/>
+
+    <div class="donatrack-mapa-header-info">
+        <div class="donatrack-ruta-endpoints">
+            <span class="donatrack-chip-origen">
+                <i class="fas fa-warehouse" aria-hidden="true"></i>
+                Depósito Central DonaTrack
+            </span>
+            <i class="fas fa-arrow-right donatrack-flecha-ruta" aria-hidden="true"></i>
+            <span class="donatrack-chip-destino">
+                <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
+                <span th:text="${destinoNombre != null ? destinoNombre : 'Comedor Rayito de Sol'}">Comedor Rayito de Sol</span>
+            </span>
+        </div>
+        <div class="donatrack-estado-vivo" id="dt-badge-vivo">
+            <span class="dt-pulso-punto"></span>
+            <span id="dt-texto-estado">En traslado en vivo</span>
+        </div>
+    </div>
+
+    <div id="donatrack-leaflet-map"
+         class="donatrack-leaflet-canvas"
+         data-modo="seguimiento"
+         th:attr="data-origen-lat=${origenLat != null ? origenLat : -34.598500},
+                  data-origen-lng=${origenLng != null ? origenLng : -58.420100},
+                  data-destino-lat=${destinoLat != null ? destinoLat : -34.617500},
+                  data-destino-lng=${destinoLng != null ? destinoLng : -58.367500},
+                  data-destino-nombre=${destinoNombre != null ? destinoNombre : 'Comedor Rayito de Sol'},
+                  data-viaje-activo=${viajeActivo != null ? viajeActivo : false}">
+    </div>
+
+    <div class="donatrack-barra-telemetria">
+        <div class="dt-progreso-bloque">
+            <div class="dt-progreso-cabecera">
+                <span class="dt-etiqueta-telemetria">Recorrido completado</span>
+                <strong class="dt-valor-progreso" id="dt-progreso-texto">0%</strong>
+            </div>
+            <div class="dt-barra-progreso-fondo">
+                <div class="dt-barra-progreso-relleno" id="dt-progreso-barra" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <div class="dt-metricas-bloque">
+            <div class="dt-metrica-item">
+                <i class="fas fa-route" aria-hidden="true"></i>
+                <div>
+                    <span class="dt-etiqueta-telemetria">Distancia restante</span>
+                    <strong class="dt-valor-metrica" id="dt-distancia-restante">-- km</strong>
+                </div>
+            </div>
+            <div class="dt-metrica-item">
+                <i class="fas fa-clock" aria-hidden="true"></i>
+                <div>
+                    <span class="dt-etiqueta-telemetria">Llegada estimada</span>
+                    <strong class="dt-valor-metrica" id="dt-tiempo-estimado">-- min</strong>
+                </div>
+            </div>
+            <div class="dt-metrica-item">
+                <i class="fas fa-location-crosshairs" aria-hidden="true"></i>
+                <div>
+                    <span class="dt-etiqueta-telemetria">Posición GPS</span>
+                    <strong class="dt-valor-metrica dt-coords" id="dt-coordenadas-actuales">-34.5985, -58.4201</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:src="@{/js/mapaLeaflet.js}"></script>
+</div>
+
+<!-- Fragmento 2: Mapa Público de Casos de Éxito (Landing Page sin login) -->
+<div th:fragment="mapaPublico(casosExitoJson)"
+     class="donatrack-mapa-publico-wrapper">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" th:href="@{/css/mapaLeaflet.css}"/>
+
+    <div id="donatrack-leaflet-map"
+         class="donatrack-leaflet-canvas donatrack-leaflet-publico"
+         data-modo="publico"
+         th:attr="data-casos-exito=${casosExitoJson != null ? casosExitoJson : '[]'}">
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script th:src="@{/js/mapaLeaflet.js}"></script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+/* ==========================================================================
+   ============ VISTA: REGISTRAR DONANTE E IMPORTACIÓN (ADMIN) ==============
+   ========================================================================== */
+
+.seccionPrincipal {
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 24px 48px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================= ENCABEZADO Y MIGAS DE PAN ================= */
+.migasPan { 
+    display: flex; align-items: center; gap: 8px; font-size: 0.85rem; 
+    color: var(--colorTextoClaro); font-weight: 500; margin-top: 24px; 
+}
+.migasPan a { color: var(--colorTextoMedio); text-decoration: none; transition: var(--transicionSuave); }
+.migasPan a:hover { color: var(--colorPrimario); }
+.migasPan .migaActual { color: var(--colorPrimario); font-weight: 600; }
+
+.encabezadoVista { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.subtituloVista { font-size: 1rem; color: var(--colorTextoMedio); max-width: 600px; }
+
+.alertaFormulario {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.alertaExito {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.alertaError {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+/* ================= CAMPOS GENÉRICOS DE FORMULARIO ================= */
+.grupoCampo { display: flex; flex-direction: column; gap: 8px; }
+.etiquetaCampo { font-size: 0.9rem; font-weight: 600; color: var(--colorTextoMedio); }
+
+.campoTexto, .selectorCampo {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoOscuro);
+    min-height: 48px;
+    transition: var(--transicionSuave);
+}
+.selectorCampo { appearance: none; cursor: pointer; padding-right: 40px; }
+
+.campoTexto:focus, .selectorCampo:focus {
+    outline: none;
+    border-color: var(--colorPrimario);
+    box-shadow: 0 0 0 3px var(--colorPrimarioBorde);
+}
+
+.cajaSelector { position: relative; display: flex; align-items: center; }
+.cajaSelector .iconoSelector { position: absolute; right: 16px; color: var(--colorTextoClaro); font-size: 0.8rem; pointer-events: none; }
+
+/* Ocultar las flechas de los input de tipo número */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ================= SISTEMA DE PESTAÑAS (CSS PURO) ================= */
+.contenedorRegistro {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.radioOculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.selectorModoRegistro {
+    display: flex;
+    gap: 12px;
+    background-color: var(--colorSuperficie);
+    padding: 8px;
+    border-radius: 16px;
+    box-shadow: var(--sombraSuave);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.etiquetaPestana {
+    flex: 1;
+    min-width: 200px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    cursor: pointer;
+    transition: var(--transicionSuave);
+    text-align: center;
+}
+
+.etiquetaPestana:hover {
+    background-color: var(--colorFondo);
+    color: var(--colorTextoOscuro);
+}
+
+/* Lógica de selección de pestañas */
+#modoIndividual:checked ~ .selectorModoRegistro label[for="modoIndividual"],
+#modoImportacion:checked ~ .selectorModoRegistro label[for="modoImportacion"] {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimario);
+    box-shadow: 0 0 0 1px var(--colorPrimarioBorde);
+}
+
+/* Lógica de visibilidad de paneles */
+.panelRegistro {
+    display: none;
+    animation: aparecer 0.4s ease-out;
+}
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#modoIndividual:checked ~ #panelIndividual { display: flex; flex-direction: column; }
+#modoImportacion:checked ~ #panelImportacion { display: flex; flex-direction: column; }
+
+/* ================= ESTILOS COMUNES DE PANELES ================= */
+.formularioIndividual, .formularioImportacion {
+    background-color: var(--colorSuperficie);
+    border-radius: var(--radioBorde);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--sombraSuave);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.tituloFormulario { font-size: 1.4rem; font-weight: 800; margin: 0; color: var(--colorTextoOscuro); }
+
+/* ================= PANEL: REGISTRO INDIVIDUAL ================= */
+.gridFormularioIndividual {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.pieFormulario {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid #f1f5f9;
+    flex-wrap: wrap;
+}
+.accionesFormulario { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-wrap: wrap; }
+.pieFormulario .botonPrimario { font-size: 1.05rem; padding: 12px 32px; }
+.textoObligatorio { font-size: 0.85rem; color: var(--colorTextoClaro); }
+
+/* ================= PANEL: IMPORTACIÓN MASIVA ================= */
+.cabeceraImportacion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.subtituloImportacion { font-size: 1rem; color: var(--colorTextoMedio); }
+
+.contenedorImportacionGrid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Columna Izquierda */
+.columnaIzquierda { display: flex; flex-direction: column; gap: 24px; }
+
+.zonaSubirArchivo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 64px 24px;
+    background-color: var(--colorSuperficie);
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radioBorde);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transicionSuave);
+}
+.zonaSubirArchivo:hover { border-color: var(--colorPrimario); background-color: var(--colorPrimarioClaro); }
+.zonaSubirArchivo:focus-within { border-color: var(--colorPrimario); box-shadow: 0 0 0 3px var(--colorPrimarioBorde); }
+
+.iconoNube { font-size: 3rem; color: var(--colorTextoClaro); margin-bottom: 8px; transition: var(--transicionSuave); }
+.zonaSubirArchivo:hover .iconoNube { color: var(--colorPrimario); }
+
+.textoArrastrar { font-size: 1.05rem; font-weight: 600; color: var(--colorTextoOscuro); }
+.textoSeparador { font-size: 0.9rem; color: var(--colorTextoClaro); font-weight: 500; }
+
+.botonSeleccionarArchivo {
+    margin-top: 8px;
+    padding: 10px 24px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTextoMedio);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: var(--transicionSuave);
+}
+.zonaSubirArchivo:hover .botonSeleccionarArchivo { border-color: var(--colorPrimario); color: var(--colorPrimario); }
+
+/* Feedback visual de archivo seleccionado mediante CSS puro */
+.zonaSubirArchivo:has(input[type="file"]:valid) {
+    border-color: var(--colorExito);
+    background-color: #f0fdf4;
+}
+.zonaSubirArchivo:has(input[type="file"]:valid) .iconoNube { color: var(--colorExito); }
+.zonaSubirArchivo:has(input[type="file"]:valid) .botonSeleccionarArchivo {
+    border-color: var(--colorExito); color: var(--colorExito);
+}
+.zonaSubirArchivo:has(input[type="file"]:valid) .textoArrastrar::after {
+    content: " (Archivo cargado)";
+    color: var(--colorExito);
+}
+
+.cajaRequisitos {
+    background-color: var(--colorFondo);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.cabeceraRequisitos { display: flex; align-items: center; gap: 10px; color: var(--colorTextoOscuro); }
+.cabeceraRequisitos i { color: var(--colorTextoMedio); font-size: 1.1rem; }
+.tituloRequisitosTexto { font-size: 1.1rem; font-weight: 700; margin: 0; }
+
+.listaRequisitos {
+    list-style: disc;
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--colorTextoMedio);
+}
+.listaRequisitos strong { color: var(--colorTextoOscuro); font-weight: 600; }
+
+.botonDescargar {
+    margin-top: 8px;
+    align-self: flex-start;
+    background-color: var(--colorSuperficie);
+    border-color: #cbd5e1;
+    color: var(--colorTextoOscuro);
+    font-size: 0.9rem;
+    padding: 10px 20px;
+}
+.botonDescargar:hover { background-color: var(--colorFondo); border-color: #94a3b8; }
+
+/* Columna Derecha */
+.columnaDerecha { display: flex; flex-direction: column; gap: 28px; }
+.tituloSeccion { font-size: 1.25rem; font-weight: 700; color: var(--colorTextoOscuro); margin: 0; }
+
+.contenedorTablaColumnas {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: var(--colorSuperficie);
+}
+.tablaColumnas { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tablaColumnas thead th { text-align: left; padding: 14px 20px; background-color: var(--colorFondo); color: var(--colorTextoMedio); font-weight: 700; border-bottom: 1.5px solid #e2e8f0; }
+.tablaColumnas tbody td { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; color: var(--colorTextoMedio); }
+.tablaColumnas tbody tr:last-child td { border-bottom: none; }
+.tablaColumnas .nombreColumna { font-weight: 600; color: var(--colorTextoOscuro); font-size: 0.85rem; letter-spacing: 0.03em; }
+
+.listaProceso {
+    list-style: none;
+    counter-reset: paso-contador;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.listaProceso li {
+    position: relative;
+    padding-left: 48px;
+    font-size: 0.95rem;
+    color: var(--colorTextoOscuro);
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+}
+.listaProceso li::before {
+    counter-increment: paso-contador;
+    content: counter(paso-contador);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--colorSuperficie);
+    border: 1.5px solid #cbd5e1;
+    color: var(--colorTextoMedio);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accionesImportacion {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    margin-top: auto;
+}
+.accionesImportacion .botonPrimario { min-width: 140px; background-color: var(--colorTextoOscuro); color: white; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2); }
+.accionesImportacion .botonPrimario:hover { background-color: #1e293b; box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3); }
+.accionesImportacion .botonOpcion { background-color: var(--colorSuperficie); border-color: #cbd5e1; color: var(--colorTextoOscuro); }
+.accionesImportacion .botonOpcion:hover { background-color: var(--colorFondo); border-color: #94a3b8; }
+
+.divisorFormulario {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 8px 0;
+}
+
+.bloqueCredenciales {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.subtituloBloque {
+    font-size: 0.95rem;
+    color: var(--colorTextoMedio);
+    margin: -8px 0 8px 0;
+}
+
+/* ==========================================================================
+   ========================= RESPONSIVE =====================================
+   ========================================================================== */
+@media (max-width: 992px) {
+    .contenedorImportacionGrid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+@media (max-width: 768px) {
+    .formularioIndividual, .formularioImportacion { padding: 24px 20px; }
+    
+    .selectorModoRegistro { flex-direction: column; }
+    .etiquetaPestana { width: 100%; min-width: 0; }
+    
+    .gridFormularioIndividual { grid-template-columns: 1fr; }
+    
+    .pieFormulario { flex-direction: column-reverse; align-items: stretch; }
+    .accionesFormulario { margin-left: 0; flex-direction: column-reverse; align-items: stretch; }
+    .pieFormulario .botonPrimario, .pieFormulario .botonOpcion { width: 100%; }
+    .textoObligatorio { text-align: center; }
+
+    .zonaSubirArchivo { padding: 48px 20px; }
+    .accionesImportacion { flex-direction: column-reverse; align-items: stretch; }
+    .accionesImportacion .botonPrimario, .accionesImportacion .botonOpcion { width: 100%; }
+}

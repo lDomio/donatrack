@@ -1,0 +1,44 @@
+<html th:replace="~{layout/base :: html}">
+<nav th:fragment="listaNavegacion" class="navegacionPrincipal" aria-label="Menú principal">
+    <ul class="listaNavegacion" aria-label="Menú principal">
+        <li><a th:href="@{/entidadBeneficiaria/misNecesidades}" class="enlaceNavegacion" th:classappend="${vistaActual == 'misNecesidades'} ? 'enlaceNavegacionActivo'">Mis necesidades</a></li>
+        <li><a th:href="@{/entidadBeneficiaria/donacionesAsignadas}" class="enlaceNavegacion" th:classappend="${vistaActual == 'donacionesAsignadas'} ? 'enlaceNavegacionActivo'">Donaciones Asignadas</a></li>
+        <li><a th:href="@{/entidadBeneficiaria/donacionesEnMovimiento}" class="enlaceNavegacion" th:classappend="${vistaActual == 'donacionesEnMovimiento'} ? 'enlaceNavegacionActivo'">Donaciones En Movimiento</a></li>
+    </ul>
+</nav>
+
+<a th:fragment="botonUnirse"></a>
+<a th:fragment="botonUnirseMovil"></a>
+
+<div th:fragment="perfilOpciones">
+    <a th:href="@{/entidadBeneficiaria/misNecesidades}" class="enlaceDesplegable">
+        <i class="fas fa-list-check"></i> Mis necesidades
+    </a>
+    <a th:href="@{/entidadBeneficiaria/donacionesAsignadas}" class="enlaceDesplegable">
+        <i class="fas fa-box-open"></i> Donaciones asignadas
+    </a>
+    <a th:href="@{/entidadBeneficiaria/donacionesEnMovimiento}" class="enlaceDesplegable">
+        <i class="fas fa-truck-fast"></i> En movimiento
+    </a>
+    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 6px 0;">
+    <form th:action="@{/logout}" method="post" style="margin: 0;">
+        <button type="submit" class="enlaceDesplegable">
+            <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+        </button>
+    </form>
+</div>
+
+<ul th:fragment="listaMovil" class="listaMovil">
+    <li><a th:href="@{/entidadBeneficiaria/misNecesidades}" class="enlaceMovil"><i class="fas fa-list-check"></i> Mis necesidades</a></li>
+    <li><a th:href="@{/entidadBeneficiaria/donacionesAsignadas}" class="enlaceMovil"><i class="fas fa-box-open"></i> Donaciones asignadas</a></li>
+    <li><a th:href="@{/entidadBeneficiaria/donacionesEnMovimiento}" class="enlaceMovil"><i class="fas fa-truck-fast"></i> En movimiento</a></li>
+    <li><hr class="divisorMenuMovil"></li>
+    <li>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="enlaceMovil" style="border: none; background: none; width: 100%; text-align: left; font-family: inherit; font-size: inherit; cursor: pointer; color: #dc2626;">
+                <i class="fas fa-arrow-right-from-bracket"></i> Cerrar sesión
+            </button>
+        </form>
+    </li>
+</ul>
+</html>

@@ -1,0 +1,159 @@
+<html lang="es" th:replace="~{layout/basePersonaDonante :: html}">
+<main class="seccionPrincipal" th:fragment="contenido">
+
+    <div class="encabezadoSeccion">
+        <h1 class="tituloVista">Incentivos</h1>
+        <p class="subtituloVista">Completá misiones, subí de categoría y desbloqueá insignias por cada donación que hacés.</p>
+    </div>
+
+    <p th:if="${errorCarga}" style="color:#b00020;">
+        No se pudo conectar con el servicio de incentivos. Mostrando contenido de referencia; intentá recargar en unos minutos.
+    </p>
+
+    <section class="tarjetaCategoriaDonante" aria-label="Tu categoría de donante">
+        <div class="resumenCategoriaActual">
+            <div class="textoResumenCategoria">
+                <span class="etiquetaCategoriaActual">Tu categoría actual</span>
+                <span class="nombreCategoriaActual" th:text="${categoriaActual}">Colaborador</span>
+            </div>
+            <p class="progresoProximaCategoria" th:if="${categoriaSiguiente != null}"
+               th:text="'Te falta' + (${misionesFaltantesCategoria} &gt; 1 ? 'n ' : ' ') + ${misionesFaltantesCategoria} + (${misionesFaltantesCategoria} &gt; 1 ? ' misiones' : ' misión') + ' para ser ' + ${categoriaSiguiente}">
+                Te falta 1 misión para ser Sostenedor
+            </p>
+        </div>
+
+        <div class="pistaCategorias">
+            <th:block th:each="categoria, iter : ${categorias}">
+                <div class="pasoCategoria"
+                     th:classappend="${categoria.actual} ? 'actual' : (${categoria.alcanzada} ? 'alcanzada' : '')">
+                    <div class="circuloPasoCategoria" th:classappend="${categoria.colorClase}">
+                        <i class="fas" th:classappend="${categoria.alcanzada} ? 'fa-check' : ${categoria.icono}" aria-hidden="true"></i>
+                    </div>
+                    <span class="nombrePasoCategoria" th:text="${categoria.nombre}">Colaborador</span>
+                </div>
+                <div class="conectorCategoria" th:if="${!iter.last}"
+                     th:classappend="${categoria.alcanzada} ? 'alcanzado' : ''"></div>
+            </th:block>
+        </div>
+    </section>
+
+    <div class="cuadriculaIncentivos">
+
+        <div class="columnaMisiones">
+            <h2 class="tituloSeccion">Misiones</h2>
+
+            <div class="pestanasCategoriaMision" role="tablist" aria-label="Filtrar misiones por categoría">
+                <button type="button" class="pestanaCategoriaMision" th:each="filtro : ${filtrosCategoriaMision}"
+                        th:classappend="${filtro == 'Todas'} ? 'activa' : ''"
+                        th:text="${filtro}" th:attr="data-categoria=${filtro}">Todas
+                </button>
+            </div>
+
+            <div class="cajaBusquedaMisiones">
+                <i class="fas fa-magnifying-glass iconoBusqueda" aria-hidden="true"></i>
+                <input type="search" class="campoBusquedaMision" id="buscadorMisiones"
+                       placeholder="Buscar misiones" aria-label="Buscar misiones">
+            </div>
+
+            <div class="listaMisiones" id="listaMisiones">
+                <article class="tarjetaMision" th:each="mision : ${misiones}"
+                          th:classappend="${mision.estado == 'BLOQUEADA'} ? 'bloqueada' : ''"
+                          th:attr="data-categoria=${mision.categoria}">
+
+                    <div class="contenedorImagenMision">
+                        <img th:if="${mision.imagenUrl != null}" class="imagenMision"
+                             th:src="${mision.imagenUrl}" th:alt="${mision.titulo}">
+                        <i th:if="${mision.imagenUrl == null and mision.estado != 'BLOQUEADA'}"
+                           class="fas fa-bullseye" aria-hidden="true"></i>
+                        <i th:if="${mision.imagenUrl == null and mision.estado == 'BLOQUEADA'}"
+                           class="fas fa-lock" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="contenidoMision">
+                        <div class="encabezadoTarjetaMision">
+                            <h3 class="tituloMision" th:text="${mision.titulo}">Arreglar escuela primaria</h3>
+
+                            <span class="etiquetaEstadoMision completada" th:if="${mision.estado == 'COMPLETADA'}">
+                                <i class="fas fa-check" aria-hidden="true"></i> Completada
+                            </span>
+                            <span class="etiquetaEstadoMision enProgreso" th:if="${mision.estado == 'EN_PROGRESO'}">
+                                En progreso
+                            </span>
+                            <span class="etiquetaEstadoMision bloqueada" th:if="${mision.estado == 'BLOQUEADA'}">
+                                <i class="fas fa-lock" aria-hidden="true"></i> Bloqueada
+                            </span>
+                        </div>
+
+                        <p class="descripcionMision" th:text="${mision.descripcion}">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+
+                        <p class="insigniaOtorgadaMision">
+                            <i class="fas fa-medal" aria-hidden="true"></i>
+                            Otorga la insignia "<span th:text="${mision.insigniaOtorgada}">Donador de muebles</span>"
+                        </p>
+
+                        <p class="avisoRachaMision" th:if="${mision.advertencia != null}">
+                            <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                            <span th:text="${mision.advertencia}"></span>
+                        </p>
+
+                        <div class="bloqueProgresoMision" th:if="${mision.estado != 'BLOQUEADA'}">
+                            <span class="textoPorcentaje" th:classappend="${mision.estado == 'COMPLETADA'} ? 'completada' : ''"
+                                  th:text="${mision.porcentaje} + '% completado (' + ${mision.cantidadActual} + '/' + ${mision.cantidadObjetivo} + ')'">
+                                50% completado (25/50)
+                            </span>
+                            <div class="contenedorBarraMision">
+                                <div class="barraRellenoMision" th:classappend="${mision.estado == 'COMPLETADA'} ? 'completada' : ''"
+                                     th:style="'width:' + ${mision.porcentaje} + '%'"></div>
+                            </div>
+                        </div>
+
+                        <div class="bloqueProgresoMision" th:if="${mision.estado == 'BLOQUEADA'}">
+                            <span class="textoPorcentaje" style="color: var(--colorTextoClaro);">
+                                Completá la misión anterior para desbloquear
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="columnaInsignias">
+            <div class="encabezadoListaInsignias">
+                <h2 class="tituloListaInsignias">Insignias</h2>
+                <span class="contadorInsignias"
+                      th:text="${insigniasObtenidas} + '/' + ${insigniasTotales} + ' obtenidas'">1/5 obtenidas</span>
+            </div>
+
+            <div class="contenedorListaInsignias">
+                <div class="tarjetaInsignia" th:each="insignia : ${insignias}"
+                     th:classappend="${!insignia.obtenida} ? 'bloqueada' : ''">
+                    <div class="iconoInsigniaMedalla" th:classappend="${insignia.colorClase}">
+                        <i class="fas" th:classappend="${insignia.obtenida} ? ${insignia.icono} : 'fa-lock'" aria-hidden="true"></i>
+                    </div>
+                    <div class="infoInsignia">
+                        <span class="tituloInsignia" th:text="${insignia.nombre}">Donador de muebles</span>
+                        <span class="descripcionInsignia" th:text="${insignia.descripcion}">Donaste más de 50 muebles.</span>
+                    </div>
+                    <div class="controlVisibilidadInsignia" th:if="${insignia.obtenida}">
+                        <label class="interruptorVisibilidad" th:attr="aria-label='Mostrar ' + ${insignia.nombre} + ' en tu perfil'">
+                            <input type="checkbox" th:checked="${insignia.visiblePerfil}">
+                            <span class="rielInterruptor"></span>
+                        </label>
+                        <span class="etiquetaVisibilidad">Visible</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<th:block th:fragment="estilosExtra">
+  <link rel="stylesheet" href="/css/personaDonante/incentivos.css">
+</th:block>
+<th:block th:fragment="scriptsExtra">
+  <script src="/js/personaDonante/incentivos.js" defer></script>
+</th:block>
+</html>

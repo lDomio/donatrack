@@ -1,0 +1,28 @@
+@startuml impacto-donante
+!theme plain
+
+actor "Persona donante" as U
+participant "Mi impacto\n(Thymeleaf)" as V
+participant "PersonaDonanteController" as C
+participant "IncentivosApiService" as S
+participant "incentivos-service" as I
+database "MySQL\nincentivos" as DB
+
+U -> V : abre /personaDonante/impacto
+V -> C : GET (cookie de sesión)
+C -> S : obtenerMetricas(donanteId, mesInicio, mesFin)
+S -> I : GET /incentivos/{id}/metricas (JWT)
+I -> DB : donaciones + ranking
+DB --> I : datos
+I --> S : MetricasUsuarioResponse
+S --> C : MetricasResponse
+C -> C : mapear a ImpactoVistaDto\n(períodos ordenados, últimos 12)
+C --> V : modelo
+V --> U : KPIs + gráfico + enlace a Incentivos
+
+note right of V
+  Sin polling ni WebSocket.
+  El botón Actualizar recarga la vista.
+end note
+
+@enduml

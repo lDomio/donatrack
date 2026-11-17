@@ -1,0 +1,137 @@
+.contenedorNecesidades { display: flex; margin: auto; padding: 20px 24px; max-width: 1280px; width: 100%; }
+.listaNecesidades { list-style: none; display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; width: 100%; }
+
+/* Item de Necesidad Fusionado y Estilizado */
+.necesidad {
+    position: relative; width: 260px; padding: 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    background-color: var(--colorSuperficie); border-radius: var(--radioBorde);
+    box-shadow: var(--sombraSuave); border: 1px solid rgba(0, 0, 0, 0.05); transition: var(--transicionSuave);
+}
+.necesidad:hover { transform: translateY(-4px); box-shadow: var(--sombraMedia); }
+
+.necesidad-ver-mas { position: absolute; color: var(--colorTextoClaro); top: 12px; right: 12px; transition: var(--transicionSuave); font-size: 1.2rem; }
+.necesidad-ver-mas:hover { color: var(--colorPrimario); transform: scale(1.1); }
+
+.textoReinicio { text-align: center; }
+.textoSubcategoria { text-align: center; font-weight: 800; font-size: 1.35rem; color: var(--colorTextoOscuro);width: 60%; }
+
+.necesidad span:not(.textoSubcategoria) {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--colorTextoMedio);
+    background-color: var(--colorFondo);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.boton-aniadir-necesidad {
+    color: var(--colorSecundario);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin: 32px auto;
+    transition: var(--transicionSuave);
+    background-color: var(--colorSuperficie);
+    border-radius: 50%;
+    box-shadow: var(--sombraSuave);
+    text-decoration: none;
+}
+.boton-aniadir-necesidad i {
+    font-size: 4rem;
+}
+.boton-aniadir-necesidad:hover {
+    transform: scale(1.1) translateY(-2px);
+    color: var(--colorSecundarioHover);
+    box-shadow: var(--sombraMedia);
+}
+
+/* --- ESTILOS NUEVOS PARA EL CONTADOR DE REINICIO --- */
+.tiempoReinicio {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-top: 4px;
+}
+
+/* Colores para cuando falta poco (Naranja) */
+.tiempoReinicio.alerta {
+    background-color: #fff7ed;
+    color: var(--colorSecundarioHover);
+    border: 1px solid #ffedd5;
+}
+
+/* Colores para cuando falta bastante (Teal / Primario) */
+.tiempoReinicio.seguro {
+    background-color: var(--colorPrimarioClaro);
+    color: var(--colorPrimarioHover);
+    border: 1px solid var(--colorPrimarioBorde);
+}
+
+/* Badges de Estado y Tipo de Necesidad */
+.badgeTipo {
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    border-radius: 9999px !important;
+    padding: 3px 10px !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.badgeEstado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    border-radius: 9999px !important;
+}
+
+.badgeSatisfecha {
+    background-color: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #86efac !important;
+}
+
+.badgeParcial {
+    background-color: #fef9c3 !important;
+    color: #854d0e !important;
+    border: 1px solid #fde047 !important;
+}
+
+.badgeAbierta {
+    background-color: #f8fafc !important;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Barra de progreso visual para necesidades */
+.barraProgresoContenedor {
+    width: 85%;
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin: 4px 0;
+}
+.barraProgresoRelleno {
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 9999px;
+    transition: width 0.4s ease;
+}
+.barraProgresoRelleno.progresoCompleto {
+    background-color: #16a34a;
+}
+
+
